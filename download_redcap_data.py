@@ -1,6 +1,9 @@
 import configparser
 import os
 
+def get_maryland_data_from_sftp():
+    
+    
 def mkdirp(newpath):
     if not os.path.exists(newpath):
         os.makedirs(newpath)
