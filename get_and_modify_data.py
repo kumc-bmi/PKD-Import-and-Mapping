@@ -3,7 +3,20 @@
 import configparser
 import os
 
-def get_maryland_data_from_sftp():
+## using file name convention as *_mmDDyyyy
+def get_maryland_data_from_sftp(umd_base_data_dir):
+    objs_from_umd = os.scandir(umd_base_data_dir)
+    files_already_worked_on = 
+    
+    for entry in objs_from_umd:
+        if entry.is_file():
+            
+            files_from_umd
+            if str(entry.name).endswith(".csv"):
+                (umd_base_data_dir + "/" + str(entry.name))
+            
+    objs_from_umd.close()
+    
     
     
 def mkdirp(newpath):
@@ -141,7 +154,7 @@ if __name__ == "__main__":
             logging.error("""Wrong format or arguments :
              please try like 'python download_recap_data.py config_file pid""")
 
-        [config_file, pid_titles, redcap_api_url, where_to_save] = argv[1:]
+        [umd_base_data_dir, pid_titles, redcap_api_url, where_to_save] = argv[1:]
         main(config_file, pid_titles, logging, post,
              join, environ, Path, redcap_api_url, where_to_save)
 
