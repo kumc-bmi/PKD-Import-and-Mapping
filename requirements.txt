@@ -3,3 +3,4 @@ requests
 pathlib2
 configparser
 os
+flake8

@@ -4,6 +4,8 @@ run: clean venv
 	. venv/bin/activate && \
 	which python3 && \
 	sftp_maryland_data
+	flake8 DBAndTableCreation.py > DBAndTableCreation_PEP8_errors.txt
+
 	# download which projects needs to export and its token && \
 	python3 download_redcap_data.py .env/REDCap_Export_Metadata_config.ini 22394 'https://redcap.kumc.edu/api/' local && \
 	# converted downloaded csv with token into ini && \
