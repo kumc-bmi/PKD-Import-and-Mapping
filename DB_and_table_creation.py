@@ -3,13 +3,18 @@ from os import path,join
 from logging_module import startlogging
 
 class UserTableRequired:
-    def __init__(self, table_name: str, columns: dict(), primary_col, startlogging):
+    def __init__(self, table_name: str, columns: dict(), foreign_key: dict(), startlogging):
         '''
         Constructor for userTableRequirement used for 
         SQLlite3 DB in class Sqlite3Db
         '''
         self.tb_name = table_name        
+        # Define columns as dict as
+        # "column_name" : ['type',Constraint1, Constraint2....]
         self.columns= columns
+        # Define foreign key dict as
+        # "site_fieldname" : [KUMC_fieldname]
+        self.foreign_key = foreign_key
         startlogging(level=debug)   
     
     def extract_tb_name(self):
