@@ -2,6 +2,7 @@
 
 import configparser
 import os
+from logging_module import startlogging
 
 ## using file name convention as *_mmDDyyyy
 def get_maryland_data_from_sftp(umd_base_data_dir):
@@ -75,7 +76,7 @@ def save_file(folder_path, file_name, data_string, join, Path, logging,
 
 
 def main(config_file, pid_titles, logging, post, join, environ, Path, redcap_api_url, where_to_save):
-
+    startlogging(level=)
     error_list = []
     # read config file
     config = read_config(config_file, logging, Path)
@@ -148,14 +149,14 @@ if __name__ == "__main__":
         from sys import argv
         from pathlib2 import Path
 
-        logging.basicConfig(level=logging.DEBUG)
+        startlogging(level="debug")
 
         if len(argv) != 5:
             logging.error("""Wrong format or arguments :
              please try like 'python download_recap_data.py config_file pid""")
 
         [umd_base_data_dir, pid_titles, redcap_api_url, where_to_save] = argv[1:]
-        main(config_file, pid_titles, logging, post,
+        main(config_file, pid_titles, startlogging, post,
              join, environ, Path, redcap_api_url, where_to_save)
 
     _main_ocap()
