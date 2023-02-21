@@ -1,5 +1,4 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
-
 import configparser
 import os
 from logging_module import startlogging
