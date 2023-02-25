@@ -2,3 +2,5 @@ pandas
 requests
 pathlib2
 configparser
+datetime
+logging

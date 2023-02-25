@@ -2,16 +2,31 @@
 import configparser
 import os
 from logging_module import startlogging
+import pandas as pd
+import datetime
+from datetime import *
+
+# Find if the file has been scanned and dealt with early on:
+def whether_file_already_imported(file_name):
+    files_recorded = pd.read_csv("./Mapping_csvs/file_fetched.csv", encoding='utf8', header=0, squeeze=true)
+    files_already_worked_on = files_recorded.loc[(datetime.datetime.strptime(files_recorded['date_of_import'],'%Y-%b-%d') < date.today()), "File_name"].values.tolist()
+    # Counter for the entry to file used in file_fetched.csv 0=old, 1=new
+    file_new = -1
+    
+    if file_name in files_already_worked_on:
+        file_new = 0
+    else:
+        file_new = 1
+        
+    return file_new
 
 ## using file name convention as *_mmDDyyyy
 def get_maryland_data_from_sftp(umd_base_data_dir):
     objs_from_umd = os.scandir(umd_base_data_dir)
-    files_already_worked_on = 
     
     for entry in objs_from_umd:
         if entry.is_file():
             
-            files_from_umd
             if str(entry.name).endswith(".csv"):
                 (umd_base_data_dir + "/" + str(entry.name))
             

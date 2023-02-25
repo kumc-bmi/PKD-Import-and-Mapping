@@ -1,15 +1,15 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
 
-run: clean venv_clean venv
+run: clean venv_clean venv maryland-dat
 	. venv/bin/activate && \
 	which python3 && \
-	sftp_maryland_data && \
 	# download which projects needs to export and its token && \
 	python3 download_redcap_data.py .env/REDCap_Export_Metadata_config.ini 22394 'https://redcap.kumc.edu/api/' local && \
 	# converted downloaded csv with token into ini && \
 	python3 convert_csv_metadata_into_ini_format.py '.env/redcap_projects_exports.csv'  '.env/redcap_projects_exports.ini' && \
 	# download all listed redcap projects && \
 	python3 download_redcap_data.py 'STUDY00146013' .env/redcap_projects_exports.ini ALL 'https://redcap.kumc.edu/api/' ${where_to_save}
+	backup_maryland_dat
 
 venv:
 	python3 -m pip install --upgrade pip
@@ -22,11 +22,14 @@ venv:
 	pip3 freeze >  requirements_pip_freeze.txt  && \
 	which pip3 && which python3 && python3 --version
 
-sftp_maryland_data:
+maryland-dat:
 	mkdir -p ./STUDY00146013 && \
 	rm -rf ./children_national_alabama_data && \
-	sftp -i ./svc-mi-redcap-account/dr_yu_mapping_project_priv_key -r svc-mi-redcap@sftp.kumc.edu:STUDY00146013/* ./STUDY00146013
-	
+	sftp -i ../svc-mi-redcap-account/dr_yu_mapping_project_priv_key -r svc-mi-redcap@sftp.kumc.edu:./STUDY00146013/* ./STUDY00146013
+
+backup_maryland_dat:
+	sftp -i ../svc-mi-redcap-account/dr_yu_mapping_project_priv_key svc-mi-redcap@sftp.kumc.edu:./My\ Folder <<< 'put ./STUDY00146013/*'
+
 clean:
 	rm -rf ./STUDY00146013  && \
 	rm -rf ./children_national_alabama_data
