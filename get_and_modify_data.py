@@ -1,5 +1,4 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
-import configparser
 import os
 from logging_module import startlogging
 import pandas as pd
@@ -10,6 +9,7 @@ from datetime import *
 def whether_file_already_imported(file_name):
     files_recorded = pd.read_csv("./Mapping_csvs/file_fetched.csv", encoding='utf8', header=0, squeeze=true)
     files_already_worked_on = files_recorded.loc[(datetime.datetime.strptime(files_recorded['date_of_import'],'%Y-%b-%d') < date.today()), "File_name"].values.tolist()
+    maryland_fiels_to_work_on = []
     # Counter for the entry to file used in file_fetched.csv 0=old, 1=new
     file_new = -1
     
@@ -20,33 +20,42 @@ def whether_file_already_imported(file_name):
         
     return file_new
 
-## using file name convention as *_mmDDyyyy
+## using file name convention as *_PKDUML
 def get_maryland_data_from_sftp(umd_base_data_dir):
+    startlogging(level='debug')
     objs_from_umd = os.scandir(umd_base_data_dir)
+    maryland_fiels_to_work_on = []
     
     for entry in objs_from_umd:
-        if entry.is_file():
-            
-            if str(entry.name).endswith(".csv"):
-                (umd_base_data_dir + "/" + str(entry.name))
-            
+        if (entry.is_file()) and (str(entry.name).endswith(".csv")) and (whether_file_already_imported(entry.name) == 1 and whether_file_already_imported(entry.name) != -1):
+            entry_name_split_1 = entry.name.split(".")[0]
+            entry_name_split_2 = entry_name_split_1.split("_")
+            length_entry_name_split_2 = len(entry_name_split_2)
+            if ((entry_name_split_2[length_entry_name_split_2-1]) == "PKDUML"):
+                maryland_fiels_to_work_on.append((umd_base_data_dir + "/" + str(entry.name)))
     objs_from_umd.close()
     
+    counter_df_appended = 0
     
-    
-def mkdirp(newpath):
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
+    for items in maryland_fiels_to_work_on:
+        temp_return_df = items.read_csv(items, encoding='utf8', header=0, squeeze=true)
+        if counter_df_appended == 0:
+            return_df = temp_return_df
+        else:
+            return_df.append(temp_return_df)
+        counter_df_appended = counter_df_appended + 1
+        
+return return_df
 
-def make_redcap_api_call(redcap_api_url, data, logging, post):
-
+##TODO: Add the pps-client to get token and append in .env file 
+def redcap_call(redcap_api_url, datacofig, startlogging, post):
     try:
         log_error_str = """
             redcap rest call was unsuccessful
             or target server is down/ check configuration
             %s
             """ % (data)
-        response = post(redcap_api_url, data)
+        response = post(redcap_api_url, data=datacofig)
         if response.status_code == 200:
             return response.content
         else:
@@ -54,46 +63,28 @@ def make_redcap_api_call(redcap_api_url, data, logging, post):
                           (log_error_str, response.status_code))
 
     except Exception as e:
-        logging.error('log_error_str : %s' % (e))
-
-
-def read_config(config_file, logging, Path):
-
-    config = configparser.ConfigParser()
-    config.optionxform = str
-    config.readfp(Path(config_file).open(), str(config_file))
-
-    sections = [section for section in config.sections()]
-    logging.info("availabe configs: %s" % (sections))
-
-    return config
-
-
-def save_file(folder_path, file_name, data_string, join, Path, logging,
-              record_id, title):
-    """Save file to local or shared location
-
-    Args:
-        folder_path (string): folder_path
-        file_name (string): file_name
-        data_string (string): data which will be written to file
-    """
-
-    full_path = join(folder_path, file_name)
-    # taking care of windows path
-    full_path = full_path.replace('\\', '/')
-    full_path = Path(full_path)
-    full_path.write_bytes(data_string)
-    logging.info("""
-    Record_id:%s and title:%s File has been downloaded at %s
-    """ % (record_id, title, full_path))
-
+        startlogging.error('log_error_str : %s' % (e))
+    
+def mkdirp(newpath):
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
 
 def main(config_file, pid_titles, logging, post, join, environ, Path, redcap_api_url, where_to_save):
-    startlogging(level=)
+    startlogging(level="debug")
     error_list = []
-    # read config file
-    config = read_config(config_file, logging, Path)
+
+    dataconfig = os.environ['data_specs']
+    # read children national config file
+    
+    dataconfig_chld['token'] = os.environ['token_chld']
+    dataconfig_chld.update(dataconfig)
+    chld_redcap_api_url = os.environ['chld_redcap_api_url']
+
+    # read kumc config file
+    dataconfig_kumc['token'] = os.environ['token_kumc']
+    dataconfig_kumc.update(dataconfig)
+    kumc_redcap_api_url = os.environ['kumc_redcap_api_url']
+
 
     # parse config
     # redcap_api_url = config._sections['global']['redcap_api_url']
@@ -169,8 +160,8 @@ if __name__ == "__main__":
             logging.error("""Wrong format or arguments :
              please try like 'python download_recap_data.py config_file pid""")
 
-        [umd_base_data_dir, pid_titles, redcap_api_url, where_to_save] = argv[1:]
-        main(config_file, pid_titles, startlogging, post,
-             join, environ, Path, redcap_api_url, where_to_save)
+        [umd_base_data_dir] = argv[1:]
+        main(umd_base_data_dir, startlogging, post,
+             join, environ, Path)
 
     _main_ocap()

@@ -4,11 +4,7 @@ run: clean venv_clean venv maryland-dat
 	. venv/bin/activate && \
 	which python3 && \
 	# download which projects needs to export and its token && \
-	python3 download_redcap_data.py .env/REDCap_Export_Metadata_config.ini 22394 'https://redcap.kumc.edu/api/' local && \
-	# converted downloaded csv with token into ini && \
-	python3 convert_csv_metadata_into_ini_format.py '.env/redcap_projects_exports.csv'  '.env/redcap_projects_exports.ini' && \
-	# download all listed redcap projects && \
-	python3 download_redcap_data.py 'STUDY00146013' .env/redcap_projects_exports.ini ALL 'https://redcap.kumc.edu/api/' ${where_to_save}
+	python3 get_and_modify_data.py ./STUDY00146013 && \
 	backup_maryland_dat
 
 venv:
