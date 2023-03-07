@@ -1,11 +1,12 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
 
-run: clean venv_clean venv maryland-dat
+run: clean venv_clean venv maryland-dat backup_maryland_dat
 	. venv/bin/activate && \
 	which python3 && \
 	# download which projects needs to export and its token && \
-	python3 get_and_modify_data.py ./STUDY00146013 && \
-	backup_maryland_dat
+	python3	get_and_modify_data.py	./STUDY00146013
+	# python3 get_and_modify_data.py .env/REDCap_Export_Metadata_config.ini 22394 'https://redcap.kumc.edu/api/'
+
 
 venv:
 	python3 -m pip install --upgrade pip
@@ -38,3 +39,17 @@ install_python3_cifs:
 	sudo yum install -y python3-pip cifs-utils && \
 	python3 -m pip3 install --user --upgrade pip && \
 	python3 -m pip3 install --user virtualenv    
+
+make_initial_structures:
+	touch ./logs/logging.log && \
+	chmod 667 ./logs/logging.log && \
+	mkdir -p ./STUDY00146013 && \
+	chmod 667 ./logs/maryland_file_log.csv && \
+	touch ./logs/maryland_file_log.csv && \
+ 	sed -i -e '1i"File_name","Date_of_import"' ./logs/maryland_file_log.csv && \
+    wget https://github.com/kumc-bmi/pps-client/releases/download/v1.1/pps-client && \
+  	chmod +x ./pps-client && \
+	wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+	chmod +x ./jq-linux64
+
+
