@@ -55,11 +55,11 @@ def get_maryland_data_from_sftp(umd_base_data_dir, scandir,logging):
 def redcap_call(redcap_api_url, token, os, logging, post):
     try:
         dataconfig = dict()
+        dataconfig["token"] = token
         for key, value in os.environ.items():
             if key.startswith("API_data_"):
-                dataconfig[key] = value
-        
-        dataconfig["token"] = token
+                key_entry = key.split("API_data_")[1]
+                dataconfig[key_entry] = value
 
         logging.info(os.environ.items())
         # Referrenced from code in 
@@ -75,12 +75,13 @@ def redcap_call(redcap_api_url, token, os, logging, post):
             print(type(response.content))
             return response.content
         else:
-            logging.error('%s : status_code: %s' %
-                          (log_error_str, response.status_code))
+            logging.error(response.content)
 
     except Exception as e:
         logging.error('log_error_str : %s' % (e))
 
+def mapping_kumc():
+    
 def main(umd_base_data_dir, logging, post, scandir, os):
     error_list = []
     
@@ -93,14 +94,12 @@ def main(umd_base_data_dir, logging, post, scandir, os):
     kumc_redcap_api_url = os.getenv('kumc_redcap_api_url')
 
     # redcap calls
-    df_kumc = redcap_call(kumc_redcap_api_url, data_token_chld, os, logging, post)
-    #print(df_kumc)
-    df_chld = redcap_call(chld_redcap_api_url, data_token_kumc, os, logging, post)
-    #print(df_chld)
+    df_kumc = redcap_call(kumc_redcap_api_url, data_token_kumc, os, logging, post)
+    df_chld = redcap_call(chld_redcap_api_url, data_token_chld, os, logging, post)
     df_maryland = get_maryland_data_from_sftp(umd_base_data_dir, scandir, logging)
     
-    logging.info(df_kumc)
-    # parse config
+    # Mapping data:
+    
 
     #logging.error(error_str)
     #error_list.append(record_id)
@@ -130,15 +129,13 @@ if __name__ == "__main__":
 
         load_dotenv()
 
-        logging.basicConfig(filename="./logs/logging.log", level="DEBUG")
+        logging.basicConfig(filename="./logs/logging.log", level="DEBUG", format=os.getenv('log_format'), datefmt='%Y-%m-%d %H:%M:%S')
         
-        logging.info("""took took {}""".format(sys.argv))
+        logging.info("""System Arguments sent: {}""".format(sys.argv))
         
         if len(sys.argv) != 2:
             logging.info("""Wrong format or arguments :
              please try like 'python download_recap_data.py config_file pid""")
-            
-        logging.info(sys.argv)
 
         [umd_base_data_dir] = sys.argv[1:]
         main(umd_base_data_dir, logging, post,
