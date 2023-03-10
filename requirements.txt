@@ -1,7 +1,5 @@
 pandas
 requests
 pathlib2
-configparser
 datetime
-python-decouple
 python-dotenv

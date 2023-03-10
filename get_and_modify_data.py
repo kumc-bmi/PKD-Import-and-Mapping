@@ -4,11 +4,14 @@ import logging
 import pandas as pd
 import datetime
 from datetime import *
+from io import StringIO
 
 # Find if the file has been scanned and dealt with early on:
-def whether_file_already_imported(file_name):
-    files_recorded = pd.read_csv("./Mapping_csvs/file_fetched.csv", encoding='utf8', header=0, squeeze=true)
-    files_already_worked_on = files_recorded.loc[(datetime.datetime.strptime(files_recorded['date_of_import'],'%Y-%b-%d') < date.today()), "File_name"].values.tolist()
+def whether_file_already_imported(file_name,datetime,date):
+    files_recorded = pd.read_csv("./logs/maryland_file_log.csv", encoding='utf8', header=0, squeeze='true')
+    files_recorded['DATE_IMPRT'] = pd.to_datetime(files_recorded['DATE_IMPRT'])
+    files_recorded['DATE_IMPRT'] = files_recorded['DATE_IMPRT'].dt.date
+    files_already_worked_on = files_recorded.loc[(files_recorded['DATE_IMPRT'] < date.today()), "FILE_NAME"].values.tolist()
     maryland_fiels_to_work_on = []
     # Counter for the entry to file used in file_fetched.csv 0=old, 1=new
     file_new = -1
@@ -21,26 +24,30 @@ def whether_file_already_imported(file_name):
     return file_new
 
 ## using file name convention as *_PKDUML
-def get_maryland_data_from_sftp(umd_base_data_dir, scandir,logging):
+def get_maryland_data_from_sftp(umd_base_data_dir,scandir,logging,date,datetime):
     objs_from_umd = scandir(umd_base_data_dir)
     maryland_fiels_to_work_on = []
     
     for entry in objs_from_umd:
         print(entry.name)
-        if (entry.is_file()) and (str(entry.name).endswith(".csv")) and (whether_file_already_imported(entry.name) == 1 and whether_file_already_imported(entry.name) != -1):
+        if (entry.is_file()) and (str(entry.name).endswith(".csv")) and (whether_file_already_imported(entry.name,datetime,date) == 1 and whether_file_already_imported(entry.name,datetime,date) != -1):
             entry_name_split_1 = entry.name.split(".")[0]
             entry_name_split_2 = entry_name_split_1.split("_")
             length_entry_name_split_2 = len(entry_name_split_2)
             if ((entry_name_split_2[length_entry_name_split_2-1]) == "PKDUML"):
                 maryland_fiels_to_work_on.append((umd_base_data_dir + "/" + str(entry.name)))
-                
+            file_read_earlier = pd.read_csv("./logs/maryland_file_log.csv", encoding='utf8', header=0, squeeze='true')
+            new_row = {'FILE_NAME':entry.name, 'DATE_IMPRT':date.today()}
+            file_read_earlier.append(new_row, ignore_index=True)
+            file_read_earlier.to_csv("./logs/maryland_file_log.csv")
+            
     objs_from_umd.close()
     
     counter_df_appended = 0
     return_df = pd.DataFrame()
     
     for items in maryland_fiels_to_work_on:
-        temp_return_df = items.read_csv(items, encoding='utf8', header=0, squeeze=true)
+        temp_return_df = pd.read_csv(items, encoding='utf8', header=0, squeeze='true')
         if counter_df_appended == 0:
             return_df = temp_return_df
         else:
@@ -80,9 +87,11 @@ def redcap_call(redcap_api_url, token, os, logging, post):
     except Exception as e:
         logging.error('log_error_str : %s' % (e))
 
-def mapping_kumc():
-    
-def main(umd_base_data_dir, logging, post, scandir, os):
+#def mapping_kumc(df_kumc,mapping_csv,logging,os,post):
+#def mapping_UAB(df_chld,mapping_csv,logging,os,post):
+#def mapping_UMB(df_maryland,mapping_csv,logging,os,post):
+  
+def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     error_list = []
     
     # read children national config file
@@ -93,14 +102,26 @@ def main(umd_base_data_dir, logging, post, scandir, os):
     data_token_kumc = os.getenv('token_kumc')
     kumc_redcap_api_url = os.getenv('kumc_redcap_api_url')
 
-    # redcap calls
+    # redcap calls-KUMC
     df_kumc = redcap_call(kumc_redcap_api_url, data_token_kumc, os, logging, post)
+    temp_df_kumc = str(df_kumc,'utf-8')
+    data_kumc = StringIO(temp_df_kumc)
+    data_df_kumc = pd.read_csv(data_kumc, header=0, encoding='utf-8')
+    #print(data_df_kumc)
+
+    # redcap calls-CHLD
     df_chld = redcap_call(chld_redcap_api_url, data_token_chld, os, logging, post)
-    df_maryland = get_maryland_data_from_sftp(umd_base_data_dir, scandir, logging)
+    temp_df_chld = str(df_chld,'utf-8')
+    data_chld = StringIO(temp_df_chld)
+    data_df_chld = pd.read_csv(data_chld, header=0, encoding='utf-8')
+    #print(data_df_chld)
+    
+    # redcap calls-MARYLAND
+    data_df_maryland = get_maryland_data_from_sftp(umd_base_data_dir, scandir, logging,date,datetime)
     
     # Mapping data:
-    
-
+    mapping_kumc = pd.read_csv("./Mapping_csvs/mapping_KUMC_KUMC.csv", encoding='utf8', header=0)
+    print(mapping_kumc.head)
     #logging.error(error_str)
     #error_list.append(record_id)
 
@@ -122,10 +143,14 @@ if __name__ == "__main__":
         from requests import post
         from os.path import join
         import sys
+        import pandas as pd
         from pathlib2 import Path
         from os import scandir
+        from datetime import date
         from dotenv import load_dotenv
+        from datetime import datetime
         import os
+        from io import StringIO
 
         load_dotenv()
 
@@ -139,6 +164,6 @@ if __name__ == "__main__":
 
         [umd_base_data_dir] = sys.argv[1:]
         main(umd_base_data_dir, logging, post,
-             scandir, os)
+             scandir, os, StringIO,date,datetime)
 
     _main_ocap()

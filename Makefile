@@ -5,8 +5,8 @@ run: clean venv_clean venv maryland-dat backup_maryland_dat
 	which python3 && \
 	# download which projects needs to export and its token && \
 	python3	get_and_modify_data.py	./STUDY00146013
+	#TODO: Make another py file to upload the csvs to the lockbox
 	# python3 get_and_modify_data.py .env/REDCap_Export_Metadata_config.ini 22394 'https://redcap.kumc.edu/api/'
-
 
 venv:
 	python3 -m pip install --upgrade pip
@@ -41,12 +41,15 @@ install_python3_cifs:
 	python3 -m pip3 install --user virtualenv    
 
 make_initial_structures:
+	# TODO: UPLOAD THE logging.log to lockbox && \
 	touch ./logs/logging.log && \
 	chmod 667 ./logs/logging.log && \
 	mkdir -p ./STUDY00146013 && \
+	# TODO: UPLOAD THE maryland_file_log to lockbox  && \
 	chmod 667 ./logs/maryland_file_log.csv && \
 	touch ./logs/maryland_file_log.csv && \
- 	sed -i -e '1i"File_name","Date_of_import"' ./logs/maryland_file_log.csv && \
+ 	echo FILE_NAME,DATE_IMPRT > ./logs/maryland_file_log.csv && \
+	echo 'test_file.csv',`date +%Y-%m-%d` >> ./logs/maryland_file_log.csv && \
     wget https://github.com/kumc-bmi/pps-client/releases/download/v1.1/pps-client && \
   	chmod +x ./pps-client && \
 	wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
