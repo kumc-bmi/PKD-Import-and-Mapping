@@ -1,8 +1,13 @@
+#!/usr/bin/env python
+
 import requests
-
-data = {'token': '9F01E61ABBDAED93744274003B4E7360', 'content': 'record', 'action': 'export', 'format': 'csv', 'type': 'flat', 'csvDelimiter': '', 'rawOrLabel': 'label', 'rawOrLabelHeaders': 'label', 'exportCheckboxLabel': 'true', 'exportSurveyFields': 'true', 'exportDataAccessGroups': 'true', 'returnFormat': 'json'}
-
-
-r = requests.post('https://redcap.kumc.edu/api/',data=data)
+data = {
+    'token': 'B14F279659FE996C53F4B1EE8AA7A1D8',
+    'content': 'user',
+    'format': 'json',
+    'returnFormat': 'json'
+}
+r = requests.post('https://redfin.kumc.edu/api/', data=data)
 print('HTTP Status: ' + str(r.status_code))
-print(r.text)
+print(r.status_code())
+

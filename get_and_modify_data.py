@@ -121,7 +121,7 @@ def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     
     # Mapping data:
     mapping_kumc = pd.read_csv("./Mapping_csvs/mapping_KUMC_KUMC.csv", encoding='utf8', header=0)
-    print(mapping_kumc.head)
+    print(data_df_maryland)
     #logging.error(error_str)
     #error_list.append(record_id)
 
