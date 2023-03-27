@@ -29,7 +29,7 @@ def get_maryland_data_from_sftp(umd_base_data_dir,scandir,logging,date,datetime)
     maryland_fiels_to_work_on = []
     
     for entry in objs_from_umd:
-        print(entry.name)
+        #print(entry.name)
         if (entry.is_file()) and (str(entry.name).endswith(".csv")) and (whether_file_already_imported(entry.name,datetime,date) == 1 and whether_file_already_imported(entry.name,datetime,date) != -1):
             entry_name_split_1 = entry.name.split(".")[0]
             entry_name_split_2 = entry_name_split_1.split("_")
@@ -77,9 +77,9 @@ def redcap_call(redcap_api_url, token, os, logging, post):
             %s
             """ % (dataconfig)
         response = post(redcap_api_url, data=dataconfig)
-        print(response)
+        #print(response)
         if response.status_code == 200:
-            print(type(response.content))
+            #print(type(response.content))
             return response.content
         else:
             logging.error(response.content)
@@ -87,9 +87,94 @@ def redcap_call(redcap_api_url, token, os, logging, post):
     except Exception as e:
         logging.error('log_error_str : %s' % (e))
 
-#def mapping_kumc(df_kumc,mapping_csv,logging,os,post):
-#def mapping_UAB(df_chld,mapping_csv,logging,os,post):
-#def mapping_UMB(df_maryland,mapping_csv,logging,os,post):
+def mapping_kumc(kumc_int_df, logging, os, post):
+    import pandas
+    redcap_api_url =  os.getenv('kumc_redcap_api_url')
+    print(kumc_int_df.columns)
+    kumc_final_df = kumc_int_df[['Study ID', 'Event Name','Date of visit', 'What is the race of the subject? (choice=Black or African American)', 'Sex']].copy()
+    
+    import_dataconfig = dict()
+    import_dataconfig["token"] = os.getenv('test_import_proj_token')
+    for key, value in os.environ.items():
+        if key.startswith("import_"):
+            key_entry = key.split("import_")[1]
+            import_dataconfig[key_entry] = value
+    
+    # Mapping and transformation of the study Id/record_id(i.e. the primary key):
+    kumc_final_df['studyid'] = 'kumc_' + kumc_final_df['Study ID'].astype(str)
+    
+    #print(kumc_final_df)
+    # Mapping and transformation of the visit date:
+    kumc_final_df = kumc_final_df.rename(columns={"Date of visit": "visdat"})
+    kumc_final_df['visdat'] = pandas.to_datetime(kumc_final_df['visdat'])
+
+    # Mapping of the Sex Field:
+    kumc_final_df = kumc_final_df.rename(columns={"Sex": "sex"})
+    
+    # mapping of the race field:
+    kumc_final_df = kumc_final_df.rename(columns={"Age in years at this visit": "age"})
+    
+    # mapping and transf. of adpkd_status to adpkd_yn:
+    #print(kumc_final_df)
+    kumc_final_df.to_csv('./Test_csvs/final_kumc.csv',encoding='utf-8', index='false')
+    
+    import_dataconfig['data'] = pandas.read_csv('./Test_csvs/final_kumc.csv')
+    response = post(redcap_api_url, data=import_dataconfig)
+    
+    return response.status_code
+    
+#def mapping_UAB(df_chld,mapping_csv,logging,os):
+
+def mapping_UMB(maryland_int_df,logging,os,post):
+    import pandas
+    maryland_final_df = maryland_int_df[['Participant ID:', 'Event Name', 'Visit Date','6. Gender','7. Race', '7a. Specify other race','8. Ethnicity', '9a. National health insurance or government coverage', '10. What is the highest level of education the subject has completed? (Select best answer)']].copy()
+    
+    # Mapping of the studyids:
+    maryland_final_df = maryland_final_df.rename(columns={"Participant ID:": "studyid"})
+    maryland_final_df['studyid'] = 'umb_' + maryland_final_df['studyid'].astype(str)
+    
+    
+    # Mapping of visit date:
+    maryland_final_df = maryland_final_df.rename(columns={"Visit Date": "visdat"})
+    maryland_final_df['visdat'] = pandas.to_datetime(maryland_final_df['visdat'])
+    
+    # mapping of the age:
+    maryland_final_df['age'] = (maryland_final_df['visdat'] - maryland_int_df['4. Date of Birth'].astype('datetime64[ns]')).dt.days/365
+    
+    # Mapping of the gender field:
+    maryland_final_df = maryland_final_df.rename(columns={"6. Gender": "sex"})
+    
+    # Mapping of the race field:
+    maryland_final_df = maryland_final_df.rename(columns={"7. Race": "race"})
+    
+    # Mapping of other race field:
+    maryland_final_df = maryland_final_df.rename(columns={"7a. Specify other race":"other_race"})
+    
+    # Mapping of the ethinic field:
+    maryland_final_df = maryland_final_df.rename(columns={"8. Ethnicity":"ethnic"})
+    maryland_final_df.loc[maryland_final_df['ethnic']=="Unknown",'ethnic'] = "NA"
+    
+    # Mapping of the gov or national health:
+    maryland_final_df = maryland_final_df.rename(columns={"9a. National health insurance or government coverage":"govinsur"})
+    
+    # Mapping of the employer provided health
+    maryland_final_df = maryland_final_df.rename(columns={"9b. Employer provided private health insurance":"employerins"})
+    
+    # Mapping of self insured:
+    maryland_final_df = maryland_final_df.rename(columns={"9c. Self-insured (private health insurance)":"selfinsur"})
+    
+    # Mapping of the no insurance:
+    maryland_final_df = maryland_final_df.rename(columns={"9d. No health insurance":"noinsur"})
+    
+    # mapping of the highest education:
+    maryland_final_df = maryland_final_df.rename(columns={"10. What is the highest level of education the subject has completed? (Select best answer)":"educlevel"})
+    maryland_final_df.loc[maryland_final_df['educlevel']=="Unknown",'educlevel'] = "NA"
+    
+    print(maryland_final_df)
+    maryland_final_df.to_csv('./Test_csvs/final_umb.csv',encoding='utf-8')
+    
+    return 0
+    
   
 def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     error_list = []
@@ -106,22 +191,25 @@ def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     df_kumc = redcap_call(kumc_redcap_api_url, data_token_kumc, os, logging, post)
     temp_df_kumc = str(df_kumc,'utf-8')
     data_kumc = StringIO(temp_df_kumc)
-    data_df_kumc = pd.read_csv(data_kumc, header=0, encoding='utf-8')
-    #print(data_df_kumc)
+    kumc_int_df = pd.read_csv(data_kumc, header=0, encoding='utf-8')
+    print(kumc_int_df.columns)
 
     # redcap calls-CHLD
     df_chld = redcap_call(chld_redcap_api_url, data_token_chld, os, logging, post)
     temp_df_chld = str(df_chld,'utf-8')
     data_chld = StringIO(temp_df_chld)
-    data_df_chld = pd.read_csv(data_chld, header=0, encoding='utf-8')
+    chld_int_df = pd.read_csv(data_chld, header=0, encoding='utf-8')
     #print(data_df_chld)
     
     # redcap calls-MARYLAND
-    data_df_maryland = get_maryland_data_from_sftp(umd_base_data_dir, scandir, logging,date,datetime)
+    maryland_int_df = get_maryland_data_from_sftp(umd_base_data_dir, scandir, logging,date,datetime)
+    print(maryland_int_df)
     
     # Mapping data:
-    mapping_kumc = pd.read_csv("./Mapping_csvs/mapping_KUMC_KUMC.csv", encoding='utf8', header=0)
-    print(data_df_maryland)
+    record_updated_kumc = mapping_kumc(kumc_int_df, logging, os,post)
+    record_updated_umb = mapping_UMB(maryland_int_df, logging, os, post)
+    print(record_updated_kumc)
+    print(record_updated_umb)
     #logging.error(error_str)
     #error_list.append(record_id)
 
