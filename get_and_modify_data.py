@@ -107,9 +107,29 @@ def mapping_kumc(kumc_int_df, logging, os, post):
     # Mapping of the Sex Field:
     kumc_final_df = kumc_final_df.rename(columns={"Sex": "sex"})
     
-    # mapping of the race field:
+    # mapping of the age field:
     kumc_final_df = kumc_final_df.rename(columns={"Age in years at this visit": "age"})
     kumc_final_df['age'] = (kumc_final_df['visdat'] - kumc_int_df['Date of Birth'].astype('datetime64[ns]')).dt.days/365
+    
+    # Mapping of the race fields: (conversion of the race fields to 1 where the checkbox fields are
+    # not null)
+    ids = kumc_final_df['studyid'].tolist()
+    
+    kumc_final_df['What is the race of the subject? (choice=Black or African American)'] = kumc_final_df['What is the race of the subject? (choice=Black or African American)'].fillna('0')
+    kumc_final_df['What is the race of the subject? (choice=White)'] = kumc_final_df['What is the race of the subject? (choice=White)'].fillna('0')
+    kumc_final_df['What is the race of the subject? (choice=Asian)'] = kumc_final_df['What is the race of the subject? (choice=Asian)'].fillna('0')
+    kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'] = kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'].fillna('0')
+    
+    for id in ids:
+        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=Black or African American)']!='0','What is the race of the subject? (choice=Black or African American)'] = '1'
+        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=White)']!='0','What is the race of the subject? (choice=White)'] = '1'
+        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=Asian)']!='0','What is the race of the subject? (choice=Asian)'] = '1'
+        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)']!='0','What is the race of the subject? (choice=American Indian or Alaska Native)'] = '1'
+    
+    kumc_final_df['What is the race of the subject? (choice=Black or African American)'] = kumc_final_df['What is the race of the subject? (choice=Black or African American)'].astype('int64')
+    kumc_final_df['What is the race of the subject? (choice=White)'] = kumc_final_df['What is the race of the subject? (choice=White)'].astype('int64')
+    kumc_final_df['What is the race of the subject? (choice=Asian)'] = kumc_final_df['What is the race of the subject? (choice=Asian)'].astype('int64')
+    kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'] = kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'].astype('int64')
     
     # Mapping of other_race:
     kumc_final_df = kumc_final_df.rename(columns={"If 'Other', please specify": 'other_race'})
@@ -117,7 +137,6 @@ def mapping_kumc(kumc_int_df, logging, os, post):
     # Mapping of the ethinicity:
     kumc_final_df = kumc_final_df.rename(columns={'What is the ethnicity of the subject?': 'ethnic'})
     # mapping and transf. of adpkd_status to adpkd_yn:
-    #print(kumc_final_df)
     
     kumc_final_df = kumc_final_df.drop(columns=['Date of Birth'])    
     kumc_final_df.to_csv('./Test_csvs/final_kumc.csv',encoding='utf-8', index='false')
@@ -147,6 +166,12 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     # Mapping of the race field:
     ids = maryland_final_df['studyid'].values
     
+    maryland_final_df['7. Race'] = maryland_final_df['7. Race'].fillna(' ')
+    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
+    maryland_final_df['What is the race of the subject? (choice=White)'] = maryland_final_df.loc['What is the race of the subject? (choice=White)'].astype('int64')
+    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
+    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
+    
     for id in ids:
         if maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Black or African American':
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = str(1)
@@ -168,7 +193,7 @@ def mapping_UMB(maryland_int_df,logging,os,post):
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 0
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 0
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 0            
-    
+   
     # Remove the 7. Race field used in above ode:
     maryland_final_df = maryland_final_df.drop(columns = ['7. Race'])
     
