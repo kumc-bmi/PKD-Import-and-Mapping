@@ -90,20 +90,16 @@ def redcap_call(redcap_api_url, token, os, logging, post):
 def mapping_kumc(kumc_int_df, logging, os, post):
     import pandas
     redcap_api_url =  os.getenv('kumc_redcap_api_url')
-    print(kumc_int_df.columns)
-    kumc_final_df = kumc_int_df[['Study ID', 'Event Name','Date of visit', 'What is the race of the subject? (choice=Black or African American)', 'Sex']].copy()
+    cols = kumc_int_df.columns
     
-    import_dataconfig = dict()
-    import_dataconfig["token"] = os.getenv('test_import_proj_token')
-    for key, value in os.environ.items():
-        if key.startswith("import_"):
-            key_entry = key.split("import_")[1]
-            import_dataconfig[key_entry] = value
+    kumc_final_df = kumc_int_df[['Study ID', 'Event Name','Date of visit', 'Date of Birth', 'Sex', "If 'Other', please specify", 'What is the ethnicity of the subject?', 'What is the race of the subject? (choice=Black or African American)', 'What is the race of the subject? (choice=American Indian or Alaska Native)', 'What is the race of the subject? (choice=Asian)', 'What is the race of the subject? (choice=Native Hawaiian or Other Pacific Islander)', 'What is the race of the subject? (choice=White)', 'What is the race of the subject? (choice=Other)']].copy()
     
     # Mapping and transformation of the study Id/record_id(i.e. the primary key):
     kumc_final_df['studyid'] = 'kumc_' + kumc_final_df['Study ID'].astype(str)
+    studyid_first_column = kumc_final_df.pop('studyid')
+    kumc_final_df.insert(0, 'studyid', studyid_first_column)
+    kumc_final_df = kumc_final_df.drop(columns=['Study ID'])
     
-    #print(kumc_final_df)
     # Mapping and transformation of the visit date:
     kumc_final_df = kumc_final_df.rename(columns={"Date of visit": "visdat"})
     kumc_final_df['visdat'] = pandas.to_datetime(kumc_final_df['visdat'])
@@ -113,15 +109,20 @@ def mapping_kumc(kumc_int_df, logging, os, post):
     
     # mapping of the race field:
     kumc_final_df = kumc_final_df.rename(columns={"Age in years at this visit": "age"})
+    kumc_final_df['age'] = (kumc_final_df['visdat'] - kumc_int_df['Date of Birth'].astype('datetime64[ns]')).dt.days/365
     
+    # Mapping of other_race:
+    kumc_final_df = kumc_final_df.rename(columns={"If 'Other', please specify": 'other_race'})
+    
+    # Mapping of the ethinicity:
+    kumc_final_df = kumc_final_df.rename(columns={'What is the ethnicity of the subject?': 'ethnic'})
     # mapping and transf. of adpkd_status to adpkd_yn:
     #print(kumc_final_df)
+    
+    kumc_final_df = kumc_final_df.drop(columns=['Date of Birth'])    
     kumc_final_df.to_csv('./Test_csvs/final_kumc.csv',encoding='utf-8', index='false')
     
-    import_dataconfig['data'] = pandas.read_csv('./Test_csvs/final_kumc.csv')
-    response = post(redcap_api_url, data=import_dataconfig)
-    
-    return response.status_code
+    return kumc_final_df
     
 #def mapping_UAB(df_chld,mapping_csv,logging,os):
 
@@ -132,7 +133,6 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     # Mapping of the studyids:
     maryland_final_df = maryland_final_df.rename(columns={"Participant ID:": "studyid"})
     maryland_final_df['studyid'] = 'umb_' + maryland_final_df['studyid'].astype(str)
-    
     
     # Mapping of visit date:
     maryland_final_df = maryland_final_df.rename(columns={"Visit Date": "visdat"})
@@ -145,8 +145,18 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     maryland_final_df = maryland_final_df.rename(columns={"6. Gender": "sex"})
     
     # Mapping of the race field:
-    maryland_final_df = maryland_final_df.rename(columns={"7. Race": "race"})
+    ids = maryland_final_df['studyid'].values
     
+    for id in ids:
+        if maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Black or African American':
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 1
+        elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'White':
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 1
+        elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Asian':
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 1
+        elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'American Indian or Alaskan Native':
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=American Indian or Alaska Native)'] = 1
+        
     # Mapping of other race field:
     maryland_final_df = maryland_final_df.rename(columns={"7a. Specify other race":"other_race"})
     
@@ -173,9 +183,55 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     print(maryland_final_df)
     maryland_final_df.to_csv('./Test_csvs/final_umb.csv',encoding='utf-8')
     
-    return 0
+    return maryland_final_df
     
-  
+def load_final_data(transformed_df_kumc, transformed_df_umb):
+    import pandas
+    
+    # Concatination of all sites data:
+    final_df_load = pandas.concat([transformed_df_kumc, transformed_df_umb],     # Append two pandas DataFrames
+                      ignore_index = True,
+                      sort = False)
+    print(final_df_load.columns) 
+    final_df_load.to_csv('./Test_csvs/final_demo_load.csv', encoding='utf-8', index=False)
+    
+    # Creation of the multi choice field data dict:
+    upload_data_dict = pandas.read_csv('./Mapping_csvs/PKDMultisiteRegistry_DataDictionary_2023-03-26.csv', encoding='utf-8', header=0)
+    final_field_choice_allowed = upload_data_dict[['Variable / Field Name','Choices, Calculations, OR Slider Labels']].copy()
+    final_field_choice_allowed = final_field_choice_allowed.dropna()
+    
+    # conversion of multichoice fields to numerical values for REDCap import:
+    cols_in_fin_df = final_df_load.columns
+    cols_in_multicoice = final_field_choice_allowed['Variable / Field Name'].tolist()
+    ids = final_df_load['studyid'].tolist()
+    tot_choices_options = dict()
+    choice_fields = []
+    
+    for col in cols_in_fin_df:
+        if col in cols_in_multicoice:
+            tot_choices_options[" _"+col] = ' '
+            choice_fields.append(col)
+            tot_choices = (final_field_choice_allowed.loc[final_field_choice_allowed['Variable / Field Name']==col, 'Choices, Calculations, OR Slider Labels'].values)[0]
+            tot_choices_or_splits = str(tot_choices).split('|')
+            for items in tot_choices_or_splits:
+                temp_choice_holder = items.split(',')
+                tot_choices_options[str(temp_choice_holder[1]).strip()+'_'+col] = str(temp_choice_holder[0]).strip() 
+    
+    print(tot_choices_options)           
+    
+    final_df_load = final_df_load.fillna(" ")
+    
+    to_be_altered_col = []
+    for cols in choice_fields:
+        to_be_altered_col = final_df_load[cols]
+        for i in range(0,len(to_be_altered_col)):
+            to_be_altered_col[i] = tot_choices_options[to_be_altered_col[i]+"_"+cols]
+        
+        final_df_load.pop(cols)
+        final_df_load.insert(4, cols, to_be_altered_col)
+    
+    final_df_load.to_csv('./Test_csvs/final_demo_import_ready.csv', encoding='utf-8', index=False)
+            
 def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     error_list = []
     
@@ -206,10 +262,12 @@ def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     print(maryland_int_df)
     
     # Mapping data:
-    record_updated_kumc = mapping_kumc(kumc_int_df, logging, os,post)
-    record_updated_umb = mapping_UMB(maryland_int_df, logging, os, post)
-    print(record_updated_kumc)
-    print(record_updated_umb)
+    transformed_df_kumc = mapping_kumc(kumc_int_df, logging, os,post)
+    transformed_df_umb = mapping_UMB(maryland_int_df, logging, os, post)
+    
+    # Data loading into PKD Multi-site Registry(https://redcap.kumc.edu/redcap_v13.1.14/index.php?pid=30282)
+    load_final_data(transformed_df_kumc, transformed_df_umb)
+    
     #logging.error(error_str)
     #error_list.append(record_id)
 
