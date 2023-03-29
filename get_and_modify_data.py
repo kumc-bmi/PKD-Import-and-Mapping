@@ -128,7 +128,7 @@ def mapping_kumc(kumc_int_df, logging, os, post):
 
 def mapping_UMB(maryland_int_df,logging,os,post):
     import pandas
-    maryland_final_df = maryland_int_df[['Participant ID:', 'Event Name', 'Visit Date','6. Gender','7. Race', '7a. Specify other race','8. Ethnicity', '9a. National health insurance or government coverage', '10. What is the highest level of education the subject has completed? (Select best answer)']].copy()
+    maryland_final_df = maryland_int_df[['Participant ID:', 'Event Name', 'Visit Date','6. Gender','7. Race', '7a. Specify other race','8. Ethnicity', '9a. National health insurance or government coverage', '10. What is the highest level of education the subject has completed? (Select best answer)', '9b. Employer provided private health insurance']].copy()
     
     # Mapping of the studyids:
     maryland_final_df = maryland_final_df.rename(columns={"Participant ID:": "studyid"})
@@ -149,14 +149,29 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     
     for id in ids:
         if maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Black or African American':
-            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 1
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = str(1)
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=American Indian or Alaska Native)'] = 0
         elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'White':
-            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 1
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = str(1)
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=American Indian or Alaska Native)'] = 0
         elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Asian':
-            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 1
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = str(1)
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=American Indian or Alaska Native)'] = 0     
         elif maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'American Indian or Alaskan Native':
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=American Indian or Alaska Native)'] = 1
-        
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 0
+            maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 0            
+    
+    # Remove the 7. Race field used in above ode:
+    maryland_final_df = maryland_final_df.drop(columns = ['7. Race'])
+    
     # Mapping of other race field:
     maryland_final_df = maryland_final_df.rename(columns={"7a. Specify other race":"other_race"})
     
