@@ -1,0 +1,14 @@
+event_name,arm_num,unique_event_name,custom_event_label,event_id
+Baseline,1,baseline_arm_1,,73705
+Month 6,1,month_6_arm_1,,74723
+Year 1,1,year_1_arm_1,,74724
+Month 18,1,month_18_arm_1,,74725
+Year 2,1,year_2_arm_1,,74726
+Month 30,1,month_30_arm_1,,74727
+Year 3,1,year_3_arm_1,,74728
+Month 42,1,month_42_arm_1,,74729
+Year 4,1,year_4_arm_1,,74730
+Year 5,1,year_5_arm_1,,74731
+Year 6,1,year_6_arm_1,,74732
+Year 7,1,year_7_arm_1,,74733
+Year 8,1,year_8_arm_1,,74734

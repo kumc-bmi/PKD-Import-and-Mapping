@@ -40,7 +40,7 @@ install_python3_cifs:
 	python3 -m pip3 install --user --upgrade pip && \
 	python3 -m pip3 install --user virtualenv    
 
-make_initial_structures:
+make_initial_structures: 
 	# TODO: UPLOAD THE logging.log to lockbox && \
 	touch ./logs/logging.log && \
 	chmod 667 ./logs/logging.log && \
@@ -53,6 +53,9 @@ make_initial_structures:
     wget https://github.com/kumc-bmi/pps-client/releases/download/v1.1/pps-client && \
   	chmod +x ./pps-client && \
 	wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
-	chmod +x ./jq-linux64
+	chmod +x ./jq-linux64 && \
+	pip3 install python-dotenv
+	# import data dict and events && \
+	python3 data_dict_and_event_pops.py
 
 

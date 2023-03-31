@@ -59,16 +59,8 @@ def get_maryland_data_from_sftp(umd_base_data_dir,scandir,logging,date,datetime)
 ## Using code referrence from: 
 ## https://github.com/kumc-bmi/redcapex/blob/29b49d21836a7337beebc1a8b8c7de3dbc541691/download_redcap_data.py#L8
 ## TODO: Add the pps-client to get token and append in .env file 
-def redcap_call(redcap_api_url, token, os, logging, post):
+def redcap_call(redcap_api_url, dataconfig, os, logging, post):
     try:
-        dataconfig = dict()
-        dataconfig["token"] = token
-        for key, value in os.environ.items():
-            if key.startswith("API_data_"):
-                key_entry = key.split("API_data_")[1]
-                dataconfig[key_entry] = value
-
-        logging.info(os.environ.items())
         # Referrenced from code in 
         # https://github.com/kumc-bmi/redcapex/blob/29b49d21836a7337beebc1a8b8c7de3dbc541691/download_redcap_data.py#L10
         log_error_str = """
@@ -77,9 +69,8 @@ def redcap_call(redcap_api_url, token, os, logging, post):
             %s
             """ % (dataconfig)
         response = post(redcap_api_url, data=dataconfig)
-        #print(response)
+        print(post(redcap_api_url, data=dataconfig))
         if response.status_code == 200:
-            #print(type(response.content))
             return response.content
         else:
             logging.error(response.content)
@@ -120,11 +111,14 @@ def mapping_kumc(kumc_int_df, logging, os, post):
     kumc_final_df['What is the race of the subject? (choice=Asian)'] = kumc_final_df['What is the race of the subject? (choice=Asian)'].fillna('0')
     kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'] = kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)'].fillna('0')
     
-    for id in ids:
-        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=Black or African American)']!='0','What is the race of the subject? (choice=Black or African American)'] = '1'
-        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=White)']!='0','What is the race of the subject? (choice=White)'] = '1'
-        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=Asian)']!='0','What is the race of the subject? (choice=Asian)'] = '1'
-        kumc_final_df.loc[kumc_final_df['studyid']==id and kumc_final_df['What is the race of the subject? (choice=American Indian or Alaska Native)']!='0','What is the race of the subject? (choice=American Indian or Alaska Native)'] = '1'
+    race_col_list = ['What is the race of the subject? (choice=Black or African American)', 'What is the race of the subject? (choice=White)','What is the race of the subject? (choice=Asian)', 'What is the race of the subject? (choice=American Indian or Alaska Native)']    
+    for col in race_col_list:
+        alter_race_col_kumc = kumc_final_df.pop(col)
+        for i in range(0, len(alter_race_col_kumc)):
+            if alter_race_col_kumc[i] != '0':
+                alter_race_col_kumc[i] = '1'
+        
+        kumc_final_df.insert(4, col, alter_race_col_kumc)
     
     kumc_final_df['What is the race of the subject? (choice=Black or African American)'] = kumc_final_df['What is the race of the subject? (choice=Black or African American)'].astype('int64')
     kumc_final_df['What is the race of the subject? (choice=White)'] = kumc_final_df['What is the race of the subject? (choice=White)'].astype('int64')
@@ -167,11 +161,7 @@ def mapping_UMB(maryland_int_df,logging,os,post):
     ids = maryland_final_df['studyid'].values
     
     maryland_final_df['7. Race'] = maryland_final_df['7. Race'].fillna(' ')
-    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
-    maryland_final_df['What is the race of the subject? (choice=White)'] = maryland_final_df.loc['What is the race of the subject? (choice=White)'].astype('int64')
-    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
-    maryland_final_df['What is the race of the subject? (choice=Black or African American)'] = maryland_final_df.loc['What is the race of the subject? (choice=Black or African American)'].astype('int64')
-    
+
     for id in ids:
         if maryland_final_df.loc[maryland_final_df['studyid'] == id,'7. Race'].values.all() == 'Black or African American':
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = str(1)
@@ -193,7 +183,7 @@ def mapping_UMB(maryland_int_df,logging,os,post):
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Asian)'] = 0
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=White)'] = 0
             maryland_final_df.loc[maryland_final_df['studyid'] == id,'What is the race of the subject? (choice=Black or African American)'] = 0            
-   
+
     # Remove the 7. Race field used in above ode:
     maryland_final_df = maryland_final_df.drop(columns = ['7. Race'])
     
@@ -236,8 +226,17 @@ def load_final_data(transformed_df_kumc, transformed_df_umb):
     final_df_load.to_csv('./Test_csvs/final_demo_load.csv', encoding='utf-8', index=False)
     
     # Creation of the multi choice field data dict:
-    upload_data_dict = pandas.read_csv('./Mapping_csvs/PKDMultisiteRegistry_DataDictionary_2023-03-26.csv', encoding='utf-8', header=0)
-    final_field_choice_allowed = upload_data_dict[['Variable / Field Name','Choices, Calculations, OR Slider Labels']].copy()
+    upload_data_dict = pandas.read_csv('./Mapping_csvs/PKDMultisiteRegistry_DataDictionary.csv', encoding='utf-8', header=0)
+    data_dict_cols = upload_data_dict.columns
+    
+    cols_of_data_dict = []
+    for cols in data_dict_cols:
+        if str.lower(cols).find('label') and str.lower(cols).find('field'):
+            cols_of_data_dict.append(cols)
+        elif str.lower(cols).find('choices') and str.lower(cols).find('calculations'):
+            cols_of_data_dict.append(cols)
+            
+    final_field_choice_allowed = upload_data_dict[cols_of_data_dict].copy()
     final_field_choice_allowed = final_field_choice_allowed.dropna()
     
     # conversion of multichoice fields to numerical values for REDCap import:
@@ -249,7 +248,7 @@ def load_final_data(transformed_df_kumc, transformed_df_umb):
     
     for col in cols_in_fin_df:
         if col in cols_in_multicoice:
-            tot_choices_options[" _"+col] = ' '
+            tot_choices_options[" _"+col] = '0'
             choice_fields.append(col)
             tot_choices = (final_field_choice_allowed.loc[final_field_choice_allowed['Variable / Field Name']==col, 'Choices, Calculations, OR Slider Labels'].values)[0]
             tot_choices_or_splits = str(tot_choices).split('|')
@@ -259,7 +258,7 @@ def load_final_data(transformed_df_kumc, transformed_df_umb):
     
     print(tot_choices_options)           
     
-    final_df_load = final_df_load.fillna(" ")
+    final_df_load = final_df_load.fillna(' ')
     
     to_be_altered_col = []
     for cols in choice_fields:
@@ -271,6 +270,16 @@ def load_final_data(transformed_df_kumc, transformed_df_umb):
         final_df_load.insert(4, cols, to_be_altered_col)
     
     final_df_load.to_csv('./Test_csvs/final_demo_import_ready.csv', encoding='utf-8', index=False)
+
+def redcap_api_cred_creation(token, prefix_for_pull, os):
+    dataconfig = dict()
+    dataconfig["token"] = token
+    for key, value in os.environ.items():
+        if key.startswith(prefix_for_pull):
+            key_entry = key.split(prefix_for_pull)[1]
+            dataconfig[key_entry] = value
+
+    return dataconfig
             
 def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     error_list = []
@@ -278,20 +287,24 @@ def main(umd_base_data_dir, logging, post, scandir, os, StringIO,date,datetime):
     # read children national config file
     data_token_chld = os.getenv('token_chld')
     chld_redcap_api_url = os.getenv('chld_redcap_api_url')
+    chld_data_import_data_dict = dict(redcap_api_cred_creation(data_token_chld,'API_data_',os))
 
     # read kumc config file
     data_token_kumc = os.getenv('token_kumc')
     kumc_redcap_api_url = os.getenv('kumc_redcap_api_url')
-
+    kumc_data_import_data_dict = dict(redcap_api_cred_creation(data_token_kumc,'API_data_',os))
+    
+    print(kumc_data_import_data_dict)
+    
     # redcap calls-KUMC
-    df_kumc = redcap_call(kumc_redcap_api_url, data_token_kumc, os, logging, post)
+    df_kumc = redcap_call(kumc_redcap_api_url, kumc_data_import_data_dict, os, logging, post)
     temp_df_kumc = str(df_kumc,'utf-8')
     data_kumc = StringIO(temp_df_kumc)
     kumc_int_df = pd.read_csv(data_kumc, header=0, encoding='utf-8')
     print(kumc_int_df.columns)
 
     # redcap calls-CHLD
-    df_chld = redcap_call(chld_redcap_api_url, data_token_chld, os, logging, post)
+    df_chld = redcap_call(chld_redcap_api_url, chld_data_import_data_dict, os, logging, post)
     temp_df_chld = str(df_chld,'utf-8')
     data_chld = StringIO(temp_df_chld)
     chld_int_df = pd.read_csv(data_chld, header=0, encoding='utf-8')
