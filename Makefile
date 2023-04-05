@@ -4,12 +4,11 @@
 
 clean:
 	rm -f .make.* || true
-	rm -rf ./
 
 all: .make.venv
 
 .make.venv:
-	# "creating python3 virtual env"
+	# "creating python virtual env"
 	which python
 	python -V
 	pip freeze
