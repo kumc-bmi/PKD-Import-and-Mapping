@@ -5,8 +5,6 @@
 clean:
 	rm -f .make.* || true
 	rm -rf ./
-	# "deleting python3 virtual env"
-	rm -rf ./venv
 
 all: .make.venv
 
@@ -15,8 +13,6 @@ all: .make.venv
 	which python
 	python -V
 	pip freeze
-	python -m virtualenv venv
-	. ./venv/bin/activate && \
 	pip install -r requirements.txt  && \
 	pip freeze >  requirements_pip_freeze.txt  && \
 	which python
