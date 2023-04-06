@@ -2,3 +2,9 @@ pandas
 requests
 pathlib2
 configparser
+PyCap
+certifi
+chardet
+numpy
+semantic-version
+urllib3
