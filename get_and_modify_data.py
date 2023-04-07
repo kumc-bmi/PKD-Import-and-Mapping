@@ -57,6 +57,7 @@ if __name__ == "__main__":
         from redcap import Project
 
         get_config = main(os_path, openf, argv, Project)
+        print(get_config)
         main(get_config)
 
     _main_ocap()
