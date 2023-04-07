@@ -56,7 +56,6 @@ if __name__ == "__main__":
         from __builtin__ import open as openf
         # from redcap import Project
 
-        get_config = main(os_path, openf, argv)
-        main(get_config)
+        main(os_path, openf, argv)
 
     _main_ocap()
