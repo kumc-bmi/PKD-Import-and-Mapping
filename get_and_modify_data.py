@@ -1,125 +1,49 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
 
 import configparser
-import os
+import logging
 
-def get_maryland_data_from_sftp():
-    
-    
-def mkdirp(newpath):
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
+log_details = logging.getLogger(__name__)
 
-def make_redcap_api_call(redcap_api_url, data, logging, post):
+def main(os_path, openf, argv, Project):
+    def get_config():
+        [config_fn, pid] = argv[1:3]
 
-    try:
-        log_error_str = """
-            redcap rest call was unsuccessful
-            or target server is down/ check configuration
-            %s
-            """ % (data)
-        response = post(redcap_api_url, data)
-        if response.status_code == 200:
-            return response.content
-        else:
-            logging.error('%s : status_code: %s' %
-                          (log_error_str, response.status_code))
+        config = configparser.SafeConfigParser()
+        print(config)
+        config_fp = openf(config_fn)
+        print(config_fp)
+        config.readfp(config_fp, filename=config_fn)
 
-    except Exception as e:
-        logging.error('log_error_str : %s' % (e))
+        # read kumc and children national credentials from config file
+        def pull_api_data(api_arr, token_arr):
+            results = []
+            for api_value, token_value in zip(api_arr, token_arr):
+                api_url = config.get('api', api_value)
+                verify_ssl = config.getboolean('api', 'verify_ssl')
+                log_details.debug('API URL: %s', api_url)
 
+                data_token = config.get(pid, token_value)
+                data_proj = Project(api_url, data_token, verify_ssl=verify_ssl)
+                results.append(data_proj)
+            # return the data API for each RedCap sites
+            return results
 
-def read_config(config_file, logging, Path):
+        api = ['kumc_redcap_api_url', 'chld_redcap_api_url']
+        token = ['token_kumc', 'token_chld']
 
-    config = configparser.ConfigParser()
-    config.optionxform = str
-    config.readfp(Path(config_file).open(), str(config_file))
+        data_projs = pull_api_data(api, token)
 
-    sections = [section for section in config.sections()]
-    logging.info("availabe configs: %s" % (sections))
+        print(data_projs)
+                
+        def open_dest(file_name, file_format):
+            file_dest = config.get(pid, 'file_dest')
+            return openf(os_path.join(file_dest,
+                                      file_name + '.' + file_format), 'wb')
 
-    return config
-
-
-def save_file(folder_path, file_name, data_string, join, Path, logging,
-              record_id, title):
-    """Save file to local or shared location
-
-    Args:
-        folder_path (string): folder_path
-        file_name (string): file_name
-        data_string (string): data which will be written to file
-    """
-
-    full_path = join(folder_path, file_name)
-    # taking care of windows path
-    full_path = full_path.replace('\\', '/')
-    full_path = Path(full_path)
-    full_path.write_bytes(data_string)
-    logging.info("""
-    Record_id:%s and title:%s File has been downloaded at %s
-    """ % (record_id, title, full_path))
-
-
-def main(config_file, pid_titles, logging, post, join, environ, Path, redcap_api_url, where_to_save):
-
-    error_list = []
-    # read config file
-    config = read_config(config_file, logging, Path)
-
-    # parse config
-    # redcap_api_url = config._sections['global']['redcap_api_url']
-    if pid_titles == 'ALL':
-        pid_titles = [section for section in config.sections()]
-    else:
-        pid_titles = [pid_titles]
-
-    for pid_title in pid_titles:
-        request_payload = dict(config.items(pid_title))
-
-        # reading key from environment variable and replace string with key
-        # request_payload['token'] = environ[request_payload['token']]
-
-        # send request to redcap
-        data_string = make_redcap_api_call(
-            redcap_api_url, request_payload, logging, post)
-
-        record_id = request_payload['record_id']
-        title = request_payload['title']
-
-        # creating export path and filename
-        file_name = request_payload['export_filename']
-        local_export_path = request_payload['local_export_path']
-        shared_export_path = request_payload['export_path']
-
-        if data_string == None:
-            # API called failed
-            error_list.append(record_id)
-            break
+        return pid, data_projs, open_dest
+    return get_config    
         
-        mkdirp(local_export_path)
-        save_file(local_export_path, file_name,
-                  data_string, join, Path, logging, record_id, title)
-
-        try:
-
-            if where_to_save == "local_and_pdrive":
-                save_file(shared_export_path, file_name,
-                          data_string, join, Path, logging, record_id, title)
-
-        except FileNotFoundError as e:
-            error_str = "Issue saving file to shared location: %s  and excpetion is: %s" % (
-                shared_export_path, e)
-
-            logging.error(error_str)
-            error_list.append(record_id)
-
-    if len(error_list) > 0:
-        logging.error("""All files are saved local location and shared location , EXCEPT following files with following recording id:
-        %s
-        """ % (error_list))
-        raise()
-
 
 if __name__ == "__main__":
 
@@ -127,22 +51,12 @@ if __name__ == "__main__":
         '''
         # https://www.madmode.com/2019/python-eng.html
         '''
-
-        import logging
-        from requests import post
-        from os import environ
-        from os.path import join
         from sys import argv
-        from pathlib2 import Path
+        from os import path as os_path
+        from __builtin__ import open as openf
+        from redcap import Project
 
-        logging.basicConfig(level=logging.DEBUG)
-
-        if len(argv) != 5:
-            logging.error("""Wrong format or arguments :
-             please try like 'python download_recap_data.py config_file pid""")
-
-        [config_file, pid_titles, redcap_api_url, where_to_save] = argv[1:]
-        main(config_file, pid_titles, logging, post,
-             join, environ, Path, redcap_api_url, where_to_save)
+        get_config = main(os_path, openf, argv, Project)
+        main(get_config)
 
     _main_ocap()
