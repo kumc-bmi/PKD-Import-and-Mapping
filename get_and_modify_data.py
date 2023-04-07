@@ -36,9 +36,7 @@ def main(os_path, openf, argv):
             file_dest = config.get(pid, 'file_dest')
             return openf(os_path.join(file_dest,
                                       file_name + '.' + file_format), 'wb')
-        print(pid)
-        print(data_projs)
-        print(open_dest)
+
         return pid, data_projs, open_dest
     return get_config    
         
@@ -55,6 +53,6 @@ if __name__ == "__main__":
         # from redcap import Project
 
         config_details = main(os_path, openf, argv)
-        print(config_details)
+        print(type(config_details))
 
     _main_ocap()
