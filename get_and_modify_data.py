@@ -24,13 +24,13 @@ def main(os_path, openf, argv, Project):
                 log_details.debug('API URL: %s', api_url)
 
                 data_token = config.get(pid, token_value)
-                data_proj = Project(api_url, data_token, verify_ssl=verify_ssl)
-                results.append(data_proj)
+                # data_proj = Project(api_url, data_token, verify_ssl=verify_ssl)
+                results.append(data_token)
             # return the data API for each RedCap sites
             return results
 
-        api = ['kumc_redcap_api_url']
-        token = ['token_kumc']
+        api = ['kumc_redcap_api_url', 'chld_redcap_api_url']
+        token = ['token_kumc', 'token_chld']
 
         data_projs = pull_api_data(api, token)
 
@@ -54,10 +54,9 @@ if __name__ == "__main__":
         from sys import argv
         from os import path as os_path
         from __builtin__ import open as openf
-        from redcap import Project
+        # from redcap import Project
 
-        get_config = main(os_path, openf, argv, Project)
-        print(get_config)
+        get_config = main(os_path, openf, argv)
         main(get_config)
 
     _main_ocap()
