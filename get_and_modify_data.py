@@ -5,7 +5,7 @@ import logging
 
 log_details = logging.getLogger(__name__)
 
-def main(os_path, openf, argv, Project):
+def main(os_path, openf, argv):
     def get_config():
         [config_fn, pid] = argv[1:3]
 
