@@ -20,5 +20,5 @@ all: .make.venv .make.get_and_modify_data
 	touch .make.venv
 
 .make.get_and_modify_data: .make.venv
-	python get_and_modify_data.py $config_file 30282
+	python get_and_modify_data.py --arg $(config_file) 30282
 	touch .make.get_and_modify_data
