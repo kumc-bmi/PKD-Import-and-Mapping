@@ -10,9 +10,7 @@ def main(os_path, openf, argv):
         [config_fn, pid] = argv[1:3]
 
         config = configparser.SafeConfigParser()
-        print(config)
         config_fp = openf(config_fn)
-        print(config_fp)
         config.readfp(config_fp, filename=config_fn)
 
         # read kumc and children national credentials from config file
@@ -33,14 +31,14 @@ def main(os_path, openf, argv):
         token = ['token_kumc', 'token_chld']
 
         data_projs = pull_api_data(api, token)
-
-        print(data_projs)
                 
         def open_dest(file_name, file_format):
             file_dest = config.get(pid, 'file_dest')
             return openf(os_path.join(file_dest,
                                       file_name + '.' + file_format), 'wb')
-
+        print(pid)
+        print(data_projs)
+        print(open_dest)
         return pid, data_projs, open_dest
     return get_config    
         
@@ -56,6 +54,7 @@ if __name__ == "__main__":
         from __builtin__ import open as openf
         # from redcap import Project
 
-        main(os_path, openf, argv)
+        config_details = main(os_path, openf, argv)
+        print(config_details)
 
     _main_ocap()
