@@ -5,7 +5,7 @@ import logging
 
 log_details = logging.getLogger(__name__)
 
-def main(os_path, openf, argv):
+def main(os_path, openf, argv, Project):
     def get_config():
         [config_fn, pid] = argv[1:3]
 
@@ -22,8 +22,8 @@ def main(os_path, openf, argv):
                 log_details.debug('API URL: %s', api_url)
 
                 data_token = config.get(pid, token_value)
-                # data_proj = Project(api_url, data_token, verify_ssl=verify_ssl)
-                results.append(data_token)
+                data_proj = Project(api_url, data_token, verify_ssl=verify_ssl)
+                results.append(data_proj)
             # return the data API for each RedCap sites
             return results
 
@@ -38,7 +38,7 @@ def main(os_path, openf, argv):
                                       file_name + '.' + file_format), 'wb')
 
         return pid, data_projs, open_dest
-    return get_config    
+    return get_config
         
 
 if __name__ == "__main__":
@@ -50,9 +50,9 @@ if __name__ == "__main__":
         from sys import argv
         from os import path as os_path
         from __builtin__ import open as openf
-        # from redcap import Project
+        from redcap import Project
 
-        config_details = main(os_path, openf, argv)
+        config_details = main(os_path, openf, argv, Project)
         print(type(config_details))
 
     _main_ocap()
