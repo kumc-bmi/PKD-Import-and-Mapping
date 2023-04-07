@@ -5,7 +5,7 @@
 clean:
 	rm -f .make.* || true
 
-all: .make.venv
+all: .make.venv .make.get_and_modify_data
 
 .make.venv:
 	# "creating python virtual env"
@@ -18,3 +18,7 @@ all: .make.venv
 	python -V
 	pip freeze
 	touch .make.venv
+
+.make.get_and_modify_data:
+	python get_and_modify_data.py $config_file 30282
+	touch .make.get_and_modify_data
