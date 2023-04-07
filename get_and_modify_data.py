@@ -29,8 +29,8 @@ def main(os_path, openf, argv, Project):
             # return the data API for each RedCap sites
             return results
 
-        api = ['kumc_redcap_api_url', 'chld_redcap_api_url']
-        token = ['token_kumc', 'token_chld']
+        api = ['kumc_redcap_api_url']
+        token = ['token_kumc']
 
         data_projs = pull_api_data(api, token)
 
