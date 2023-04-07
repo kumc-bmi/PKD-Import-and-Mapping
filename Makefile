@@ -19,6 +19,6 @@ all: .make.venv .make.get_and_modify_data
 	pip freeze
 	touch .make.venv
 
-.make.get_and_modify_data:
+.make.get_and_modify_data: .make.venv
 	python get_and_modify_data.py $config_file 30282
 	touch .make.get_and_modify_data
