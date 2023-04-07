@@ -11,6 +11,7 @@ all: .make.venv .make.get_and_modify_data
 	# "creating python virtual env"
 	which python
 	python -V
+	pip install redcap
 	pip freeze
 	pip install -r requirements.txt  && \
 	pip freeze >  requirements_pip_freeze.txt  && \
@@ -20,5 +21,5 @@ all: .make.venv .make.get_and_modify_data
 	touch .make.venv
 
 .make.get_and_modify_data: .make.venv
-	python get_and_modify_data.py --arg $(config_file) 30282
+	python get_and_modify_data.py $(config_file) 30282
 	touch .make.get_and_modify_data
