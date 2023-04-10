@@ -6,21 +6,23 @@ import logging
 log_details = logging.getLogger(__name__)
 
 def main(os_path, openf, argv):
-    [config_fn, pid] = argv[1:3]
-    config = configparser.SafeConfigParser()
-    config_fp = openf(config_fn)
-    config.readfp(config_fp, filename=config_fn)
+    def get_config():
+        [config_fn, pid] = argv[1:3]
+        config = configparser.SafeConfigParser()
+        config_fp = openf(config_fn)
+        config.readfp(config_fp, filename=config_fn)
 
-    values = {}
-    values['kumc_api'] = config.get('api', 'kumc_redcap_api_url')
-    values['verify_ssl'] = config.getboolean('api', 'verify_ssl')
-    values['file_dest'] = config.get(pid, 'file_dest')
+        values = {}
+        values['kumc_api'] = config.get('api', 'kumc_redcap_api_url')
+        values['verify_ssl'] = config.getboolean('api', 'verify_ssl')
+        values['file_dest'] = config.get(pid, 'file_dest')
 
-    def open_dest(file_name, file_format):
-        file_dest = config.get(pid, 'file_dest')
-        return openf(os_path.join(file_dest, file_name + '.' + file_format), 'wb')
-
-    return values, open_dest
+        def open_dest(file_name, file_format):
+            file_dest = config.get(pid, 'file_dest')
+            return openf(os_path.join(file_dest, 
+                                    file_name + '.' + file_format), 'wb')
+        return values, open_dest
+    return get_config
         
 
 if __name__ == "__main__":
@@ -34,8 +36,6 @@ if __name__ == "__main__":
         print(config_values['kumc_api'])
         print(config_values['verify_ssl'])
         print(config_values['file_dest'])
-        # kumc = 'kumc'
-        # fmt = 'csv'
-        # print(config_values.open_dest(kumc,fmt))
+       
 
     _main_ocap()
