@@ -31,8 +31,6 @@ def main(os_path, openf, argv):
         values['data_return_format'] = config.get('default', 'data_return_format')
         values['data_overwrite'] = config.get('default', 'data_overwrite')
         values['data_date_format'] = config.get('default', 'data_date_format')
-        # values['log_format'] = config.get('default', 'log_format')
-        # values['log_datefmt'] = config.get('default', 'log_datefmt')
         
         # api
         values['kumc_redcap_api_url'] = config.get('api', 'kumc_redcap_api_url')
@@ -64,5 +62,12 @@ if __name__ == "__main__":
         print(config_values['token_chld'])
         print(config_values['proj_token'])
         print(config_values['file_dest'])
+        print(config_values['import_dir'])
+        print(config_values['export_dir'])
+        print(config_values['data_content'])
+        print(config_values['data_event'])
+        print(config_values['data_metadata'])
+        print(config_values['data_action_export'])
+        print(config_values['data_action_import'])
 
     _main_ocap()
