@@ -45,7 +45,7 @@ def main(os_path, openf, argv):
         values['proj_token'] = config.get(pid, 'proj_token')
         values['file_dest'] = config.get(pid, 'file_dest')
 
-        return values, pid, config_fn 
+        return values 
     return get_config()
         
 
@@ -64,8 +64,5 @@ if __name__ == "__main__":
         print(config_values['token_chld'])
         print(config_values['proj_token'])
         print(config_values['file_dest'])
-        print(config_values[0])
-        print(config_values[1])
-        print(config_values[2])
 
     _main_ocap()
