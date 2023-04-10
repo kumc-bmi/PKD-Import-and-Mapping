@@ -45,7 +45,7 @@ def main(os_path, openf, argv):
         values['proj_token'] = config.get(pid, 'proj_token')
         values['file_dest'] = config.get(pid, 'file_dest')
 
-        return values, pid, config_fn, 
+        return values, pid, config_fn 
     return get_config()
         
 
