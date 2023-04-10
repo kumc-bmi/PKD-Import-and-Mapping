@@ -69,5 +69,6 @@ if __name__ == "__main__":
         print(config_values['data_metadata'])
         print(config_values['data_action_export'])
         print(config_values['data_action_import'])
+        print(config_values)
 
     _main_ocap()
