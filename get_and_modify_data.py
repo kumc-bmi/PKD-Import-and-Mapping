@@ -34,8 +34,8 @@ if __name__ == "__main__":
         print(config_values['kumc_api'])
         print(config_values['verify_ssl'])
         print(config_values['file_dest'])
-        kumc = 'kumc'
-        fmt = 'csv'
-        print(config_values.open_dest(kumc,fmt))
+        # kumc = 'kumc'
+        # fmt = 'csv'
+        # print(config_values.open_dest(kumc,fmt))
 
     _main_ocap()
