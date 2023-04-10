@@ -55,20 +55,6 @@ if __name__ == "__main__":
         from __builtin__ import open as openf
 
         config_values = main(os_path, openf, argv)
-        print(config_values['kumc_redcap_api_url'])
-        print(config_values['chld_redcap_api_url'])
-        print(config_values['verify_ssl'])
-        print(config_values['token_kumc'])
-        print(config_values['token_chld'])
-        print(config_values['proj_token'])
-        print(config_values['file_dest'])
-        print(config_values['import_dir'])
-        print(config_values['export_dir'])
-        print(config_values['data_content'])
-        print(config_values['data_event'])
-        print(config_values['data_metadata'])
-        print(config_values['data_action_export'])
-        print(config_values['data_action_import'])
         print(config_values)
 
     _main_ocap()
