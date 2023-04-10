@@ -31,8 +31,8 @@ def main(os_path, openf, argv):
         values['data_return_format'] = config.get('default', 'data_return_format')
         values['data_overwrite'] = config.get('default', 'data_overwrite')
         values['data_date_format'] = config.get('default', 'data_date_format')
-        values['log_format'] = config.get('default', 'log_format')
-        values['log_datefmt'] = config.get('default', 'log_datefmt')
+        # values['log_format'] = config.get('default', 'log_format')
+        # values['log_datefmt'] = config.get('default', 'log_datefmt')
         
         # api
         values['kumc_redcap_api_url'] = config.get('api', 'kumc_redcap_api_url')
