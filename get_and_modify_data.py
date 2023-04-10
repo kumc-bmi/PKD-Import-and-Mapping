@@ -33,9 +33,9 @@ if __name__ == "__main__":
         from __builtin__ import open as openf
 
         config_values = main(os_path, openf, argv)
-        print(config_values['kumc_api'])
-        print(config_values['verify_ssl'])
-        print(config_values['file_dest'])
+        print(config_values[0])
+        print(config_values[1])
+        print(config_values[2])
        
 
     _main_ocap()
