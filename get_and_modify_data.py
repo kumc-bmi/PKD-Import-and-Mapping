@@ -21,7 +21,7 @@ def main(os_path, openf, argv):
             return openf(os_path.join(file_dest, 
                                     file_name + '.' + file_format), 'wb')
         return kumc_api, verify_ssl, file_dest, open_dest
-    return get_config
+    return get_config()
         
 
 if __name__ == "__main__":
