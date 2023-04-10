@@ -16,11 +16,7 @@ def main(os_path, openf, argv):
         verify_ssl = config.getboolean('api', 'verify_ssl')
         file_dest = config.get(pid, 'file_dest')
 
-        def open_dest(file_name, file_format):
-            file_dest = config.get(pid, 'file_dest')
-            return openf(os_path.join(file_dest, 
-                                    file_name + '.' + file_format), 'wb')
-        return kumc_api, verify_ssl, file_dest, open_dest
+        return kumc_api, verify_ssl, file_dest, config_fn, pid, os_path
     return get_config()
         
 
@@ -35,6 +31,9 @@ if __name__ == "__main__":
         print(config_values[0])
         print(config_values[1])
         print(config_values[2])
+        print(config_values[3])
+        print(config_values[4])
+        print(config_values[5])
        
 
     _main_ocap()
