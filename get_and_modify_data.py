@@ -12,16 +12,15 @@ def main(os_path, openf, argv):
         config_fp = openf(config_fn)
         config.readfp(config_fp, filename=config_fn)
 
-        values = {}
-        values['kumc_api'] = config.get('api', 'kumc_redcap_api_url')
-        values['verify_ssl'] = config.getboolean('api', 'verify_ssl')
-        values['file_dest'] = config.get(pid, 'file_dest')
+        kumc_api = config.get('api', 'kumc_redcap_api_url')
+        verify_ssl = config.getboolean('api', 'verify_ssl')
+        file_dest = config.get(pid, 'file_dest')
 
         def open_dest(file_name, file_format):
             file_dest = config.get(pid, 'file_dest')
             return openf(os_path.join(file_dest, 
                                     file_name + '.' + file_format), 'wb')
-        return values, open_dest
+        return kumc_api, verify_ssl, file_dest, open_dest
     return get_config
         
 
