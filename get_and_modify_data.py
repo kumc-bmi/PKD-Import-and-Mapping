@@ -7,6 +7,10 @@ import pandas as pd
 log_details = logging.getLogger(__name__)
 
 def merge_sites_csv():
+    # based on site convert src_var to trg_var
+    # site, (src_val_raw, src_val_lbl) <=> (trg_val, trg_lbl)
+    # TRGCALCFIELD => calculated field
+
     # read kumc csv
     kumc_csv = pd.read_csv(csv_kumc, encoding='utf-8', header=True)
     # read university of alabama csv
