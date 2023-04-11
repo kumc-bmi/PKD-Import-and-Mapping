@@ -2,8 +2,21 @@
 
 import configparser
 import logging
+import pandas as pd
 
 log_details = logging.getLogger(__name__)
+
+def merge_sites_csv():
+    # read kumc csv
+    kumc_csv = pd.read_csv(csv_kumc, encoding='utf-8', header=True)
+    # read university of alabama csv
+    uab_csv = pd.read_csv(csv_uab, encoding='utf-8', header=True)
+    # read university of maryland csv
+    umb_csv = pd.read_csv(csv_umb, encoding='utf-8', header=True)
+
+    # merge all sites csv
+    merged_csvs = pd.concat([kumc_csv, uab_csv, umb_csv])
+    return merged_csvs
 
 def main(os_path, openf, argv):
     def get_config():
