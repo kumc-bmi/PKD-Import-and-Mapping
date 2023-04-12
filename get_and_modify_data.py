@@ -3,7 +3,7 @@
 import configparser
 import logging
 import pandas as pd
-from builtins import open as openf
+from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
 
