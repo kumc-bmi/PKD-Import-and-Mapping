@@ -13,7 +13,7 @@ def mapped_headers():
     # TRGCALCFIELD => calculated field
 
     # moving mapping csv into dataframe
-    mapping_df = pd.read_csv('../csvs/mapping.csv')
+    mapping_df = pd.read_csv('./csvs/mapping.csv')
 
     # ensure all values are lowercase
     col_header_df = mapping_df[['src_val', 'trg_val', 'site']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
