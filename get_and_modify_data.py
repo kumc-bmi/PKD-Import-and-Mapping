@@ -3,24 +3,40 @@
 import configparser
 import logging
 import pandas as pd
+from builtins import open as openf
 
 log_details = logging.getLogger(__name__)
 
-def merge_sites_csv():
+def mapped_headers():
     # based on site convert src_var to trg_var
-    # site, (src_val_raw, src_val_lbl) <=> (trg_val, trg_lbl)
+    # site, src_val, trg_val => (sites, column headers, target column header)
     # TRGCALCFIELD => calculated field
 
-    # read kumc csv
-    kumc_csv = pd.read_csv(csv_kumc, encoding='utf-8', header=True)
-    # read university of alabama csv
-    uab_csv = pd.read_csv(csv_uab, encoding='utf-8', header=True)
-    # read university of maryland csv
-    umb_csv = pd.read_csv(csv_umb, encoding='utf-8', header=True)
+    # moving mapping csv into dataframe
+    mapping_df = pd.read_csv('../csvs/mapping.csv')
 
-    # merge all sites csv
-    merged_csvs = pd.concat([kumc_csv, uab_csv, umb_csv])
-    return merged_csvs
+    # ensure all values are lowercase
+    col_header_df = mapping_df[['src_val', 'trg_val', 'site']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+
+    # select unique colums from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
+    unique_header_cols = col_header_df.loc([col_header_df['trg_var'].notnull(), ['src_val', 'trg_val', 'site']].drop_duplicates(keep='first', ignore_index=True))
+
+    # drop calculated field for later custom logic function
+    unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('TRGCALCFIELD')]
+
+    cols_headers = pd.DataFrame(unique_header_cols_df, columns=['src_val','trg_val', 'site'])
+
+    # get headers for KUMC
+    kumc_col_headers = cols_headers[cols_headers['site'] == 'kumc']
+
+    # get headers for Alabama
+    uab_col_headers = cols_headers[cols_headers['site'] == 'uab']
+
+    # get headers for Maryland
+    umb_col_headers = cols_headers[cols_headers['site'] == 'umb']
+
+    # return header columns for all sites
+    return kumc_col_headers, uab_col_headers, umb_col_headers
 
 def main(os_path, openf, argv):
     def get_config():
@@ -73,5 +89,8 @@ if __name__ == "__main__":
 
         config_values = main(os_path, openf, argv)
         print(config_values)
+
+        site_headers = mapped_headers()
+        print(site_headers)
 
     _main_ocap()
