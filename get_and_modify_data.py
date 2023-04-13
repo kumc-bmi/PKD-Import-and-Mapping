@@ -13,22 +13,22 @@ def csv_file():
 
 def mapped_headers():
     # based on site convert src_var to trg_var
-    # site, src_var, trg_val => (sites, column headers, target column header)
+    # site, src_var, trg_var => (sites, column headers, target column header)
     # TRGCALCFIELD => calculated field
 
     # moving mapping csv into dataframe
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
 
     # ensure all values are lowercase
-    col_header_df = mapping_df[['src_var', 'site', 'trg_val']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+    col_header_df = mapping_df[['src_var', 'site', 'trg_var']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
     # select unique colums from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
-    unique_header_cols = col_header_df.loc([col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_val']].drop_duplicates(keep='first', ignore_index=True))
+    unique_header_cols = col_header_df.loc([col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(keep='first', ignore_index=True))
 
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('TRGCALCFIELD', na=True)]
 
-    cols_headers = pd.DataFrame(unique_header_cols_df, columns=['src_var', 'site', 'trg_val'])
+    cols_headers = pd.DataFrame(unique_header_cols_df, columns=['src_var', 'site', 'trg_var'])
 
     # get headers for KUMC
     kumc_col_headers = cols_headers[cols_headers['site'] == 'kumc']
