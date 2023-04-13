@@ -7,10 +7,6 @@ from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
 
-def csv_file():
-    mapping_records = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
-    return mapping_records
-
 def mapped_headers():
     # based on site convert src_var to trg_var
     # site, src_var, trg_var => (sites, column headers, target column header)
@@ -22,22 +18,20 @@ def mapped_headers():
     # ensure all values are lowercase
     col_header_df = mapping_df[['src_var', 'site', 'trg_var']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
-    # select unique colums from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
+    # select unique columns from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
     unique_header_cols = col_header_df.loc[col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
 
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
 
-    cols_headers = pd.DataFrame(unique_header_cols_df, columns=['src_var', 'site', 'trg_var'])
-
     # get headers for KUMC
-    kumc_col_headers = cols_headers[cols_headers['site'] == 'kumc']
+    kumc_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'kumc']
 
     # get headers for Alabama
-    uab_col_headers = cols_headers[cols_headers['site'] == 'uab']
+    uab_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'uab']
 
     # get headers for Maryland
-    umb_col_headers = cols_headers[cols_headers['site'] == 'umb']
+    umb_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'umb']
 
     # return header columns for all sites
     return kumc_col_headers, uab_col_headers, umb_col_headers
