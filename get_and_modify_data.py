@@ -88,9 +88,6 @@ if __name__ == "__main__":
         config_values = main(os_path, openf, argv)
         print(config_values)
 
-        csv_df = csv_file()
-        print(csv_df)
-
         site_headers = mapped_headers()
         print(site_headers)
 
