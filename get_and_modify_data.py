@@ -7,6 +7,10 @@ from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
 
+def csv_file():
+    mapping_records = pd.read_csv('./csvs/mapping.csv')
+    return mapping_records
+
 def mapped_headers():
     # based on site convert src_var to trg_var
     # site, src_val, trg_val => (sites, column headers, target column header)
@@ -89,6 +93,9 @@ if __name__ == "__main__":
 
         config_values = main(os_path, openf, argv)
         print(config_values)
+
+        csv_df = csv_file()
+        print(csv_df)
 
         site_headers = mapped_headers()
         print(site_headers)
