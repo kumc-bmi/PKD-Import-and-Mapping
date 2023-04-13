@@ -8,7 +8,7 @@ from __builtin__ import open as openf
 log_details = logging.getLogger(__name__)
 
 def csv_file():
-    mapping_records = pd.read_csv('./csvs/mapping.csv')
+    mapping_records = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
     return mapping_records
 
 def mapped_headers():
@@ -17,7 +17,7 @@ def mapped_headers():
     # TRGCALCFIELD => calculated field
 
     # moving mapping csv into dataframe
-    mapping_df = pd.read_csv('./csvs/mapping.csv')
+    mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
 
     # ensure all values are lowercase
     col_header_df = mapping_df[['src_val', 'site', 'trg_val']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
