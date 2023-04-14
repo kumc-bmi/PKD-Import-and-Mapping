@@ -55,7 +55,7 @@ def mapped_headers():
     umb_src_val = unique_source_values[unique_source_values['site'] == 'umb']
 
     # raw data for KUMC
-    kumc_data_df = pd.read_csv('./csv/kumc_data.csv', skip_blank_lines=True)
+    kumc_data_df = pd.read_csv('./csvs/kumc_data.csv', skip_blank_lines=True)
 
     # Create a dictionary that maps the corrected column names to the original names
     kumc_column_mapping = dict(zip(kumc_col_headers['src_var'], kumc_col_headers['trg_var']))
