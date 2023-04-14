@@ -24,80 +24,57 @@ def mapped_headers():
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
 
-    # get headers for KUMC
-    kumc_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'kumc']
+    for site in ['kumc', 'uab', 'umb']:
+        site_col_headers = site + '_col_headers'
+        site_src_val = site + '_src_val'
+        site_data_df = site + '_data_df'
+        site_column_mapping = site + '_column_mapping'
+        site_data_col_renamed_df = site + '_data_col_renamed_df'
+        site_source_mapping = site + '_source_mapping'
+        site_column_mapping = site + '_column_mapping'
+        site_final = site + '_final'
 
-    # get headers for Alabama
-    uab_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'uab']
+        # get headers for each site
+        site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
 
-    # get headers for Maryland
-    umb_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'umb']
+        # source values from mapping file
+        source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
-    # source values from mapping file
-    source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+        # combine src_val_raw and src_val_lbl into a single column
+        source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
 
-    # combine src_val_raw and src_val_lbl into a single column
-    source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
+        # drop rows with no src_val_raw or src_val_lbl
+        source_df = source_df.dropna(subset=['source_val_combined'])
 
-    # drop rows with no src_val_raw or src_val_lbl
-    source_df = source_df.dropna(subset=['source_val_combined'])
+        # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
+        unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
 
-    # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
-    unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
+        # get source value labels for KUMC
+        site_src_val = unique_source_values[unique_source_values['site'] == 'kumc']
 
-    # get source value labels for KUMC
-    kumc_src_val = unique_source_values[unique_source_values['site'] == 'kumc']
+        # raw data for KUMC
+        site_data_df = pd.read_csv('./csvs/' + site + '_data.csv', skip_blank_lines=True)
 
-    # get source value labels for Alabama
-    uab_src_val = unique_source_values[unique_source_values['site'] == 'uab']
+        # Create a dictionary that maps the corrected column names to the original names
+        site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
 
-    # get source value labels for Maryland
-    umb_src_val = unique_source_values[unique_source_values['site'] == 'umb']
+        # Rename the columns using the dictionary
+        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping)
 
-    # raw data for KUMC
-    kumc_data_df = pd.read_csv('./csvs/kumc_data.csv', skip_blank_lines=True)
+        # convert corresponding source row values to target source value
+        site_source_mapping = site_src_val[site_src_val['site'] == 'kumc']
 
-    # Create a dictionary that maps the corrected column names to the original names
-    kumc_column_mapping = dict(zip(kumc_col_headers['src_var'], kumc_col_headers['trg_var']))
+        # Create a dictionary that maps the target source values to the original source site value
+        site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
-    # Rename the columns using the dictionary
-    kumc_data_col_renamed_df = kumc_data_df.rename(columns=kumc_column_mapping)
+        # apply the mapping to the column with values to be converted
+        site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
 
-    # convert corresponding source row values to target source value
-    kumc_source_mapping = kumc_src_val[kumc_src_val['site'] == 'kumc']
-
-    # Create a dictionary that maps the target source values to the original source site value
-    kumc_column_mapping = dict(zip(kumc_source_mapping['source_val_combined'], kumc_source_mapping['trg_val']))
-
-    # apply the mapping to the column with values to be converted
-    kumc_data_col_renamed_df['redcap_event_name'] = kumc_data_col_renamed_df['redcap_event_name'].map(kumc_column_mapping)
-
-    # final converted kumc raw data
-    kumc_final = kumc_data_col_renamed_df
-
-    # raw data for umb
-    umb_data_df = pd.read_csv('./csvs/umb_data.csv', skip_blank_lines=True)
-
-    # Create a dictionary that maps the corrected column names to the original names
-    umb_column_mapping = dict(zip(umb_col_headers['src_var'], umb_col_headers['trg_var']))
-
-    # Rename the columns using the dictionary
-    umb_data_col_renamed_df = umb_data_df.rename(columns=umb_column_mapping)
-
-    # convert corresponding source row values to target source value
-    umb_source_mapping = umb_src_val[umb_src_val['site'] == 'umb']
-
-    # Create a dictionary that maps the target source values to the original source site value
-    umb_column_mapping = dict(zip(umb_source_mapping['source_val_combined'], umb_source_mapping['trg_val']))
-
-    # apply the mapping to the column with values to be converted
-    umb_data_col_renamed_df['redcap_event_name'] = umb_data_col_renamed_df['redcap_event_name'].map(umb_column_mapping)
-
-    # final converted umb raw data
-    umb_final = umb_data_col_renamed_df
+        # final converted kumc raw data
+        site_final = site_data_col_renamed_df
 
     # return header columns for all sites
-    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val, kumc_final, umb_final
+    return site_col_headers, site_src_val, site_final
 
 def main(os_path, openf, argv):
     def get_config():
