@@ -72,8 +72,11 @@ def mapped_headers():
     # apply the mapping to the column with values to be converted
     kumc_data_col_renamed_df['redcap_event_name'] = kumc_data_col_renamed_df['redcap_event_name'].map(kumc_column_mapping)
 
+    # final converted kumc raw data
+    kumc_final = kumc_data_col_renamed_df
+
     # return header columns for all sites
-    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val
+    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val, kumc_final
 
 def main(os_path, openf, argv):
     def get_config():
