@@ -49,10 +49,10 @@ def mapped_headers():
         # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
         unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
 
-        # get source value labels for KUMC
-        site_src_val = unique_source_values[unique_source_values['site'] == 'kumc']
+        # get source value labels for site
+        site_src_val = unique_source_values[unique_source_values['site'] == site]
 
-        # raw data for KUMC
+        # raw data for site
         site_data_df = pd.read_csv('./csvs/' + site + '_data.csv', skip_blank_lines=True)
 
         # Create a dictionary that maps the corrected column names to the original names
@@ -62,7 +62,7 @@ def mapped_headers():
         site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping)
 
         # convert corresponding source row values to target source value
-        site_source_mapping = site_src_val[site_src_val['site'] == 'kumc']
+        site_source_mapping = site_src_val[site_src_val['site'] == site]
 
         # Create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
@@ -70,7 +70,7 @@ def mapped_headers():
         # apply the mapping to the column with values to be converted
         site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
 
-        # final converted kumc raw data
+        # final converted site raw data
         site_final = site_data_col_renamed_df
 
     # return header columns for all sites
