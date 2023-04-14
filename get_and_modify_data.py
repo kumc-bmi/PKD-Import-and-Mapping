@@ -54,6 +54,24 @@ def mapped_headers():
     # get source value labels for Maryland
     umb_src_val = unique_source_values[unique_source_values['site'] == 'umb']
 
+    # raw data for KUMC
+    kumc_data_df = pd.read_csv('./csv/kumc_data.csv', skip_blank_lines=True)
+
+    # Create a dictionary that maps the corrected column names to the original names
+    kumc_column_mapping = dict(zip(kumc_col_headers['src_var'], kumc_col_headers['trg_var']))
+
+    # Rename the columns using the dictionary
+    kumc_data_col_renamed_df = kumc_data_df.rename(columns=kumc_column_mapping)
+
+    # convert corresponding source row values to target source value
+    kumc_source_mapping = kumc_src_val[kumc_src_val['site'] == 'kumc']
+
+    # Create a dictionary that maps the target source values to the original source site value
+    kumc_column_mapping = dict(zip(kumc_source_mapping['source_val_combined'], kumc_source_mapping['trg_val']))
+
+    # apply the mapping to the column with values to be converted
+    kumc_data_col_renamed_df['redcap_event_name'] = kumc_data_col_renamed_df['redcap_event_name'].map(kumc_column_mapping)
+
     # return header columns for all sites
     return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val
 
