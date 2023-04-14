@@ -75,8 +75,29 @@ def mapped_headers():
     # final converted kumc raw data
     kumc_final = kumc_data_col_renamed_df
 
+    # raw data for umb
+    umb_data_df = pd.read_csv('./csvs/umb_data.csv', skip_blank_lines=True)
+
+    # Create a dictionary that maps the corrected column names to the original names
+    umb_column_mapping = dict(zip(umb_col_headers['src_var'], umb_col_headers['trg_var']))
+
+    # Rename the columns using the dictionary
+    umb_data_col_renamed_df = umb_data_df.rename(columns=umb_column_mapping)
+
+    # convert corresponding source row values to target source value
+    umb_source_mapping = umb_src_val[umb_src_val['site'] == 'umb']
+
+    # Create a dictionary that maps the target source values to the original source site value
+    umb_column_mapping = dict(zip(umb_source_mapping['source_val_combined'], umb_source_mapping['trg_val']))
+
+    # apply the mapping to the column with values to be converted
+    umb_data_col_renamed_df['redcap_event_name'] = umb_data_col_renamed_df['redcap_event_name'].map(umb_column_mapping)
+
+    # final converted umb raw data
+    umb_final = umb_data_col_renamed_df
+
     # return header columns for all sites
-    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val, kumc_final
+    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val, kumc_final, umb_final
 
 def main(os_path, openf, argv):
     def get_config():
