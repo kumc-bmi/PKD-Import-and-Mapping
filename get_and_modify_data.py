@@ -24,6 +24,8 @@ def mapped_headers():
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
 
+    site_csv_list = []
+
     for site in ['kumc', 'uab', 'umb']:
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
@@ -71,10 +73,10 @@ def mapped_headers():
         site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
 
         # final converted site raw data
-        site_final = site_data_col_renamed_df
+        site_csv_list.append(site_data_col_renamed_df)
 
     # return header columns for all sites
-    return site_col_headers, site_src_val, site_final
+    return site_csv_list[0], site_csv_list[1], site_csv_list[2]
 
 def main(os_path, openf, argv):
     def get_config():
