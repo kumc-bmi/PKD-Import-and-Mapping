@@ -45,10 +45,17 @@ def mapped_headers():
     # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
     unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
 
-    print(unique_source_values)
+    # get headers for KUMC
+    kumc_src_val = unique_source_values[unique_source_values['site'] == 'kumc']
+
+    # get headers for Alabama
+    uab_src_val = unique_source_values[unique_source_values['site'] == 'uab']
+
+    # get headers for Maryland
+    umb_src_val = unique_source_values[unique_source_values['site'] == 'umb']
 
     # return header columns for all sites
-    return kumc_col_headers, uab_col_headers, umb_col_headers
+    return kumc_col_headers, uab_col_headers, umb_col_headers, kumc_src_val, uab_src_val, umb_src_val
 
 def main(os_path, openf, argv):
     def get_config():
