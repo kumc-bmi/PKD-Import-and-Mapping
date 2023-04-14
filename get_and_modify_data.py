@@ -33,6 +33,20 @@ def mapped_headers():
     # get headers for Maryland
     umb_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == 'umb']
 
+    # source values from mapping file
+    source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+
+    # combine src_val_raw and src_val_lbl into a single column
+    source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
+
+    # drop rows with no src_val_raw or src_val_lbl
+    source_df = source_df.dropna(subset=['source_val_combined'])
+
+    # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
+    unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
+
+    print(unique_source_values)
+
     # return header columns for all sites
     return kumc_col_headers, uab_col_headers, umb_col_headers
 
