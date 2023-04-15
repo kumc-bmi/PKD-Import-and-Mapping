@@ -27,6 +27,7 @@ def mapped_headers():
     site_csv_list = []
 
     for site in ['kumc', 'uab', 'umb']:
+        # declare variables
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
         site_data_df = site + '_data_df'
