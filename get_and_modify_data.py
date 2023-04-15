@@ -35,7 +35,6 @@ def mapped_headers():
         site_data_col_renamed_df = site + '_data_col_renamed_df'
         site_source_mapping = site + '_source_mapping'
         site_column_mapping = site + '_column_mapping'
-        site_final = site + '_final'
 
         # get headers for each site
         site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
