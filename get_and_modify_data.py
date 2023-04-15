@@ -76,7 +76,7 @@ def mapped_headers():
         site_csv_list.append(site_data_col_renamed_df)
     
     # merge all the sites csvs
-    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], axis=0, ignore_index=True, na=True)
+    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], axis=0, ignore_index=True)
 
     # return merged file
     return merge_site_cvs
