@@ -31,11 +31,12 @@ def mapped_headers():
 
     vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
+    site_name_array = []
     print(vaiables)
     print(directory)
     
     for filename in os.listdir(directory):
-        site_names = os.path.splitext(filename)[0]
+        site_names = site_name_array.append(os.path.splitext(filename)[0])
         print(site_names)
 
     for site in site_names:
