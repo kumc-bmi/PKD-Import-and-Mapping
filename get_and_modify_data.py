@@ -93,6 +93,7 @@ def main(os_path, openf, argv):
         # default attributes
         values['import_dir'] = config.get('default', 'import_dir')
         values['export_dir'] = config.get('default', 'export_dir')
+        values['raw_data'] = config.get('default', 'raw_data')
         values['data_content'] = config.get('default', 'data_content')
         values['data_event'] = config.get('default', 'data_event')
         values['data_metadata'] = config.get('default', 'data_metadata')
