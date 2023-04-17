@@ -89,6 +89,8 @@ def mapped_headers():
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
     
+    print(site_csv_list)
+    
     # merge all the sites csvs
     merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], axis=0, ignore_index=True)
 
