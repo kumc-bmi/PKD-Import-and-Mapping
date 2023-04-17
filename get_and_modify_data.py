@@ -40,6 +40,7 @@ def mapped_headers():
 
     for site in site_names:
         print(site)
+        print(directory)
         # declare variables
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
