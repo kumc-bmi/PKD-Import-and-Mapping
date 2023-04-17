@@ -30,7 +30,7 @@ def mapped_headers():
     site_csv_list = []
 
     datafiles = main(os_path, openf, argv)
-    directory = datafiles['raw_data']
+    directory = str(datafiles['raw_data'])
     
     for filename in os.listdir(directory):
         site_names = os.path.splitext(filename)[0]
