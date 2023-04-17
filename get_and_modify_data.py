@@ -4,6 +4,8 @@ import configparser
 import logging
 import pandas as pd
 import os
+from sys import argv
+from os import path as os_path
 from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
@@ -27,7 +29,7 @@ def mapped_headers():
 
     site_csv_list = []
 
-    datafiles = main()
+    datafiles = main(os_path, openf, argv)
     directory = datafiles['raw_data']
     
     for filename in os.listdir(directory):
