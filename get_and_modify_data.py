@@ -36,6 +36,7 @@ def mapped_headers():
     
     for filename in os.listdir(directory):
         site_names = os.path.splitext(filename)[0]
+        print(site_names)
 
     for site in site_names:
         # declare variables
