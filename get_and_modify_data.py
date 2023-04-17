@@ -3,6 +3,7 @@
 import configparser
 import logging
 import pandas as pd
+import os
 from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ def mapped_headers():
     # based on site convert src_var to trg_var
     # site, src_var, trg_var => (sites, column headers, target column header)
     # TRGCALCFIELD => calculated field
-
+    
     # moving mapping csv into dataframe
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
 
@@ -26,7 +27,13 @@ def mapped_headers():
 
     site_csv_list = []
 
-    for site in ['kumc', 'uab', 'umb']:
+    datafiles = main()
+    directory = datafiles['raw_data']
+    
+    for filename in os.listdir(directory):
+        site_names = os.path.splitext(filename)[0]
+
+    for site in site_names:
         # declare variables
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
@@ -55,7 +62,7 @@ def mapped_headers():
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
         # raw data for site
-        site_data_df = pd.read_csv('./csvs/' + site + '_data.csv', skip_blank_lines=True)
+        site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True)
 
         # Create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
