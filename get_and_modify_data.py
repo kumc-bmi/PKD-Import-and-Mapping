@@ -31,17 +31,16 @@ def mapped_headers():
 
     vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
-    site_name_array = []
-    print(vaiables)
-    print(directory)
+    site_names = []
     
     for filename in os.listdir(directory):
-        site_names = site_name_array.append(os.path.splitext(filename)[0])
-        print(site_names)
+        if filename.endswith('.csv'):
+            site_names.append(os.path.splitext(filename)[0])
+    
+    print(site_names)
 
     for site in site_names:
         print(site)
-        print(directory)
         # declare variables
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
