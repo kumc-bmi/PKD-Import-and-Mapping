@@ -87,7 +87,7 @@ def mapped_headers():
         site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
 
         # attach site name to studyid
-        site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + x)
+        site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
