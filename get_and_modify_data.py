@@ -107,14 +107,14 @@ def mapped_headers():
         print(site_data_col_renamed_df)
 
         # final converted site raw data
-        site_csv_list.append(site_data_col_renamed_df)
+        site_csv_list.append(site_data_col_renamed_df.fillna(0))
 
     # loop through sites records in dataframe
     for i in range(len(site_csv_list)):
         # check for missing values
         if site_csv_list[i].isnull().values.any():
             # handles missing values
-            site_csv_list[i] = site_csv_list[i].fillna(0)
+            site_csv_list[i] = site_csv_list[i].fillna('')
     
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True)
