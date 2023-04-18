@@ -104,7 +104,7 @@ def mapped_headers():
         # attach site name to studyid
         site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
         
-        site_data_col_renamed_df =  site_data_col_renamed_df.fillna('')
+        site_data_col_renamed_df =  site_data_col_renamed_df.replace('nan', '')
 
         print(site_data_col_renamed_df)
 
@@ -116,7 +116,7 @@ def mapped_headers():
         # check for missing values
         if site_csv_list[i].isnull().values.any():
             # handles missing values
-            site_csv_list[i] = site_csv_list[i].fillna('')
+            site_csv_list[i] = site_csv_list[i].fillna(0)
     
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
