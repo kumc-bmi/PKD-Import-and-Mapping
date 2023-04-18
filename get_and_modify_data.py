@@ -37,10 +37,7 @@ def mapped_headers():
         if filename.endswith('.csv'):
             site_names.append(os.path.splitext(filename)[0])
     
-    print(site_names)
-
     for site in site_names:
-        print(site)
         # declare variables
         site_col_headers = site + '_col_headers'
         site_src_val = site + '_src_val'
@@ -104,8 +101,6 @@ def mapped_headers():
         # apply the mapping to the column with values to be converted
         site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping).fillna(site_data_col_renamed_df['redcap_event_name'].map(alt_site_column_mapping))
 
-        print(site_data_col_renamed_df)
-
         # attach site name to studyid
         site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
 
@@ -116,7 +111,7 @@ def mapped_headers():
 
     
     # merge all the sites csvs
-    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], ignore_index=True)
+    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], sort=False)
 
     # return merged file
     return merge_site_cvs
