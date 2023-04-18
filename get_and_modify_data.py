@@ -75,7 +75,9 @@ def mapped_headers():
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
 
         # rename the columns using the dictionary
-        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in site_column_mapping])
+        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping)
+        
+        print(site_data_col_renamed_df)
 
         # convert corresponding source row values to target source value
         site_source_mapping = site_src_val[site_src_val['site'] == site]
