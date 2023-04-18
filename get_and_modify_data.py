@@ -110,11 +110,11 @@ def mapped_headers():
         site_csv_list.append(site_data_col_renamed_df)
 
     
-    # merge all the sites csvs
-    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], sort=False)
+    # # merge all the sites csvs
+    # merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], sort=False)
 
     # return merged file
-    return merge_site_cvs
+    return site_csv_list
 
 def main(os_path, openf, argv):
     def get_config():
