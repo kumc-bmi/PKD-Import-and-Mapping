@@ -98,8 +98,11 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
+        # create alternate dictionary that maps the target source values if original is not present
+        alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
+
         # apply the mapping to the column with values to be converted
-        site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
+        site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping).fillna(site_data_col_renamed_df['redcap_event_name'].map(alt_site_column_mapping))
 
         print(site_data_col_renamed_df)
 
@@ -110,11 +113,10 @@ def mapped_headers():
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
-    
-    print(site_csv_list)
+
     
     # merge all the sites csvs
-    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], ignore_index=True, sort=False)
+    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], ignore_index=True)
 
     # return merged file
     return merge_site_cvs
