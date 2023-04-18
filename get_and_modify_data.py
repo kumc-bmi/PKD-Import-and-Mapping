@@ -112,7 +112,7 @@ def mapped_headers():
     # loop through sites records in dataframe
     for i in range(len(site_csv_list)):
         # check for missing values
-        if site_csv_list[i].isnull.values.any():
+        if site_csv_list[i].isnull().values.any():
             # handles missing values
             site_csv_list[i] = site_csv_list[i].fillna(0)
     
