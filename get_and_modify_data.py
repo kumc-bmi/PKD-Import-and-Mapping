@@ -53,8 +53,6 @@ def mapped_headers():
         # get headers for each site
         site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
 
-        print(site_col_headers)
-
         # source values from mapping file
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
@@ -76,12 +74,23 @@ def mapped_headers():
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
         
-        print(site_column_mapping)
-        
-        # rename the columns using the dictionary
-        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in site_column_mapping])
+        # create a new dictionary with the updated keys
+        updated_column_mapping = {}
+        for key, value in site_column_mapping.items():
+            if value in site_data_df.columns:
+                updated_column_mapping[site_data_df[value].name] = value
+            else:
+                updated_column_mapping[key] = value
 
-        print(site_data_col_renamed_df)
+        # match column names if correct in dataframe     
+        for col_name in site_data_df.columns:
+            if col_name in site_column_mapping and site_column_mapping[col_name] == col_name:
+                site_data_df[site_column_mapping[col_name]] = site_data_df[col_name].astype(str)
+            else:
+                site_data_df[col_name] = site_data_df[col_name].astype(str)
+           
+        # rename the columns using the dictionary
+        site_data_col_renamed_df = site_data_df.rename(columns=updated_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in updated_column_mapping])
 
         # convert corresponding source row values to target source value
         site_source_mapping = site_src_val[site_src_val['site'] == site]
