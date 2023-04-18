@@ -54,7 +54,7 @@ def mapped_headers():
         site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
 
         # source values from mapping file
-        source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+        source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # combine src_val_raw and src_val_lbl into a single column
         source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
@@ -71,20 +71,23 @@ def mapped_headers():
         # raw data for site
         site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True)
 
-        # Create a dictionary that maps the corrected column names to the original names
+        # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
 
-        # Rename the columns using the dictionary
-        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping)
+        # rename the columns using the dictionary
+        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in site_column_mapping])
 
         # convert corresponding source row values to target source value
         site_source_mapping = site_src_val[site_src_val['site'] == site]
 
-        # Create a dictionary that maps the target source values to the original source site value
+        # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
         # apply the mapping to the column with values to be converted
         site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping)
+
+        # attach site name to studyid
+        site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + x)
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
@@ -92,7 +95,7 @@ def mapped_headers():
     print(site_csv_list)
     
     # merge all the sites csvs
-    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], axis=1)
+    merge_site_cvs = pd.concat([site_csv_list[0], site_csv_list[1], site_csv_list[2]], ignore_index=True, sort=False)
 
     # return merged file
     return merge_site_cvs
