@@ -103,11 +103,13 @@ def mapped_headers():
 
         # attach site name to studyid
         site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
+        
+        site_data_col_renamed_df =  site_data_col_renamed_df.fillna('')
 
         print(site_data_col_renamed_df)
 
         # final converted site raw data
-        site_csv_list.append(site_data_col_renamed_df.fillna(0))
+        site_csv_list.append(site_data_col_renamed_df)
 
     # loop through sites records in dataframe
     for i in range(len(site_csv_list)):
@@ -117,7 +119,7 @@ def mapped_headers():
             site_csv_list[i] = site_csv_list[i].fillna('')
     
     # merge all the sites csvs
-    merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True)
+    merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
 
     # return merged file
     return merge_site_cvs
