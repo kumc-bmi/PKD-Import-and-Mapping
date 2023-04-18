@@ -53,6 +53,8 @@ def mapped_headers():
         # get headers for each site
         site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
 
+        print(site_col_headers)
+
         # source values from mapping file
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
@@ -73,10 +75,12 @@ def mapped_headers():
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
-
-        # rename the columns using the dictionary
-        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping)
         
+        print(site_column_mapping)
+        
+        # rename the columns using the dictionary
+        site_data_col_renamed_df = site_data_df.rename(columns=site_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in site_column_mapping])
+
         print(site_data_col_renamed_df)
 
         # convert corresponding source row values to target source value
