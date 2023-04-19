@@ -63,6 +63,11 @@ def mapped_headers():
         # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
         unique_source_values = source_df.loc[source_df['trg_val'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
 
+        # drop records where trg_val is lower string nan
+        unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower != 'nan']
+
+        print(unique_source_values)
+
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
