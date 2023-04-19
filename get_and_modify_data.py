@@ -132,7 +132,7 @@ def mapped_headers():
                        'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8']
         
         # dictionary comprehension to create column mappings
-        column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
+        column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].dropna().unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
 
         print(column_site_mappings)
 
