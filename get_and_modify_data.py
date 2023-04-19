@@ -95,6 +95,9 @@ def mapped_headers():
         # rename the columns using the dictionary
         site_data_col_renamed_df = site_data_df.rename(columns=updated_column_mapping).drop(columns=[col for col in site_data_df.columns if col not in updated_column_mapping])
 
+        # remove string nan on dataframe
+        site_data_col_renamed_df =  site_data_col_renamed_df.replace('nan', '')
+
         # convert corresponding source row values to target source value
         site_source_mapping = site_src_val[site_src_val['site'] == site]
 
