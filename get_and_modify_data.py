@@ -55,7 +55,7 @@ def mapped_headers():
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # combine src_val_raw and src_val_lbl into a single column
-        source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
+        source_df['source_val_combined'] = source_df['src_val_lbl'].fillna(source_df['src_val_raw'])
 
         # drop rows with no src_val_raw or src_val_lbl
         source_df = source_df.dropna(subset=['source_val_combined'])
@@ -99,8 +99,36 @@ def mapped_headers():
         # create alternate dictionary that maps the target source values if original is not present
         alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
 
+        # columns with no conversion metric
+        exclude_col = ['studyid','visdat','age','gest_age','other_race','diagnosisage','pmhhtn_age_onset','pmhhemat_age_onset','pmhflpain_age_onset','mthr','fthr','partentdx','gstagedx',
+                       'gestage','birth_weight','birth_height','apgar1min','apgar5min','ultsound','oligohydra','prenat_enl_kidn','prenat_renal_cyst','prenat_ren_abnor','nicu','interven',
+                       'ventil','conven','rpamenarage','rpnumpreg','rpnumliv','parity','uti_preg','pet_preg','eclampsia_preg','preg_prot','pih','preterm_labor','iugr','ectopic','miscarr',
+                       'spabort','tabort','electabort','stillbirth','gest_dm','preg_edema','preg_hemat','preg_aki','preg_complic_other','contracep_method','contracep_other','hormone_type',
+                       'hormcontracep_age','hormcontracep_dur','estreplage','estrepldur','infertrxage','infertrxdur','rpmenopage','teayn','coffeeyn','sodayn','caffintake','caffdur',
+                       'sucigdur','sualcodur','sualcodrinks','occupation','homeexpos','workexpos','otherexpos','otherexpos_spec','contrastnum','bldtransfnum','employstatus','employfull',
+                       'employpart','workhr','limitbypkd','reasonunempl','retiredpkd','retiredat','unabletowork','dateunabletowork','reasonunempl_other','height_m','weight','bmi','waist',
+                       'temp','average_hr3','average_sysbp3','average_diabp3','tanner_stage','blood_date','glucose','bun','creatinine','cystatin','ckd_epi_egfr','schwartz_gfr','ckid_gfr',
+                       'u25_egfr_cr','u25_egfr_cysc','sodium','potassium','chloride','carbon_dioxide','calcium','phosphorus','tot_protein','albumin','ast','alt','alk_phos','gamma_gt',
+                       'total_bili','pth','choles','trigly','hdl','ldl','vldl','uric_acid','ph','crp','hgb','hct','rbc_k','mcv','mchc','wbc_k','platelets','iron','ferritin','transferrin',
+                       'protime','inr','urine_date','total_pr_urine','urine_microalb','urine_creatinine','urine_calcium','iohexol_gfr','kidmri_dat','kmrires','othrstdy','kv_left',
+                       'kl_mr_left','kv_right','kl_mr_right','tkv','subject_height','httkv','mic','livmri_dat','tlv','htlv','lvrmriheplev','mricomments','kultsounddt','kultsoundecho',
+                       'kultsound_crdiff','kultsoundres','kultsound_cyst_location','ptpl_2','ptpl','lvrultdt','lvrultheplev','kctscandt','kctscanres','lvrctscandt','port_flow','lvrctheplev',
+                       'datecnsus','cnsfib','cnsmri','datecnsmri','patimestamp','pa1a','pa1b','pa1c','pa1d','pa2a','pa2b','pa2c','pa2d','pa3a','pa3b','pa3c','pa3d','pa4a','pa4b','pa4c','pa4d',
+                       'pa5a','pa5b','pa5c','pa5d','pa6a','pa6b','pa6c','pa6d','pa7a','pa7b','pa7c','pa7d','pa8a','pa8b','pa8c','pa8d','pa9a','pa9b','pa9c','pa9d','pa10a','pa10b','pa10c',
+                       'pa10d','pa11a','pa11b','pa11c','pa11d','pa12a','pa12b','pa12c','pa12d','pa13a','pa13b','pa13c','pa13d','pa14a','pa14b','pa14c','pa14d','pa15a','pa15b','pa15c','pa15d',
+                       'pa16a','pa16b','pa16c','pa16d','pkd1muttype','pkd1mutdesc','pkd2muttype','pkd2mutdesc','pkhd1mutdesc','hnf1mutdesc','ganabmutdesc','dnajbmutdesc','oth_gen_nam',
+                       'oth_gen_spec','ekg_yn','ekg_comment','mean_night_bp','mean_nt_map','mean_nt_hr','pwvperf','pwvdat','pwvdist','pwvprox','echo_date','echofinding','bd_yn','bdtimestamp',
+                       'bd1','bd2','bd3','bd4','bd5','bd6','bd7','bd8','bd9','bd10','bd11','bd12','bd13','bd14','bd15','bd16','bd17','bd18','bd19','bd19a','bd20','bd21','bdi_score','moca_yn',
+                       'mcrdate','mc0a','mc1','mc2','mc3a','mc3b','mc3c','mc4a','mc4b','mc5','mc6','mc7','mocascore','pra1','prardate','pra3','pra4','pra5','pra6','pra7','pra8','prf1','prfrdate',
+                       'prf3','prf4','prf5','prf6','prf7','prf8','pri1','prirdate','pri3','pri4','pri5','pri6','pri7','pri8','prp1','prprdate','prp3','prp4','prp5','prp6','prp7','prp8','prd1',
+                       'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8']
+        
+        # dictionary comprehension to create column mappings
+        column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
+        alt_column_site_mappings = {col: {val: alt_site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
+
         # apply the mapping to the column with values to be converted
-        site_data_col_renamed_df['redcap_event_name'] = site_data_col_renamed_df['redcap_event_name'].map(site_column_mapping).fillna(site_data_col_renamed_df['redcap_event_name'].map(alt_site_column_mapping))
+        site_data_col_renamed_df = site_data_col_renamed_df.replace(column_site_mappings).fillna(site_data_col_renamed_df.replace(alt_column_site_mappings))
 
         # attach site name to studyid
         site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
