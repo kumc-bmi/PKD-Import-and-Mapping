@@ -109,7 +109,9 @@ def mapped_headers():
 
         print(site_data_col_renamed_df)
 
-        site_data_col_renamed_df.to_csv(export_directory + site + '/' + site + '.csv', index=False)
+        site_data_col_renamed_df.dropna(subset=['redcap_event_name'], inplace=True)
+
+        site_data_col_renamed_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, skip_blank_lines=True)
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
