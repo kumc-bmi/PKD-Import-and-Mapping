@@ -61,7 +61,7 @@ def mapped_headers():
         source_df = source_df.dropna(subset=['source_val_combined'])
 
         # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
-        unique_source_values = source_df.loc[source_df['source_val_combined'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
+        unique_source_values = source_df.loc[source_df['trg_val'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
 
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
