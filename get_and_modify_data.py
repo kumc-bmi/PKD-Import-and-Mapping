@@ -31,6 +31,7 @@ def mapped_headers():
 
     vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
+    export_directory = str(vaiables['export_dir'])
     site_names = []
     
     for filename in os.listdir(directory):
@@ -107,6 +108,8 @@ def mapped_headers():
         site_data_col_renamed_df =  site_data_col_renamed_df.replace('nan', '')
 
         print(site_data_col_renamed_df)
+
+        site_data_col_renamed_df.to_csv(export_directory, index=False)
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
