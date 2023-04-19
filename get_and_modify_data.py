@@ -16,7 +16,7 @@ def mapped_headers():
     # TRGCALCFIELD => calculated field
     
     # moving mapping csv into dataframe
-    mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True)
+    mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 
     # ensure all values are lowercase
     col_header_df = mapping_df[['src_var', 'site', 'trg_var']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
@@ -67,7 +67,7 @@ def mapped_headers():
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
         # raw data for site
-        site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True)
+        site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
@@ -111,7 +111,7 @@ def mapped_headers():
 
         print(site_data_col_renamed_df)
 
-        site_data_col_renamed_df.to_csv(export_directory + site + '/' + site + '.csv', index=False)
+        site_data_col_renamed_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
         # final converted site raw data
         site_csv_list.append(site_data_col_renamed_df)
