@@ -102,8 +102,6 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['source_val_combined']))
 
-        print(site_source_mapping)
-
         # # create alternate dictionary that maps the target source values if original is not present
         # alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
 
@@ -131,6 +129,8 @@ def mapped_headers():
                        'prf3','prf4','prf5','prf6','prf7','prf8','pri1','prirdate','pri3','pri4','pri5','pri6','pri7','pri8','prp1','prprdate','prp3','prp4','prp5','prp6','prp7','prp8','prd1',
                        'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8']
         
+        print(site)
+
         # dictionary comprehension to create column mappings
         column_site_mappings = {col: {val: site_column_mapping[val] if val in site_column_mapping else val for val in site_data_col_renamed_df[col].unique() if val and val.strip()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
 
