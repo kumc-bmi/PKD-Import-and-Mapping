@@ -125,10 +125,9 @@ def mapped_headers():
         
         # dictionary comprehension to create column mappings
         column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
-        alt_column_site_mappings = {col: {val: alt_site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
 
         # apply the mapping to the column with values to be converted
-        site_data_col_renamed_df = site_data_col_renamed_df.replace(column_site_mappings).fillna(site_data_col_renamed_df.replace(alt_column_site_mappings))
+        site_data_col_renamed_df = site_data_col_renamed_df.replace(column_site_mappings)
 
         # attach site name to studyid
         site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
