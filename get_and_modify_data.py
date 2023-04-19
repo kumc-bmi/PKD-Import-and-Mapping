@@ -104,8 +104,10 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
-        # create alternate dictionary that maps the target source values if original is not present
-        alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
+        print(site_column_mapping)
+
+        # # create alternate dictionary that maps the target source values if original is not present
+        # alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
 
         # columns with no conversion metric
         exclude_col = ['studyid','visdat','age','gest_age','other_race','diagnosisage','pmhhtn_age_onset','pmhhemat_age_onset','pmhflpain_age_onset','mthr','fthr','partentdx','gstagedx',
@@ -132,7 +134,7 @@ def mapped_headers():
                        'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8']
         
         # dictionary comprehension to create column mappings
-        column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].dropna('').unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
+        column_site_mappings = {col: {val: site_column_mapping.get(val, val) for val in site_data_col_renamed_df[col].unique()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
 
         print(column_site_mappings)
 
