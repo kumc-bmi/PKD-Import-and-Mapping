@@ -66,8 +66,6 @@ def mapped_headers():
         # drop records where trg_val is lower string nan
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
 
-        print(unique_source_values)
-
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
@@ -101,12 +99,10 @@ def mapped_headers():
         # convert corresponding source row values to target source value
         site_source_mapping = site_src_val[site_src_val['site'] == site]
 
-        print(site_source_mapping)
-
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['source_val_combined']))
 
-        print(site_column_mapping)
+        print(site_source_mapping)
 
         # # create alternate dictionary that maps the target source values if original is not present
         # alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
