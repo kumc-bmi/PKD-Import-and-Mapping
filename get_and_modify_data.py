@@ -100,7 +100,7 @@ def mapped_headers():
         site_source_mapping = site_src_val[site_src_val['site'] == site]
 
         # create a dictionary that maps the target source values to the original source site value
-        site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['source_val_combined']))
+        site_column_mapping = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
         # # create alternate dictionary that maps the target source values if original is not present
         # alt_site_column_mapping = dict(zip(site_source_mapping['trg_val'], site_source_mapping['trg_val']))
