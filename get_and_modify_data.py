@@ -131,7 +131,7 @@ def mapped_headers():
                        'bd1','bd2','bd3','bd4','bd5','bd6','bd7','bd8','bd9','bd10','bd11','bd12','bd13','bd14','bd15','bd16','bd17','bd18','bd19','bd19a','bd20','bd21','bdi_score','moca_yn',
                        'mcrdate','mc0a','mc1','mc2','mc3a','mc3b','mc3c','mc4a','mc4b','mc5','mc6','mc7','mocascore','pra1','prardate','pra3','pra4','pra5','pra6','pra7','pra8','prf1','prfrdate',
                        'prf3','prf4','prf5','prf6','prf7','prf8','pri1','prirdate','pri3','pri4','pri5','pri6','pri7','pri8','prp1','prprdate','prp3','prp4','prp5','prp6','prp7','prp8','prd1',
-                       'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8', 'adpkd_yn', 'pkd2mut_yn', 'pkd1mut_yn', 'rpmenostat' ]
+                       'prdrdate','prd3','prd4','prd5','prd6','prd7','prd8', 'adpkd_yn', 'pkd2mut_yn', 'pkd1mut_yn', 'rpmenostat']
         
         print(site)
 
