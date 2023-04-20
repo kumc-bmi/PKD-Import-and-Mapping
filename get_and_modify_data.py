@@ -136,10 +136,14 @@ def mapped_headers():
 
         df_mapped = pd.DataFrame()
 
-        for col, mapping in site_column_mapping.items():
+        for col in site_column_mapping.keys():
             if col in site_data_col_renamed_df.columns:
-                new_col = site_data_col_renamed_df[col].map(mapping)
-                df_mapped[col] = new_col
+                df_mapped[col] = site_data_col_renamed_df[col].map(site_column_mapping[col])
+            else:
+                df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+                df_mapped[col] = df_mapped[col].map(site_column_mapping[col])
+  
+        df_mapped.dropna(how='all', axis=1, inplace=True)        
 
         print(df_mapped)
 
