@@ -102,7 +102,7 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
 
 
-        site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
+        site_column_mapping = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
         print(site_column_mapping)
 
