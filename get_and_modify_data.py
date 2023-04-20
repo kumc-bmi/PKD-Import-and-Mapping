@@ -102,19 +102,11 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        print(site_column_mapping)
-        
-        print(site)
-
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
-        print(event_dict)
-
         # remove unknown event rows
         site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.values())]
-
-        print(site_data_col_renamed_df)
 
         # create new empty dataframe for storage
         df_mapped = pd.DataFrame()
@@ -123,49 +115,18 @@ def mapped_headers():
         for col, mapping in site_column_mapping.items():
             # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
-                print(col)
-                print(site_data_col_renamed_df[col])
                 # If it does exist, map values using source mapping dictionary
                 df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
             else:
                 # If it does not exist, set all values to None
                 df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
         
-        print(df_mapped)
-
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
             if col not in site_column_mapping.keys():
                 df_mapped[col] = site_data_col_renamed_df[col]
 
-        print(df_mapped)
-
-        
-        # df_mapped = pd.DataFrame()
-
-        # for col in site_column_mapping.keys():
-        #     if col in site_data_col_renamed_df.columns:
-        #         df_mapped[col] = site_data_col_renamed_df[col].map(site_column_mapping[col])
-        #     else:
-        #         df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
-        #         df_mapped[col] = df_mapped[col].map(site_column_mapping[col])
-
-        # print(df_mapped)
-
         df_mapped.dropna(how='all', axis=1, inplace=True)        
-
-        print(df_mapped)
-
-        tuples = zip(*df_mapped)
-
-        lengths = [len(t) for t in tuples]
-
-        if len(set(lengths)) == 1:
-            print(lengths)
-            print("Equal lengths")
-        else:
-            print(lengths)
-            print("UnEqual lengths")
 
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
@@ -186,19 +147,11 @@ def mapped_headers():
 
         # final converted site raw data
         site_csv_list.append(site_final_df)
-
-    # loop through sites records in dataframe
-    for i in range(len(site_csv_list)):
-        print(i)
-        print(len(site_csv_list))
-        # check for missing values
-        if site_csv_list[i].isnull().values.any():
-            print(site_csv_list[i])
-            # handles missing values
-            site_csv_list[i] = site_csv_list[i].fillna(0)
     
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
+
+    merge_site_cvs.to_csv(export_directory + 'merged/merged.csv', index=False, float_format=None)
 
     # return merged file
     return merge_site_cvs
