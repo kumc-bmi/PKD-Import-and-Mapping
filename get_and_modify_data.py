@@ -117,7 +117,7 @@ def mapped_headers():
         print(event_dict)
 
         # remove unknown event rows
-        site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.keys())]
+        site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.values())]
 
         print(site_data_col_renamed_df)
 
