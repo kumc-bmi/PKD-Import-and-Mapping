@@ -19,14 +19,14 @@ def mapped_headers():
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 
     # ensure all values are lowercase
-    col_header_df = mapping_df[['src_var', 'site', 'trg_var']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+    col_header_df = mapping_df[['src_var', 'site', 'trg_var', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
     # select unique columns from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
-    unique_header_cols = col_header_df.loc[col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
+    unique_header_cols = col_header_df.loc[col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var', 'trg_logic']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
 
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
-    unique_header_cols_df = unique_header_cols[~unique_header_cols['trg_logic'].str.contains('Y', na=True)]
+    unique_header_cols_df = unique_header_cols[~unique_header_cols['trg_logic'].str.contains('y', na=True)]
 
      # empty array to store dataframes
     site_csv_list = []
