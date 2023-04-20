@@ -135,13 +135,13 @@ def mapped_headers():
         
         print(site)
 
-        # dictionary comprehension to create column mappings
-        column_site_mappings = {col: {val: site_column_mapping[val] if val in site_column_mapping else val for val in site_data_col_renamed_df[col].unique() if val and val.strip()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
+        # # dictionary comprehension to create column mappings
+        # column_site_mappings = {col: {val: site_column_mapping[val] if val in site_column_mapping else val for val in site_data_col_renamed_df[col].unique() if val and val.strip()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
 
-        print(column_site_mappings)
+        # print(column_site_mappings)
 
         # apply the mapping to the column with values to be converted
-        site_data_col_renamed_df = site_data_col_renamed_df.replace(column_site_mappings)
+        site_data_col_renamed_df = site_data_col_renamed_df.replace(site_column_mapping)
 
         print(site_data_col_renamed_df)
 
