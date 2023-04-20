@@ -117,7 +117,7 @@ def mapped_headers():
         print(site_data_col_renamed_df)
 
         # create new empty dataframe for storage
-        df_mapped = {}
+        df_mapped = pd.DataFrame()
 
         # iterate over columns in mapping dictionary
         for col, mapping in site_column_mapping.items():
@@ -134,7 +134,7 @@ def mapped_headers():
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
             if col not in site_column_mapping.keys():
-                df_mapped[col] = site_data_col_renamed_df[col].tolist()
+                df_mapped[col] = site_data_col_renamed_df[col]
 
         print(df_mapped)
 
