@@ -123,6 +123,7 @@ def mapped_headers():
         for col, mapping in site_column_mapping.items():
             # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
+                print(df_mapped)
                 # If it does exist, map values using source mapping dictionary
                 df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
             else:
