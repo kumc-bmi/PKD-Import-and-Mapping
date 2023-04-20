@@ -140,8 +140,26 @@ def mapped_headers():
 
         # print(column_site_mappings)
 
+        # create new empty dataframe for storage
+        df_mapped = {}
+
+        # iterate over columns in mapping dictionary
+        for col, mapping in site_column_mapping.items():
+            # check if column is in site data frame
+            if col in site_data_col_renamed_df.columns:
+                # If it does exist, map values using sorce mapping dictionary
+                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+            else:
+                # If it does not exist, set all values to None
+                df_mapped[col] = [None] * len(site_data_col_renamed_df)
+
         # create new dataframe and apply the mapping to the column with values to be converted
-        site_df_mapped = pd.DataFrame({col: site_data_col_renamed_df[col].map(site_column_mapping[col]) for col in site_data_col_renamed_df.columns})
+        for col in site_data_col_renamed_df.columns:
+            if col not in site_column_mapping.keys():
+                df_mapped[col] = site_data_col_renamed_df[col].tolist()
+
+        # create new DataFrame
+        site_df_mapped = pd.DataFrame(df_mapped)
 
         print(site_df_mapped)
 
