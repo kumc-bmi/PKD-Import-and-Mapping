@@ -149,7 +149,7 @@ def mapped_headers():
         initial_cols = ['studyid', 'redcap_event_name']
 
         # reorder the columns
-        site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in site_df_mapped])
+        site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
         print(site_final_df)
 
