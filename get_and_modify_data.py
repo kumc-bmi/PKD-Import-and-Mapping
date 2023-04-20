@@ -106,11 +106,6 @@ def mapped_headers():
         
         print(site)
 
-        # # dictionary comprehension to create column mappings
-        # column_site_mappings = {col: {val: site_column_mapping[val] if val in site_column_mapping else val for val in site_data_col_renamed_df[col].unique() if val and val.strip()} for col in site_data_col_renamed_df.columns if col not in exclude_col}
-
-        # print(column_site_mappings)
-
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
@@ -121,29 +116,34 @@ def mapped_headers():
 
         print(site_data_col_renamed_df)
 
-        # create new empty dataframe for storage
-        df_mapped = {}
+        # # create new empty dataframe for storage
+        # df_mapped = {}
 
-        # iterate over columns in mapping dictionary
+        # # iterate over columns in mapping dictionary
+        # for col, mapping in site_column_mapping.items():
+        #     # check if column is in site data frame
+        #     if col in site_data_col_renamed_df.columns:
+        #         # If it does exist, map values using source mapping dictionary
+        #         df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+        #     else:
+        #         # If it does not exist, set all values to None
+        #         df_mapped[col] = [None] * len(site_data_col_renamed_df)
+
+        # # create new dataframe and apply the mapping to the column with values to be converted
+        # for col in site_data_col_renamed_df.columns:
+        #     if col not in site_column_mapping.keys():
+        #         df_mapped[col] = site_data_col_renamed_df[col].tolist()
+
+        df_mapped = pd.DataFrame()
+
         for col, mapping in site_column_mapping.items():
-            # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
-                # If it does exist, map values using source mapping dictionary
-                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
-            else:
-                # If it does not exist, set all values to None
-                df_mapped[col] = [None] * len(site_data_col_renamed_df)
-
-        # create new dataframe and apply the mapping to the column with values to be converted
-        for col in site_data_col_renamed_df.columns:
-            if col not in site_column_mapping.keys():
-                df_mapped[col] = site_data_col_renamed_df[col].tolist()
+                new_col = site_data_col_renamed_df.map(mapping)
+                df_mapped[col] = new_col
 
         print(df_mapped)
 
         tuples = zip(*df_mapped)
-
-        print(tuples)
 
         lengths = [len(t) for t in tuples]
 
