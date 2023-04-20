@@ -116,35 +116,40 @@ def mapped_headers():
 
         print(site_data_col_renamed_df)
 
-        # # create new empty dataframe for storage
-        # df_mapped = {}
+        # create new empty dataframe for storage
+        df_mapped = {}
 
-        # # iterate over columns in mapping dictionary
-        # for col, mapping in site_column_mapping.items():
-        #     # check if column is in site data frame
-        #     if col in site_data_col_renamed_df.columns:
-        #         # If it does exist, map values using source mapping dictionary
-        #         df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
-        #     else:
-        #         # If it does not exist, set all values to None
-        #         df_mapped[col] = [None] * len(site_data_col_renamed_df)
-
-        # # create new dataframe and apply the mapping to the column with values to be converted
-        # for col in site_data_col_renamed_df.columns:
-        #     if col not in site_column_mapping.keys():
-        #         df_mapped[col] = site_data_col_renamed_df[col].tolist()
-
-        df_mapped = pd.DataFrame()
-
-        for col in site_column_mapping.keys():
+        # iterate over columns in mapping dictionary
+        for col, mapping in site_column_mapping.items():
+            # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
-                df_mapped[col] = site_data_col_renamed_df[col].map(site_column_mapping[col])
+                # If it does exist, map values using source mapping dictionary
+                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
             else:
+                # If it does not exist, set all values to None
                 df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
-                df_mapped[col] = df_mapped[col].map(site_column_mapping[col])
+        
+        print(df_mapped)
+
+        # create new dataframe and apply the mapping to the column with values to be converted
+        for col in site_data_col_renamed_df.columns:
+            if col not in site_column_mapping.keys():
+                df_mapped[col] = site_data_col_renamed_df[col].tolist()
 
         print(df_mapped)
+
         
+        # df_mapped = pd.DataFrame()
+
+        # for col in site_column_mapping.keys():
+        #     if col in site_data_col_renamed_df.columns:
+        #         df_mapped[col] = site_data_col_renamed_df[col].map(site_column_mapping[col])
+        #     else:
+        #         df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+        #         df_mapped[col] = df_mapped[col].map(site_column_mapping[col])
+
+        # print(df_mapped)
+
         df_mapped.dropna(how='all', axis=1, inplace=True)        
 
         print(df_mapped)
