@@ -138,7 +138,7 @@ def mapped_headers():
 
         for col, mapping in site_column_mapping.items():
             if col in site_data_col_renamed_df.columns:
-                new_col = site_data_col_renamed_df.map(mapping)
+                new_col = site_data_col_renamed_df[col].map(mapping)
                 df_mapped[col] = new_col
 
         print(df_mapped)
