@@ -114,8 +114,12 @@ def mapped_headers():
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
+        print(event_dict)
+
         # remove unknown event rows
         site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.keys())]
+
+        print(site_data_col_renamed_df)
 
         # create new empty dataframe for storage
         df_mapped = {}
