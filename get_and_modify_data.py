@@ -140,24 +140,24 @@ def mapped_headers():
 
         # print(column_site_mappings)
 
-        # apply the mapping to the column with values to be converted
-        site_data_col_renamed_df = site_data_col_renamed_df.replace(site_column_mapping)
+        # create new dataframe and apply the mapping to the column with values to be converted
+        site_df_mapped = pd.DataFrame({col: site_data_col_renamed_df[col].map(site_column_mapping[col]) for col in site_data_col_renamed_df.columns})
 
-        print(site_data_col_renamed_df)
+        print(site_df_mapped)
 
         # attach site name to studyid
-        site_data_col_renamed_df['studyid'] = site_data_col_renamed_df['studyid'].apply(lambda x: site + '_' + str(x))
+        site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
         
-        site_data_col_renamed_df =  site_data_col_renamed_df.replace('nan', '')
+        site_df_mapped =  site_df_mapped.replace('nan', '')
 
-        site_data_col_renamed_df.dropna(subset=['redcap_event_name'], inplace=True)
+        site_df_mapped.dropna(subset=['redcap_event_name'], inplace=True)
 
-        print(site_data_col_renamed_df)
+        print(site_df_mapped)
 
-        site_data_col_renamed_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
+        site_df_mapped.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
         # final converted site raw data
-        site_csv_list.append(site_data_col_renamed_df)
+        site_csv_list.append(site_df_mapped)
 
     # loop through sites records in dataframe
     for i in range(len(site_csv_list)):
