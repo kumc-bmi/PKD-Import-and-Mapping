@@ -26,14 +26,20 @@ def mapped_headers():
 
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
+    unique_header_cols_df = unique_header_cols[~unique_header_cols['trg_logic'].str.contains('Y', na=True)]
 
+     # empty array to store dataframes
     site_csv_list = []
 
+    # fetch defined variables from sys
     vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
     export_directory = './export/temp/'
+
+    # empty array to store site names
     site_names = []
     
+    # extract site name for csv filename
     for filename in os.listdir(directory):
         if filename.endswith('.csv'):
             site_names.append(os.path.splitext(filename)[0])
@@ -140,8 +146,6 @@ def mapped_headers():
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
-        print(site_final_df)
-
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
@@ -151,6 +155,7 @@ def mapped_headers():
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
 
+    # export merged csv file to temporary directory called merged 
     merge_site_cvs.to_csv(export_directory + 'merged/merged.csv', index=False, float_format=None)
 
     # return merged file
