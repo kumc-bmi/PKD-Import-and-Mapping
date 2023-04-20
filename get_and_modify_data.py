@@ -143,6 +143,8 @@ def mapped_headers():
 
         tuples = zip(*df_mapped)
 
+        print(tuples)
+
         lengths = [len(t) for t in tuples]
 
         if len(set(lengths)) == 1:
@@ -151,6 +153,7 @@ def mapped_headers():
         else:
             print(lengths)
             print("UnEqual lengths")
+
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
