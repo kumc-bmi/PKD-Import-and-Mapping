@@ -128,7 +128,7 @@ def mapped_headers():
         for col, mapping in site_column_mapping.items():
             # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
-                # If it does exist, map values using sorce mapping dictionary
+                # If it does exist, map values using source mapping dictionary
                 df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
             else:
                 # If it does not exist, set all values to None
@@ -140,7 +140,17 @@ def mapped_headers():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()
 
         print(df_mapped)
-        
+
+        tuples = zip(*df_mapped)
+
+        lengths = [len(t) for t in tuples]
+
+        if len(set(lengths)) == 1:
+            print(lengths)
+            print("Equal lengths")
+        else:
+            print(lengths)
+            print("UnEqual lengths")
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
