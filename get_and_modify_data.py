@@ -21,6 +21,7 @@ def mapped_headers():
     # ensure all values are lowercase
     col_header_df = mapping_df[['src_var', 'site', 'trg_var', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
+    # drop columns with logic
     col_header_df = col_header_df[~(col_header_df['trg_logic'] == 'y')]
 
     # select unique columns from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
@@ -60,10 +61,6 @@ def mapped_headers():
 
         # source values from mapping file
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
-
-        print(source_df)
-
-        # source_df = source_df[~source_df['trg_logic'].str.contains('y', na=True)]
 
         # combine src_val_raw and src_val_lbl into a single column
         source_df['source_val_combined'] = source_df['src_val_lbl'].fillna(source_df['src_val_raw'])
@@ -150,6 +147,16 @@ def mapped_headers():
 
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
+
+        # uppercase function
+        def ucase_col(value):
+            if value.name not in initial_cols:
+                return value.str.upper()
+            else:
+                return value
+        
+        # uppercase df columns
+        site_final_df = site_final_df.applymap(ucase_col)
 
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
