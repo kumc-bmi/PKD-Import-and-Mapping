@@ -147,16 +147,9 @@ def mapped_headers():
 
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
-
-        # uppercase function
-        def ucase_col(value):
-            if value.name not in initial_cols:
-                return value.str.upper()
-            else:
-                return value
         
-        # uppercase df columns
-        site_final_df = site_final_df.applymap(ucase_col)
+        # uppercase df values in columns
+        site_final_df = site_final_df.applymap(lambda val: val.upper() if val not in initial_cols else val)
 
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
