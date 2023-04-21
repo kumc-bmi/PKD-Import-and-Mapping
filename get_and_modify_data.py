@@ -77,8 +77,12 @@ def mapped_headers():
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
-        # raw data for site
+        # read site raw data to dataframe
         site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
+
+        # ensure all values are in lower case
+        site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
@@ -136,6 +140,8 @@ def mapped_headers():
             if col not in site_column_mapping.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()        
 
+        print(df_mapped)
+        
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
