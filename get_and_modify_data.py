@@ -19,7 +19,9 @@ def mapped_headers():
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 
     # ensure all values are lowercase
-    col_header_df = mapping_df[['src_var', 'site', 'trg_var']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+    col_header_df = mapping_df[['src_var', 'site', 'trg_var', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+
+    col_header_df = col_header_df[~(col_header_df['trg_logic'] == 'y')]
 
     # select unique columns from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
     unique_header_cols = col_header_df.loc[col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
@@ -60,7 +62,7 @@ def mapped_headers():
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         print(source_df)
-        
+
         # source_df = source_df[~source_df['trg_logic'].str.contains('y', na=True)]
 
         # combine src_val_raw and src_val_lbl into a single column
