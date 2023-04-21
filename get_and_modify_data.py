@@ -110,14 +110,16 @@ def mapped_headers():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
+        print(site_column_mapping)
+
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
-        # remove unknown event rows
+        # remove unknown event name records
         site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.values())]
 
         # create new empty dataframe for storage
-        df_mapped = pd.DataFrame()
+        df_mapped = {}
 
         # iterate over columns in mapping dictionary
         for col, mapping in site_column_mapping.items():
@@ -132,12 +134,12 @@ def mapped_headers():
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
             if col not in site_column_mapping.keys():
-                df_mapped[col] = site_data_col_renamed_df[col]
-
-        df_mapped.dropna(how='all', axis=1, inplace=True)        
+                df_mapped[col] = site_data_col_renamed_df[col].tolist()        
 
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
+
+        site_df_mapped.dropna(how='all', axis=1, inplace=True)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
@@ -148,9 +150,6 @@ def mapped_headers():
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
         
-        # # uppercase df values in columns
-        # site_final_df.loc[:, ~site_final_df.columns.isin(initial_cols)] = site_final_df.loc[:, ~site_final_df.columns.isin(initial_cols)].applymap(str.upper)
-
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
