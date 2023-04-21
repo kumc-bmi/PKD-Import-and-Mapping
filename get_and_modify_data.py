@@ -10,7 +10,7 @@ from __builtin__ import open as openf
 
 log_details = logging.getLogger(__name__)
 
-def mapped_headers():
+def mapped_csvs():
     # based on site convert src_var to trg_var
     # site, src_var, trg_var => (sites, column headers, target column header)
     # TRGCALCFIELD => calculated field
@@ -216,15 +216,4 @@ def main(os_path, openf, argv):
 
 if __name__ == "__main__":
 
-    def _main_ocap():
-        from sys import argv
-        from os import path as os_path
-        from __builtin__ import open as openf
-
-        config_values = main(os_path, openf, argv)
-        print(config_values)
-
-        site_headers = mapped_headers()
-        print(site_headers)
-
-    _main_ocap()
+    mapped_csvs()
