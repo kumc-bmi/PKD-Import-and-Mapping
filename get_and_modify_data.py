@@ -59,7 +59,7 @@ def mapped_headers():
         # source values from mapping file
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
-        source_df = source_df[~source_df['trg_logic'].str.contains('y', na=True)]
+        # source_df = source_df[~source_df['trg_logic'].str.contains('y', na=True)]
 
         # combine src_val_raw and src_val_lbl into a single column
         source_df['source_val_combined'] = source_df['src_val_lbl'].fillna(source_df['src_val_raw'])
