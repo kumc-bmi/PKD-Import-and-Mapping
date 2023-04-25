@@ -69,7 +69,7 @@ def mapped_csvs():
         source_df = source_df.dropna(subset=['source_val_combined'])
 
         # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
-        unique_source_values = source_df.loc[source_df['trg_val'].notnull(), ['source_val_combined', 'site', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'trg_var', 'trg_val'], keep='first')
+        unique_source_values = source_df.loc[source_df['trg_val'].notnull(), ['source_val_combined', 'site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val'], keep='first')
 
         # drop records where trg_val is lower string nan
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
@@ -114,6 +114,8 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
+        print(site)
+
         print(site_column_mapping)
 
         # event dictionary
@@ -140,14 +142,11 @@ def mapped_csvs():
             if col not in site_column_mapping.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()        
         
-        print(df_mapped)
-        
+
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
         site_df_mapped.dropna(how='all', axis=1, inplace=True)
-
-        print(site_df_mapped)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
