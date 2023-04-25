@@ -114,6 +114,8 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
+        print(site_column_mapping)
+
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
@@ -138,10 +140,14 @@ def mapped_csvs():
             if col not in site_column_mapping.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()        
         
+        print(df_mapped)
+        
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
         site_df_mapped.dropna(how='all', axis=1, inplace=True)
+
+        print(site_df_mapped)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
