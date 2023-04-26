@@ -63,7 +63,7 @@ def mapped_csvs():
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # combine src_val_raw and src_val_lbl into a single column
-        source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
+        source_df['source_val_combined'] = source_df['src_val_lbl'].fillna(source_df['src_val_raw'])
 
         # drop rows with no src_val_raw or src_val_lbl
         source_df = source_df.dropna(subset=['source_val_combined'])
@@ -114,10 +114,6 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        print(site)
-
-        print(site_column_mapping)
-
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
@@ -145,8 +141,6 @@ def mapped_csvs():
 
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
-
-        site_df_mapped.dropna(how='all', axis=1, inplace=True)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
