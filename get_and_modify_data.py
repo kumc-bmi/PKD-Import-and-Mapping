@@ -150,6 +150,8 @@ def mapped_csvs():
 
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
+
+        site_df_mapped.dropna(subset=['studyid','redcap_event_name'], how='all')
         
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
