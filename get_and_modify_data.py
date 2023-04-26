@@ -117,8 +117,8 @@ def mapped_csvs():
         # event dictionary
         event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
-        # remove unknown event name records
-        site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.values())]
+        # # remove unknown event name records
+        # site_data_col_renamed_df = site_data_col_renamed_df[site_data_col_renamed_df['redcap_event_name'].isin(event_dict.values())]
 
         # create new empty dataframe for storage
         df_mapped = {}
