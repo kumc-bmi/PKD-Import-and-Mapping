@@ -141,6 +141,7 @@ def mapped_csvs():
         # remove unknown event name records
         site_df_mapped = site_df_mapped[site_df_mapped['redcap_event_name'].isin(event_dict.values())]
 
+        print(site_df_mapped)
         # group the dataframe by studyid and redcap_event_name and then use fillna() and first() functions to combine the rows
         site_df_mapped = site_df_mapped.groupby(['studyid', 'redcap_event_name'], as_index=False).agg(lambda x: x.fillna('').iloc[0])
 
