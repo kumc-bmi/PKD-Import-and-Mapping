@@ -114,9 +114,6 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        # event dictionary
-        event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
-
         # create new empty dataframe for storage
         df_mapped = {}
 
@@ -138,9 +135,6 @@ def mapped_csvs():
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
-        # remove unknown event name records
-        site_df_mapped = site_df_mapped[site_df_mapped['redcap_event_name'].isin(event_dict.values())]
-
         print(site_df_mapped)
 
         # attach site name to studyid
@@ -155,6 +149,13 @@ def mapped_csvs():
         # group the dataframe by studyid and redcap_event_name and merge the rows
         site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
+        # event dictionary
+        event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
+
+        # remove unknown event name records
+        site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.values())]
+
+        # drop records where only studyid and redcap_event_name are only present
         site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
         
         # export site dataframe to csv
