@@ -142,7 +142,7 @@ def mapped_csvs():
         site_df_mapped = site_df_mapped[site_df_mapped['redcap_event_name'].isin(event_dict.values())]
 
         # group the dataframe by studyid and redcap_event_name and then use fillna() and first() functions to combine the rows
-        site_df_mapped = site_df_mapped.grouoby(['studyid', 'redcap_event_name'], as_index=False).agg(lambda x: x.fillna('').iloc[0])
+        site_df_mapped = site_df_mapped.groupby(['studyid', 'redcap_event_name'], as_index=False).agg(lambda x: x.fillna('').iloc[0])
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
