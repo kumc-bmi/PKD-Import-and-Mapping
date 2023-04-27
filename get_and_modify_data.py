@@ -63,7 +63,7 @@ def mapped_csvs():
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # combine src_val_raw and src_val_lbl into a single column
-        source_df['source_val_combined'] = source_df['src_val_lbl'].fillna(source_df['src_val_raw'])
+        source_df['source_val_combined'] = source_df['src_val_raw'].fillna(source_df['src_val_lbl'])
 
         # drop rows with no src_val_raw or src_val_lbl
         source_df = source_df.dropna(subset=['source_val_combined'])
