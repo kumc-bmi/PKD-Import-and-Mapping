@@ -142,8 +142,6 @@ def mapped_csvs():
         site_df_mapped = site_df_mapped[site_df_mapped['redcap_event_name'].isin(event_dict.values())]
 
         print(site_df_mapped)
-        # group the dataframe by studyid and redcap_event_name and then use fillna() and first() functions to combine the rows
-        site_df_mapped = site_df_mapped.groupby(['studyid', 'redcap_event_name'], as_index=False).agg(lambda x: x.fillna('').iloc[0])
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
@@ -154,7 +152,10 @@ def mapped_csvs():
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
-        site_df_mapped.dropna(subset=['studyid','redcap_event_name'], how='all')
+        # group the dataframe by studyid and redcap_event_name and merge the rows
+        site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+
+        site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
         
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
