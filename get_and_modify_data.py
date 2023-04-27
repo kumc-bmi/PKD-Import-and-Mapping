@@ -134,12 +134,12 @@ def mapped_csvs():
         for col in site_data_col_renamed_df.columns:
             if col not in site_column_mapping.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()        
-        
-        # remove unknown event name records
-        site_data_col_renamed_df = df_mapped[df_mapped['redcap_event_name'].isin(event_dict.values())]
 
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
+
+        # remove unknown event name records
+        site_df_mapped = site_df_mapped[site_df_mapped['redcap_event_name'].isin(event_dict.values())]
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
