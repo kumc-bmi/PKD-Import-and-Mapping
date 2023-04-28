@@ -84,7 +84,6 @@ def mapped_csvs():
         # ensure all values are in lower case
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
-
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
         
@@ -135,10 +134,12 @@ def mapped_csvs():
                         if col == key2[0] and val in [x[i] for x in value2 for i in range(len(x))]:
                             site_data_col_renamed_df.at[i, col] = key2[1]       
 
+        print(mapping_dict)
+
+        print(alt_mapping_dict)
+
         # create new DataFrame
         site_df_mapped = pd.DataFrame(site_data_col_renamed_df)
-
-        print(site_df_mapped)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
