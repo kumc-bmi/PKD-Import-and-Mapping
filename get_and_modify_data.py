@@ -116,6 +116,7 @@ def mapped_csvs():
 
         site_source_alt_dict = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
+        print(site_source_alt_dict)
         # create new empty dataframe for storage
         df_mapped = {}
 
@@ -125,11 +126,10 @@ def mapped_csvs():
             if col1 in site_data_col_renamed_df.columns:
                 # If it does exist, map values using source mapping1 dictionary
                 df_mapped[col1] = [mapping1.get(val, val) for val in site_data_col_renamed_df[col1]]
-            elif col2 in site_data_col_renamed_df.columns:
-                df_mapped[col2] = [mapping2.get(val, val) for val in site_data_col_renamed_df[col2]]
             else:
                 # If it does not exist, set all values to None
-                df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+                df_mapped[col2] = [mapping2.get(val, val) for val in site_data_col_renamed_df[col2]]
+                # df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
 
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
