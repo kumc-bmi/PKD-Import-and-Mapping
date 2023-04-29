@@ -152,7 +152,7 @@ def mapped_csvs():
         # print(site_source_dict)
 
         # event dictionary
-        event_dict = dict(zip(site_src_val['source_val_combined'], site_src_val['trg_val']))
+        event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
 
         print(event_dict)
 
