@@ -114,7 +114,7 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-       # create new empty dataframe for storage
+        # create new empty dataframe for storage
         df_mapped = {}
 
         # iterate over columns in mapping dictionary
@@ -147,12 +147,14 @@ def mapped_csvs():
         # group the dataframe by studyid and redcap_event_name and merge the rows
         site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
+        # site_source_dict = dict(zip(site_src_val['source_val_combined'], site_src_val['trg_val']))
+
+        # print(site_source_dict)
+
         # event dictionary
-        event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
+        event_dict = dict(zip(site_src_val['source_val_combined'], site_src_val['trg_val']))
 
         print(event_dict)
-
-        print(site_column_mapping)
 
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.values())]
