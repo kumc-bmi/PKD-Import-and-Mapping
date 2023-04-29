@@ -114,32 +114,26 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        # create mapping dictionary
-        mapping_dict = {}
-        for (header, value), group in groupby(site_src_val.to_dict('records'), key=lambda x: (x['trg_var'], x['trg_val'])):
-            mapping_dict[(header, value)] = [(d['src_val_raw'], d['src_val_lbl']) for d in group]
-    
-        # create alternate mapping dictionary
-        alt_mapping_dict = {}
-        for (header, value), group in groupby(site_src_val.to_dict('records'), key=lambda x: (x['trg_var'], x['trg_val'])):
-            alt_mapping_dict[(header, value)] = [(d['trg_lbl'], d['trg_val']) for d in group]
-    
-        # map original and alternate dictionary to dataframe
+       # create new empty dataframe for storage
+        df_mapped = {}
+
+        # iterate over columns in mapping dictionary
+        for col, mapping in site_column_mapping.items():
+            # check if column is in site data frame
+            if col in site_data_col_renamed_df.columns:
+                # If it does exist, map values using source mapping dictionary
+                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+            else:
+                # If it does not exist, set all values to None
+                df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+
+        # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
-            for i, val in enumerate(site_data_col_renamed_df[col]):
-                for (key1, value1), (key2, value2) in zip(mapping_dict.items(), alt_mapping_dict.items()):
-                    if col == key1[0] and val in [x[i] for x in value1 for i in range(len(x))]:
-                        site_data_col_renamed_df.at[i, col] = key1[1]
-                    else:
-                        if col == key2[0] and val in [x[i] for x in value2 for i in range(len(x))]:
-                            site_data_col_renamed_df.at[i, col] = key2[1]       
-
-        print(mapping_dict)
-
-        print(alt_mapping_dict)
+            if col not in site_column_mapping.keys():
+                df_mapped[col] = site_data_col_renamed_df[col].tolist()      
 
         # create new DataFrame
-        site_df_mapped = pd.DataFrame(site_data_col_renamed_df)
+        site_df_mapped = pd.DataFrame(df_mapped)
 
         # attach site name to studyid
         site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
