@@ -112,24 +112,28 @@ def mapped_csvs():
         site_source_mapping = site_src_val[site_src_val['site'] == site]
 
         # create a dictionary that maps the target source values to the original source site value
-        site_column_mapping = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
+        site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
+
+        site_source_alt_dict = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
         # create new empty dataframe for storage
         df_mapped = {}
 
         # iterate over columns in mapping dictionary
-        for col, mapping in site_column_mapping.items():
+        for (col1, mapping1), (col2, mapping2) in zip(site_source_dict.items(), site_source_alt_dict.items()):
             # check if column is in site data frame
-            if col in site_data_col_renamed_df.columns:
-                # If it does exist, map values using source mapping dictionary
-                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+            if col1 in site_data_col_renamed_df.columns:
+                # If it does exist, map values using source mapping1 dictionary
+                df_mapped[col1] = [mapping1.get(val, val) for val in site_data_col_renamed_df[col1]]
+            elif col2 in site_data_col_renamed_df.columns:
+                df_mapped[col2] = [mapping2.get(val, val) for val in site_data_col_renamed_df[col2]]
             else:
                 # If it does not exist, set all values to None
                 df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
 
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
-            if col not in site_column_mapping.keys():
+            if col not in site_source_dict.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()      
 
         # create new DataFrame
@@ -146,10 +150,6 @@ def mapped_csvs():
 
         # group the dataframe by studyid and redcap_event_name and merge the rows
         site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
-        # site_source_dict = dict(zip(site_src_val['source_val_combined'], site_src_val['trg_val']))
-
-        # print(site_source_dict)
 
         # event dictionary
         event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
