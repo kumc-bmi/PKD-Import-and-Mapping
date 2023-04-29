@@ -148,9 +148,11 @@ def mapped_csvs():
         site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         # event dictionary
-        event_dict = dict(zip(site_source_mapping['trg_val'], site_source_mapping['source_val_combined']))
+        event_dict = dict(zip(site_source_mapping['source_val_combined'], site_source_mapping['trg_val']))
 
         print(event_dict)
+
+        print(site_column_mapping)
 
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.values())]
