@@ -122,7 +122,7 @@ def mapped_csvs():
         # create alternate mapping dictionary
         alt_mapping_dict = {}
         for (header, value), group in groupby(site_src_val.to_dict('records'), key=lambda x: (x['trg_var'], x['trg_val'])):
-            alt_mapping_dict[(header, value)] = [(d['trg_lbl'], d['source_val_combined']) for d in group]
+            alt_mapping_dict[(header, value)] = [(d['trg_lbl'], d['trg_val']) for d in group]
     
         # map original and alternate dictionary to dataframe
         for col in site_data_col_renamed_df.columns:
