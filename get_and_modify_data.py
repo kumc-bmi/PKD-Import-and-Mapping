@@ -156,6 +156,8 @@ def mapped_csvs():
 
         print(event_dict)
 
+        print(site_final_df)
+
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.values())]
 
