@@ -159,8 +159,8 @@ def mapped_csvs():
         # # remove unknown event name records
         # site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.values())]
 
-        # drop records where only studyid and redcap_event_name are only present
-        site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
+        # # drop records where only studyid and redcap_event_name are only present
+        # site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
         
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
