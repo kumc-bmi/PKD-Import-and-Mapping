@@ -114,22 +114,21 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        site_source_alt_dict = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
+        site_source_alt_dict = {col: dict(zip(group['trg_val'], group['trg_lbl'])) for col, group in site_source_mapping.groupby('trg_var')}
 
         print(site_source_alt_dict)
         # create new empty dataframe for storage
         df_mapped = {}
 
         # iterate over columns in mapping dictionary
-        for (col1, mapping1), (col2, mapping2) in zip(site_source_dict.items(), site_source_alt_dict.items()):
+        for col, mapping in site_source_dict.items():
             # check if column is in site data frame
-            if col1 in site_data_col_renamed_df.columns:
-                # If it does exist, map values using source mapping1 dictionary
-                df_mapped[col1] = [mapping1.get(val, val) for val in site_data_col_renamed_df[col1]]
+            if col in site_data_col_renamed_df.columns:
+                # If it does exist, map values using source mapping dictionary
+                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
             else:
                 # If it does not exist, set all values to None
-                df_mapped[col2] = [mapping2.get(val, val) for val in site_data_col_renamed_df[col2]]
-                # df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+                df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
 
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
