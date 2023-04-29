@@ -114,7 +114,7 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        site_source_alt_dict = {col: dict(zip(group['trg_val'], group['trg_lbl'])) for col, group in site_source_mapping.groupby('trg_var')}
+        site_source_alt_dict = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
         print(site_source_alt_dict)
         # create new empty dataframe for storage
