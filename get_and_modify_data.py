@@ -147,6 +147,9 @@ def mapped_csvs():
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
+        # make sure all NaN and None values in dataframe is replaced with dataframe
+        site_final_df.fillna('', inplace=True)
+
         # group the dataframe by studyid and redcap_event_name and merge the rows
         site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
