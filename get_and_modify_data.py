@@ -125,9 +125,6 @@ def mapped_csvs():
         # create a dictionary that maps the target source values to the original source site value
         site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        site_source_alt_dict = {col: dict(zip(group['trg_lbl'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
-
-        print(site_source_alt_dict)
         # create new empty dataframe for storage
         df_mapped = {}
 
@@ -169,9 +166,6 @@ def mapped_csvs():
 
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.keys())]
-
-        # # drop records where only studyid and redcap_event_name are only present
-        # site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
 
         # apply missing function
         site_final_df = site_final_df.applymap(missing)
