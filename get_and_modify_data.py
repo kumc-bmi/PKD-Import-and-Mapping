@@ -11,6 +11,17 @@ from itertools import groupby
 
 log_details = logging.getLogger(__name__)
 
+# function for missing values
+def missing(x):
+    if x == 'unk':
+        return '888'
+    elif x == 'not applicable':
+        return '555'
+    elif x == 'unknown':
+        return '88'
+    else:
+        return x
+
 def mapped_csvs():
     # based on site convert src_var to trg_var
     # site, src_var, trg_var => (sites, column headers, target column header)
@@ -158,17 +169,6 @@ def mapped_csvs():
 
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.keys())]
-
-        # function for missing values
-        def missing(x):
-            if x == 'unk':
-                return 'UNK'
-            elif x == 'not applicable':
-                return 'Not applicable'
-            elif x == 'unknown':
-                return 'Unknown'
-            else:
-                return x
 
         # # drop records where only studyid and redcap_event_name are only present
         # site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
