@@ -147,7 +147,7 @@ def mapped_csvs():
         # reorder the columns
         site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
-        # make sure all NaN and None values in dataframe is replaced with dataframe
+        # make sure all NaN and None values in dataframe are replaced with empty strings
         site_final_df.fillna('', inplace=True)
 
         # group the dataframe by studyid and redcap_event_name and merge the rows
@@ -156,15 +156,25 @@ def mapped_csvs():
         # event dictionary
         event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
 
-        print(event_dict)
-
-        print(site_final_df)
-
         # remove unknown event name records
         site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.keys())]
 
+        # function for missing values
+        def missing(x):
+            if x == 'unk':
+                return 'UNK'
+            elif x == 'not applicable':
+                return 'Not applicable'
+            elif x == 'unknown':
+                return 'Unknown'
+            else:
+                return x
+
         # # drop records where only studyid and redcap_event_name are only present
         # site_final_df.dropna(subset=['studyid','redcap_event_name'], how='all')
+
+        # apply missing function
+        site_final_df = site_final_df.applymap(missing)
         
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
