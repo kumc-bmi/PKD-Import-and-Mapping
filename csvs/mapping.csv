@@ -830,6 +830,7 @@ pkd2gentest,kumc,5,Test result not known,,pkd2mut_yn,888,UNK,,radio,radio,,,,gen
 gen_pkd2_res,uab,0,No mutation,,pkd2mut_yn,0,No,,dropdown,yesno,,,,genetic_testing,,,,,pkd2_mutation,,,,
 gen_pkd2_res,uab,1,Mutation,,pkd2mut_yn,1,Yes,,dropdown,yesno,,,,genetic_testing,,,,,pkd2_mutation,,,,
 pkdresults,umb,,PKD2,,pkd2mut_yn,1,Yes,,radio,yesno,,,,genetic_testing,,,,,pkd2_mutation,,,,
+pkdresults,umb,3,PKD2,,pkd2mut_yn,0,No,,radio,yesno,,,,genetic_testing,,,,,pkd2_mutation,,,,
 pkd2muttype,kumc,,,,pkd2muttype,,,,radio,radio,,,,genetic_testing,,,,,pkd2_mutation_type,,,,
 pkd2mut,kumc,,,,pkd2mutdesc,,,,text,text,,,,genetic_testing,,,,,pkd2_mutation_description,,,,
 gen_pkd2_res_spe,uab,,,,pkd2mutdesc,,,,text,text,,,,genetic_testing,,,,,pkd2_mutation_description,,,,

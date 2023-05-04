@@ -93,25 +93,17 @@ def mapped_csvs():
             # read umb site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
 
-            print(site_data_df)
-
             # create a new DataFrame to hold the transposed data
             new_umb_df = pd.DataFrame(columns=['pid', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6'])
-
-            print(new_umb_df)
 
             # Iterate over each row in the original DataFrame
             for index, row in site_data_df.iterrows():
                 # get the value from the 'cr7' column for the current row
                 cr_value = row['cr7']
-            
-                print(cr_value)
-            
+                        
                 # create a new dictionary to hold the values for the current row
                 new_row = {'pid': row['pid'], 'cr7': cr_value}
-            
-                print(new_row)
-            
+                        
                 # Set the value for the corresponding column based on the 'cr7' value
                 if cr_value == '1':
                     new_row['race___5'] = '1'
@@ -132,16 +124,14 @@ def mapped_csvs():
                 # concatenate the new DataFrame to the new_umb_df DataFrame
                 new_umb_df = pd.concat([new_umb_df, new_umb_row_df], ignore_index=True)
 
-            print(new_umb_df)
-
             # remove string nan on dataframe
             new_umb_df =  new_umb_df.fillna('')
+
+            # append race columns to umb dataframe
             site_data_df = pd.merge(site_data_df, new_umb_df[['pid', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6']], on=['pid', 'cr7'], how='left')
 
             # drop the 'cr7' column
             site_data_df = site_data_df.drop('cr7', axis=1)
-
-            print(site_data_df)
         else:
             # read site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
