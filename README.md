@@ -1,7 +1,6 @@
 ## 📽️ PKD MULTI-SITE REGISTRY [REDCAP]
-==========================================================================
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) [![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
 
 <img src="https://projectredcap.org/wp-content/themes/rcap/images/answerhub.png" />
 
@@ -11,11 +10,11 @@
 - [Why PKD MULTI-SITE REGISTRY?](#why-pkd-multi-site-registry)
 - [Setup](#setup)
 
-## Authors [![Authors on PKD](images/authors-badge-small.png)]
+## Authors ![Authors on PKD](images/authors-badge-small.png)
 
 Thank you to all our authors! ✨
 
-:Authors: Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel
+Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel
 
 | Name | Description |
 | --- | --- |
@@ -34,6 +33,5 @@ makes changes as per requirements and then maps the data to KUMC redcap PKD proj
 ### Download Instructions
 
 ### Mapping Instructions
-
 
 ### Import Instructions
