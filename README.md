@@ -10,7 +10,7 @@
 - [Why PKD MULTI-SITE REGISTRY?](#why-pkd-multi-site-registry)
 - [Setup](#setup)
 
-<img src="images/authors-badge-77-20.png" width="214" height="44"/>
+<img src="images/authors-badge-small.png" width="99" height="20"/>
 
 Thank you to all our authors! ✨
 
