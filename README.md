@@ -7,6 +7,7 @@
 ## 🚩 Table of Contents
 
 - [Authors](#authors)
+- [Site](#site)
 - [Why PKD MULTI-SITE REGISTRY?](#why-pkd-multi-site-registry)
 - [Setup](#setup)
 
@@ -15,6 +16,8 @@
 Thank you to all our authors! ✨
 
 Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel
+
+## ⛬ Site
 
 | Name | Description |
 | --- | --- |
