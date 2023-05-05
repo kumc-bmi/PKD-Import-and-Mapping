@@ -16,10 +16,10 @@
 Thank you to all our authors! ✨
 <table>
   <tr>
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/72703458?v=4" width="100px;" /><sub><b>Mary Penne Mays</b></sub></td>
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/43289998?v=4" width="100px;" /><sub><b>Siddharth Satyakam</b></sub></td>
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/8313457?v=4" width="100px;" /><sub><b>Sravani Chandaka</b></sub></td>
-    <td align="center"><img src="https://avatars.githubusercontent.com/u/8277466?v=4" width="100px;" /><sub><b>Lav Patel</b></sub></td>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/72703458?v=4" width="100px;" /><br /><sub><b>Mary Penne Mays</b></sub></td>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/43289998?v=4" width="100px;" /><br /><sub><b>Siddharth Satyakam</b></sub></td>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/8313457?v=4" width="100px;" /><br /><sub><b>Sravani Chandaka</b></sub></td>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/8277466?v=4" width="100px;" /><br /><sub><b>Lav Patel</b></sub></td>
     <td align="center"><sub><b>Alan Yu(MD, PhD)</b></sub></td>
   </tr>
 </table>
