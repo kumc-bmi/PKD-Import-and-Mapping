@@ -15,7 +15,7 @@
 
 Thank you to all our authors! ✨
 
-Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel
+Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel, Alan Yu(MD, PhD)
 
 ## ⛬ Site
 
