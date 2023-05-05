@@ -11,7 +11,8 @@
 - [Setup](#setup)
 
 
-<img src="images/authors-badge-small.png" width="214" height="44"/>
+<img src="images/authors-badge-small.png" width="180" height="37"/>
+
 Thank you to all our authors! ✨
 
 Mary Penne Mays, Siddharth Satyakam, Sravani Chandaka, Lav Patel
