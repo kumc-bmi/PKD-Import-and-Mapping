@@ -1,4 +1,10 @@
-## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
+"""
+Authors:
+- Mary Penne Mays
+- Siddharth Satyakam
+- Sravani Chandaka
+- Lav Patel
+"""
 
 import configparser
 import logging
@@ -122,7 +128,7 @@ def mapped_csvs():
                 new_umb_row_df = pd.DataFrame.from_dict(new_row, orient='index').T
             
                 # concatenate the new DataFrame to the new_umb_df DataFrame
-                new_umb_df = pd.concat([new_umb_df, new_umb_row_df], ignore_index=True)
+                new_umb_df = pd.concat([new_umb_df, new_umb_row_df], ignore_index=True, sort=True)
 
             # remove string nan on dataframe
             new_umb_df =  new_umb_df.fillna('')

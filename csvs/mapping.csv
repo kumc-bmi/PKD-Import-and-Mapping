@@ -810,7 +810,6 @@ pkdresults,umb,,PKD1,,gentest,1,Yes,,radio,yesno,,,,genetic_testing,,,,,genetic_
 pkdresults,umb,,PKD2,,gentest,1,Yes,,radio,yesno,,,,genetic_testing,,,,,genetic_test_yn,,,,
 pkdresults,umb,3,Other,,gentest,1,Yes,,radio,yesno,,,,genetic_testing,,,,,genetic_test_yn,,,,
 pkdresults,umb,88,Unknown,,gentest,888,UNK,,radio,radio,,,,genetic_testing,,,,,genetic_test_yn,,,,
-
 pkd1gentest,kumc,1,Mutation found in sequencing,,pkd1mut_yn,1,Yes,,radio,yesno,,,,genetic_testing,,,,,pkd1_mutation,,,,
 pkd1gentest,kumc,2,Positive result based on linkage only,,pkd1mut_yn,1,Yes,,radio,yesno,,,,genetic_testing,,,,,pkd1_mutation,,,,
 pkd1gentest,kumc,3,No mutation found on test,,pkd1mut_yn,0,No,,radio,yesno,,,,genetic_testing,,,,,pkd1_mutation,,,,
