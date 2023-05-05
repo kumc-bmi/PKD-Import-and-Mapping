@@ -10,7 +10,7 @@
 - [Why PKD MULTI-SITE REGISTRY?](#why-pkd-multi-site-registry)
 - [Setup](#setup)
 
-## Authors ![Authors on PKD](images/authors-badge.png)
+## Authors ![Authors on PKD](images/authors-badge-77-20.png)
 
 Thank you to all our authors! ✨
 
