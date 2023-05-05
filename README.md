@@ -21,6 +21,7 @@ Thank you to all our authors! ✨
     <td align="center"><img src="https://avatars.githubusercontent.com/u/8313457?v=4" width="100px;" /><br /><sub><b>Sravani Chandaka</b></sub></td>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/8277466?v=4" width="100px;" /><br /><sub><b>Lav Patel</b></sub></td>
     <td align="center"><sub><b>Alan Yu(MD, PhD)</b></sub></td>
+    <td align="center"><img src="https://avatars.githubusercontent.com/u/4640305?v=4" width="100px;" /><br /><sub><b>Kelechi Anuforo</b></sub></td>
   </tr>
 </table>
 
