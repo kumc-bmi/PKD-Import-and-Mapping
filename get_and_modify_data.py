@@ -11,7 +11,6 @@ import logging
 import pandas as pd
 import os
 import requests
-from redcap import Project
 import csv
 from sys import argv
 from os import path as os_path
@@ -55,7 +54,7 @@ def mapped_csvs():
     site_csv_list = []
 
     # fetch defined variables from sys
-    vaiables = main(os_path, openf, argv, Project)
+    vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
     export_directory = './export/temp/'
 
@@ -240,32 +239,48 @@ def mapped_csvs():
 
 # set up connection to REDCap API
 def redcap_api():
-    vaiables = main(os_path, openf, argv, Project)
+    vaiables = main(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
     api_token = str(vaiables['token_kumc'])
     verify_ssl = str(vaiables['verify_ssl'])
     log_details.debug('API URL: %s', api_url)
-    project = Project(api_url, api_token, verify_ssl=verify_ssl)
     export_directory = './export/temp/'
 
     print(api_url)
     print(api_token)
     print(verify_ssl)
-    print(project)
 
     # folders for exported files
     folders = ['kumc','umb','uab']
 
     for folder in folders:
-        # open CSV file for reading
-        with openf(export_directory + folder + '/' + folder + '.csv') as csvfile:
-            # read CSV record into list of dictionaries
-            record = [dict(row) for row in csv.DictReader(csvfile)]
+        # site csv file
+        filename = export_directory + folder + '/' + folder + '.csv'
+        print(filename)
+        # record parameters
+        data = {
+            'token': api_token,
+            'content': 'project',
+            'action': 'import',
+            'format': 'csv',
+            'type': 'flat',
+            'overwriterBehavior': 'normal',
+            'data': '@' + filename,
+            'project_id': '30282',
+            'returnContent': 'count',
+            'returnFormat': 'json'
+        }
 
-        # import records into Redcap Project
-        project.import_records(record, overwrite='normal') 
+        # make the API call to import records
+        response = requests.post(api_url, data=data)
 
-def main(os_path, openf, argv, Project):
+        if response.status_code == 200:
+            # print the response from API call
+            print(response.content.decode('utf-8'))
+        else:
+            print('Error importing ' + folder + '.csv file' + response.content.decode('utf-8'))
+
+def main(os_path, openf, argv):
     def get_config():
         [config_fn, pid] = argv[1:3]
         config = configparser.SafeConfigParser()
