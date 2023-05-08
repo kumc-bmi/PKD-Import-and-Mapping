@@ -10,6 +10,7 @@ import configparser
 import logging
 import pandas as pd
 import os
+import requests
 from redcap import Project
 import csv
 from sys import argv
