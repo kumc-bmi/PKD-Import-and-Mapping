@@ -171,58 +171,62 @@ def mapped_csvs():
         # remove string nan on dataframe
         site_data_col_renamed_df =  site_data_col_renamed_df.replace('nan', '')
 
-        # convert corresponding source row values to target source value
-        site_source_mapping = site_src_val[site_src_val['site'] == site]
+        if 'redcap_event_name' not in site_data_col_renamed_df.columns:
+            # empty dataframe if event is not present
+            site_final_df = pd.DataFrame(columns=range(len(site_data_col_renamed_df.columns)))
+        else:
+            # convert corresponding source row values to target source value
+            site_source_mapping = site_src_val[site_src_val['site'] == site]
 
-        # create a dictionary that maps the target source values to the original source site value
-        site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
+            # create a dictionary that maps the target source values to the original source site value
+            site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
 
-        # create new empty dataframe for storage
-        df_mapped = {}
-        print(site)
-        # iterate over columns in mapping dictionary
-        for col, mapping in site_source_dict.items():
-            # check if column is in site data frame
-            if col in site_data_col_renamed_df.columns:
-                # If it does exist, map values using source mapping dictionary
-                df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
-            else:
-                # If it does not exist, set all values to None
-                df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+            # create new empty dataframe for storage
+            df_mapped = {}
+            print(site)
+            # iterate over columns in mapping dictionary
+            for col, mapping in site_source_dict.items():
+                # check if column is in site data frame
+                if col in site_data_col_renamed_df.columns:
+                    # If it does exist, map values using source mapping dictionary
+                    df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+                else:
+                    # If it does not exist, set all values to None
+                    df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
 
-        # create new dataframe and apply the mapping to the column with values to be converted
-        for col in site_data_col_renamed_df.columns:
-            print(col)
-            if col not in site_source_dict.keys():
-                df_mapped[col] = site_data_col_renamed_df[col].tolist()
+            # create new dataframe and apply the mapping to the column with values to be converted
+            for col in site_data_col_renamed_df.columns:
+                print(col)
+                if col not in site_source_dict.keys():
+                    df_mapped[col] = site_data_col_renamed_df[col].tolist()
 
-        # create new DataFrame
-        site_df_mapped = pd.DataFrame(df_mapped)
+            # create new DataFrame
+            site_df_mapped = pd.DataFrame(df_mapped)
 
-        # attach site name to studyid
-        site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
+            # attach site name to studyid
+            site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
 
-        # ensure studyid and redcap_event_name are first in df
-        initial_cols = ['studyid', 'redcap_event_name']
+            # ensure studyid and redcap_event_name are first in df
+            initial_cols = ['studyid', 'redcap_event_name']
 
-        # reorder the columns
-        site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
+            # reorder the columns
+            site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
 
-        # make sure all NaN and None values in dataframe are replaced with empty strings
-        site_final_df.fillna('', inplace=True)
+            # make sure all NaN and None values in dataframe are replaced with empty strings
+            site_final_df.fillna('', inplace=True)
 
-        # group the dataframe by studyid and redcap_event_name and merge the rows
-        site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+            # group the dataframe by studyid and redcap_event_name and merge the rows
+            site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
-        # event dictionary
-        event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
+            # event dictionary
+            event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
 
-        # remove unknown event name records
-        site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.keys())]
+            # remove unknown event name records
+            site_final_df = site_final_df[site_final_df['redcap_event_name'].isin(event_dict.keys())]
 
-        # apply missing function
-        site_final_df = site_final_df.applymap(missing)
-        
+            # apply missing function
+            site_final_df = site_final_df.applymap(missing)
+            
         # export site dataframe to csv
         site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
