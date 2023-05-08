@@ -31,7 +31,7 @@ Thank you to all our authors! ✨
 
 | Name | Description |
 | --- | --- |
-| Organization | Univeristy of Kansas Medical Center |
+| Organization | University of Kansas Medical Center |
 | Project | https://redcap.kumc.edu/redcap_v13.1.27/index.php?pid=30282 |
 | Contact | https://www.kumc.edu/research-informatics.html |
 | Copyright | Copyright (c) 2023 Univeristy of Kansas Medical Center |

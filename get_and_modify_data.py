@@ -2,7 +2,7 @@
 Authors:
 - Mary Penne Mays
 - Siddharth Satyakam
-- Sravani Chandaka
+- Sravani Chandakaq
 - Lav Patel
 """
 
@@ -10,6 +10,8 @@ import configparser
 import logging
 import pandas as pd
 import os
+from redcap import Project
+import csv
 from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
@@ -52,7 +54,7 @@ def mapped_csvs():
     site_csv_list = []
 
     # fetch defined variables from sys
-    vaiables = main(os_path, openf, argv)
+    vaiables = main(os_path, openf, argv, Project)
     directory = str(vaiables['raw_data'])
     export_directory = './export/temp/'
 
@@ -235,7 +237,33 @@ def mapped_csvs():
     # return merged file
     return merge_site_cvs
 
-def main(os_path, openf, argv):
+# set up connection to REDCap API
+def redcap_api():
+    vaiables = main(os_path, openf, argv)
+    api_url = str(vaiables['kumc_redcap_api_url'])
+    api_token = str(vaiables['token_kumc'])
+    verify_ssl = str(vaiables['verify_ssl'])
+    project = Project(api_url, api_token, verify_ssl=verify_ssl)
+    export_directory = './export/temp/'
+
+    print(api_url)
+    print(api_token)
+    print(verify_ssl)
+    print(project)
+
+    # folders for exported files
+    folders = ['kumc','umb','uab']
+
+    for folder in folders:
+        # open CSV file for reading
+        with open(export_directory + folder + '/' + folder + '.csv') as csvfile:
+            # read CSV record into list of dictionaries
+            record = [dict(row) for row in csv.DictReader(csvfile)]
+
+        # import records into Redcap Project
+        project.import_records(record, overwrite='normal') 
+
+def main(os_path, openf, argv, Project):
     def get_config():
         [config_fn, pid] = argv[1:3]
         config = configparser.SafeConfigParser()
@@ -279,5 +307,7 @@ def main(os_path, openf, argv):
         
 
 if __name__ == "__main__":
-
+    # map sites redcap projects and export to csvs
     mapped_csvs()
+    # import all converted sites csvs into redcap through API
+    redcap_api()
