@@ -239,10 +239,11 @@ def mapped_csvs():
 
 # set up connection to REDCap API
 def redcap_api():
-    vaiables = main(os_path, openf, argv)
+    vaiables = main(os_path, openf, argv, Project)
     api_url = str(vaiables['kumc_redcap_api_url'])
     api_token = str(vaiables['token_kumc'])
     verify_ssl = str(vaiables['verify_ssl'])
+    log_details.debug('API URL: %s', api_url)
     project = Project(api_url, api_token, verify_ssl=verify_ssl)
     export_directory = './export/temp/'
 
@@ -256,7 +257,7 @@ def redcap_api():
 
     for folder in folders:
         # open CSV file for reading
-        with open(export_directory + folder + '/' + folder + '.csv') as csvfile:
+        with openf(export_directory + folder + '/' + folder + '.csv') as csvfile:
             # read CSV record into list of dictionaries
             record = [dict(row) for row in csv.DictReader(csvfile)]
 
