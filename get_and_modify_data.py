@@ -286,13 +286,13 @@ def redcap_api():
         response = requests.post(api_url + action, headers=headers, data=data_param)
         
         print('HTTP Status: ' + str(response.status_code))
-        print(response.json())
+        print(response.text)
 
         if response.status_code == 200:
             # print the response from API call
-            print(response.content.decode('utf-8'))
+            print('Records imported successfully')
         else:
-            print('Error importing ' + folder + '.csv file' + response.content.decode('utf-8'))
+            print('Error importing ' + folder + '.csv file: ', response.text)
 
 def main(os_path, openf, argv):
     def get_config():
