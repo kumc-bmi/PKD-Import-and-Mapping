@@ -265,7 +265,7 @@ def redcap_api():
         # record parameters
         data = {
             'token': api_token,
-            'content': 'project',
+            'content': 'record',
             'action': 'import',
             'format': 'csv',
             'type': 'flat',
