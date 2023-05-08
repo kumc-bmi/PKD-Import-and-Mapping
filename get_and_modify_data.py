@@ -274,9 +274,10 @@ def redcap_api():
             'returnContent': 'count',
             'returnFormat': 'json'
         }
+        print(project_id)
 
         # make the API call to import records
-        response = requests.post(api_url + f'?pid={project_id}', data=data)
+        response = requests.post(api_url + f"?pid={project_id}", data=data)
         
         print('HTTP Status: ' + str(response.status_code))
         print(response.json())
