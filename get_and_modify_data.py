@@ -179,7 +179,7 @@ def mapped_csvs():
 
         # create new empty dataframe for storage
         df_mapped = {}
-
+        print(site)
         # iterate over columns in mapping dictionary
         for col, mapping in site_source_dict.items():
             print(mapping)
