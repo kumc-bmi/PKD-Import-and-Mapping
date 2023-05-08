@@ -195,6 +195,8 @@ def mapped_csvs():
             if col not in site_source_dict.keys():
                 df_mapped[col] = site_data_col_renamed_df[col].tolist()      
 
+        print(df_mapped)
+
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
 
