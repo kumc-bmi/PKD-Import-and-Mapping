@@ -249,6 +249,7 @@ def redcap_api():
     log_details.debug('API URL: %s', api_url)
     export_directory = './export/temp/'
     project_id = '30282'
+    action = 'import'
 
     print(api_url)
     print(api_token)
@@ -259,25 +260,30 @@ def redcap_api():
 
     for folder in folders:
         # site csv file
-        filename = export_directory + folder + '/' + folder + '.csv'
+        filename = openf(export_directory + folder + '/' + folder + '.csv', 'r')
+
         print(filename)
-        # record parameters
-        data = {
+        print(project_id)
+
+        headers = {
+            'Content-Type': '',
+            'Accept': 'application/json'
+        }
+        # data parameters
+        data_param = {
             'token': api_token,
             'content': 'record',
-            'action': 'import',
             'format': 'csv',
             'type': 'flat',
-            'forceAutoNumber': 'false',
             'overwriterBehavior': 'normal',
-            'data': '@' + filename,
+            'data': filename,
+            'project_id': project_id,
             'returnContent': 'count',
             'returnFormat': 'json'
         }
-        print(project_id)
-
+        
         # make the API call to import records
-        response = requests.post(api_url + f"?pid={project_id}", data=data)
+        response = requests.post(api_url + action, headers=headers, data=data_param)
         
         print('HTTP Status: ' + str(response.status_code))
         print(response.json())
