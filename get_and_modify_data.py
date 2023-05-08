@@ -182,20 +182,22 @@ def mapped_csvs():
 
         # iterate over columns in mapping dictionary
         for col, mapping in site_source_dict.items():
+            print(mapping)
             # check if column is in site data frame
             if col in site_data_col_renamed_df.columns:
                 # If it does exist, map values using source mapping dictionary
                 df_mapped[col] = [mapping.get(val, val) for val in site_data_col_renamed_df[col]]
+                print(df_mapped[col]) 
             else:
                 # If it does not exist, set all values to None
                 df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+                print(df_mapped[col]) 
 
         # create new dataframe and apply the mapping to the column with values to be converted
         for col in site_data_col_renamed_df.columns:
             if col not in site_source_dict.keys():
-                df_mapped[col] = site_data_col_renamed_df[col].tolist()      
-
-        print(df_mapped)
+                df_mapped[col] = site_data_col_renamed_df[col].tolist()
+                print(df_mapped[col])     
 
         # create new DataFrame
         site_df_mapped = pd.DataFrame(df_mapped)
