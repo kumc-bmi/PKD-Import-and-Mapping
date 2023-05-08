@@ -183,7 +183,6 @@ def mapped_csvs():
 
             # create new empty dataframe for storage
             df_mapped = {}
-            print(site)
             # iterate over columns in mapping dictionary
             for col, mapping in site_source_dict.items():
                 # check if column is in site data frame
@@ -196,7 +195,6 @@ def mapped_csvs():
 
             # create new dataframe and apply the mapping to the column with values to be converted
             for col in site_data_col_renamed_df.columns:
-                print(col)
                 if col not in site_source_dict.keys():
                     df_mapped[col] = site_data_col_renamed_df[col].tolist()
 
@@ -250,6 +248,7 @@ def redcap_api():
     verify_ssl = str(vaiables['verify_ssl'])
     log_details.debug('API URL: %s', api_url)
     export_directory = './export/temp/'
+    project_id = '30282'
 
     print(api_url)
     print(api_token)
@@ -269,15 +268,18 @@ def redcap_api():
             'action': 'import',
             'format': 'csv',
             'type': 'flat',
+            'forceAutoNumber': 'false',
             'overwriterBehavior': 'normal',
             'data': '@' + filename,
-            'project_id': '30282',
             'returnContent': 'count',
             'returnFormat': 'json'
         }
 
         # make the API call to import records
-        response = requests.post(api_url, data=data)
+        response = requests.post(api_url + f'?pid={project_id}', data=data)
+        
+        print('HTTP Status: ' + str(response.status_code))
+        print(response.json())
 
         if response.status_code == 200:
             # print the response from API call
