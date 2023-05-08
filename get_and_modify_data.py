@@ -260,13 +260,13 @@ def redcap_api():
 
     for folder in folders:
         # site csv file
-        filename = openf(export_directory + folder + '/' + folder + '.csv', 'r')
+        filename = open(export_directory + folder + '/' + folder + '.csv', 'r')
 
         print(filename)
         print(project_id)
 
         headers = {
-            'Content-Type': '',
+            'Content-Type': 'multipart/form-data',
             'Accept': 'application/json'
         }
         # data parameters
@@ -276,7 +276,9 @@ def redcap_api():
             'format': 'csv',
             'type': 'flat',
             'overwriterBehavior': 'normal',
+            'forceAutoNumber': 'false',
             'data': filename,
+            'dateFormat': 'MDY',
             'project_id': project_id,
             'returnContent': 'count',
             'returnFormat': 'json'
