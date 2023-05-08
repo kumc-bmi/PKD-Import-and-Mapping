@@ -173,7 +173,7 @@ def mapped_csvs():
 
         if 'redcap_event_name' not in site_data_col_renamed_df.columns:
             # empty dataframe if event is not present
-            site_final_df = pd.DataFrame(columns=range(len(site_data_col_renamed_df.columns)))
+            site_final_df = pd.DataFrame(columns=[''])
         else:
             # convert corresponding source row values to target source value
             site_source_mapping = site_src_val[site_src_val['site'] == site]
