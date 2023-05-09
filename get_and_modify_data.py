@@ -265,6 +265,7 @@ def redcap_api():
 
         with io.open(filename, 'r', encoding='utf8') as f:
             reader = csv.DictReader(f)
+            print(reader)
             data_records = [row for row in reader]  
 
         print(filename)
