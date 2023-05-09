@@ -12,7 +12,6 @@ import pandas as pd
 import os
 import requests
 import csv
-import io
 from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
@@ -263,18 +262,15 @@ def redcap_api():
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
 
-        with io.open(filename, 'r', encoding='utf8') as f:
-            reader = csv.DictReader(f)
-            data_records = [row for row in reader]  
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            data_records = "'" + "\n".join([",".join(row) for row in reader]) + "'"
 
-        headers = {
-            'Content-Type': 'text/csv; charset=utf-8'
-        }
-        
         # data parameters
         data_param = {
             'token': api_token,
             'content': 'record',
+            'action': 'import',
             'format': 'csv',
             'type': 'flat',
             'overwriterBehavior': 'normal',
@@ -282,14 +278,14 @@ def redcap_api():
             'data': data_records,
             'dateFormat': 'MDY',
             'project_id': project_id,
-            'returnContent': 'count'
+            'returnContent': 'count',
+            'returnFormat': 'json'
         }
 
-        print(headers)
         print(data_param)
         
         # make the API call to import records
-        response = requests.post(api_url + action, headers=headers, data=data_param)
+        response = requests.post(api_url, data=data_param)
         
         print('HTTP Status: ' + str(response.status_code))
         print(response.text)
