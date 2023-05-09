@@ -282,8 +282,7 @@ def redcap_api():
             'data': data_records,
             'dateFormat': 'MDY',
             'project_id': project_id,
-            'returnContent': 'count',
-            'returnFormat': 'json'
+            'returnContent': 'count'
         }
 
         print(headers)
