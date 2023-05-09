@@ -12,6 +12,7 @@ import pandas as pd
 import os
 import requests
 import csv
+import io
 from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
@@ -262,9 +263,9 @@ def redcap_api():
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
 
-        with open(filename, encoding='utf-8') as f:
+        with io.open(filename, 'r', encoding='utf8') as f:
             reader = csv.DictReader(f)
-            data_records = [row for row in reader]
+            data_records = [row for row in reader]  
 
         print(filename)
         print(project_id)
