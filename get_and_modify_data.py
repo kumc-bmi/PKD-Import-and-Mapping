@@ -265,11 +265,7 @@ def redcap_api():
 
         with io.open(filename, 'r', encoding='utf8') as f:
             reader = csv.DictReader(f)
-            print(reader)
-            data_records = [row for row in reader]  
-
-        print(filename)
-        print(project_id)
+            data_records = [row for row in reader]  )
 
         headers = {
             'Content-Type': 'text/csv; charset=utf-8'
@@ -289,6 +285,9 @@ def redcap_api():
             'returnContent': 'count',
             'returnFormat': 'json'
         }
+
+        print(headers)
+        print(data_param)
         
         # make the API call to import records
         response = requests.post(api_url + action, headers=headers, data=data_param)
