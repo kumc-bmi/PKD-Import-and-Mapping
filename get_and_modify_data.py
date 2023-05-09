@@ -264,7 +264,7 @@ def redcap_api():
 
         with open(filename, 'r') as f:
             reader = csv.reader(f)
-            data_records = ''' + "\n".join([",".join(row) for row in reader]) + '''
+            data_records = "'" + "\n".join([",".join(row) for row in reader]) + "'"
 
         # data parameters
         data_param = {
