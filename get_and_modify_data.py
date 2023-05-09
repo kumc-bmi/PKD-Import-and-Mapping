@@ -283,7 +283,7 @@ def redcap_api():
             # print the response status from API call
             print('HTTP Status: ' + str(response.status_code))
             # print success message for site
-            print(folder + ' records imported successfully')
+            print(response.text + ' ' + folder + ' records imported successfully')
         else:
             # print error result for unsucessful import
             print('Error importing ' + folder + '.csv file: ', response.text)
