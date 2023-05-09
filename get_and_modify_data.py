@@ -260,7 +260,11 @@ def redcap_api():
 
     for folder in folders:
         # site csv file
-        filename = open(export_directory + folder + '/' + folder + '.csv', 'r')
+        filename = export_directory + folder + '/' + folder + '.csv'
+
+        with open(filename, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            data_records = [row for row in reader]
 
         print(filename)
         print(project_id)
@@ -268,6 +272,7 @@ def redcap_api():
         headers = {
             'Content-Type': 'text/csv; charset=utf-8'
         }
+        
         # data parameters
         data_param = {
             'token': api_token,
@@ -276,7 +281,7 @@ def redcap_api():
             'type': 'flat',
             'overwriterBehavior': 'normal',
             'forceAutoNumber': 'false',
-            'data': filename,
+            'data': data_records,
             'dateFormat': 'MDY',
             'project_id': project_id,
             'returnContent': 'count',
@@ -289,7 +294,7 @@ def redcap_api():
         print('HTTP Status: ' + str(response.status_code))
         print(response.text)
 
-        if response.status_code == 200:
+        if response.ok:
             # print the response from API call
             print('Records imported successfully')
         else:
