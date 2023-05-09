@@ -262,7 +262,7 @@ def redcap_api():
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
 
-        with open(filename, 'r', encoding='utf-8') as f:
+        with open(filename, encoding='utf-8') as f:
             reader = csv.DictReader(f)
             data_records = [row for row in reader]
 
