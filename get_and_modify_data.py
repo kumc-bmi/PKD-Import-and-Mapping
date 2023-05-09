@@ -245,15 +245,9 @@ def redcap_api():
     vaiables = main(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
     api_token = str(vaiables['token_kumc'])
-    verify_ssl = str(vaiables['verify_ssl'])
     log_details.debug('API URL: %s', api_url)
     export_directory = './export/temp/'
     project_id = '30282'
-    action = 'import'
-
-    print(api_url)
-    print(api_token)
-    print(verify_ssl)
 
     # folders for exported files
     folders = ['kumc','umb','uab']
@@ -281,19 +275,17 @@ def redcap_api():
             'returnContent': 'count',
             'returnFormat': 'json'
         }
-
-        print(data_param)
         
         # make the API call to import records
         response = requests.post(api_url, data=data_param)
         
-        print('HTTP Status: ' + str(response.status_code))
-        print(response.text)
-
         if response.ok:
-            # print the response from API call
-            print('Records imported successfully')
+            # print the response status from API call
+            print('HTTP Status: ' + str(response.status_code))
+            # print success message for site
+            print(folder + 'records imported successfully')
         else:
+            # print error result for unsucessful import
             print('Error importing ' + folder + '.csv file: ', response.text)
 
 def main(os_path, openf, argv):
