@@ -16,7 +16,6 @@ from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
 from itertools import groupby
-from redcap import RedcapErrror
 
 log_details = logging.getLogger(__name__)
 
@@ -256,39 +255,36 @@ def redcap_export_api():
     for folder in folders:
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
-
-        try:
             # data parameters
-            data_param = {
-                'token': api_export_token,
-                'content': 'record',
-                'action': 'export',
-                'format': 'csv',
-                'type': 'flat',
-                'csvDelimiter': '',
-                'rawOrLabel': 'raw',
-                'rawOrLabelHeaders': 'raw',
-                'exportCheckboxLabel': 'false',
-                'exportSurveyFields': 'false',
-                'exportDataAccessGroups': 'false',
-                'project_id': project_id,
-                'returnContent': 'count',
-                'returnFormat': 'json'
-            }
-            
-            # make the API call to export records
-            response = requests.post(api_url, data=data_param)
-            
-            if response.ok:
-                # print the response status from API call
-                print('HTTP Status: ' + str(response.status_code))
+        data_param = {
+            'token': api_export_token,
+            'content': 'record',
+            'action': 'export',
+            'format': 'csv',
+            'type': 'flat',
+            'csvDelimiter': '',
+            'rawOrLabel': 'raw',
+            'rawOrLabelHeaders': 'raw',
+            'exportCheckboxLabel': 'false',
+            'exportSurveyFields': 'false',
+            'exportDataAccessGroups': 'false',
+            'project_id': project_id,
+            'returnContent': 'count',
+            'returnFormat': 'json'
+        }
+        
+        # make the API call to export records
+        response = requests.post(api_url, data=data_param)
+        
+        if response.ok:
+            # print the response status from API call
+            print('HTTP Status: ' + str(response.status_code))
 
-                with open(filename, 'w', newline='', encoding='utf-8') as f:
-                    f.write(response)
-                # print success message for site
-                print(response.text + ' ' + folder + ' records exported successfully') 
-
-        except RedcapErrror as e:
+            with open(filename, 'w', newline='', encoding='utf-8') as f:
+                f.write(response)
+            # print success message for site
+            print(response.text + ' ' + folder + ' records exported successfully') 
+        else:
             # print error result for unsucessful export
             print('Error exporting ' + folder + '.csv file: ', response.text)
 
