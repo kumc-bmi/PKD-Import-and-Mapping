@@ -16,6 +16,7 @@ from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
 from itertools import groupby
+from redcap import RedcapErrror
 
 log_details = logging.getLogger(__name__)
 
@@ -240,21 +241,72 @@ def mapped_csvs():
     # return merged file
     return merge_site_cvs
 
-# set up connection to REDCap API
-def redcap_api():
+# set up connection to REDCap API Export
+def redcap_export_api():
     vaiables = main(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
-    api_token = str(vaiables['token_kumc'])
+    api_export_token = str(vaiables['export_token'])
     log_details.debug('API URL: %s', api_url)
     export_directory = './export/temp/'
-    project_id = '30282'
+    project_id = str(vaiables['test_project_id'])
 
     # folders for exported files
-    folders = ['kumc','umb','uab']
+    folders = ['uab']
 
     for folder in folders:
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
+
+        try:
+            # data parameters
+            data_param = {
+                'token': api_export_token,
+                'content': 'record',
+                'action': 'export',
+                'format': 'csv',
+                'type': 'flat',
+                'csvDelimiter': '',
+                'rawOrLabel': 'raw',
+                'rawOrLabelHeaders': 'raw',
+                'exportCheckboxLabel': 'false',
+                'exportSurveyFields': 'false',
+                'exportDataAccessGroups': 'false',
+                'project_id': project_id,
+                'returnContent': 'count',
+                'returnFormat': 'json'
+            }
+            
+            # make the API call to import records
+            response = requests.post(api_url, data=data_param)
+            
+            if response.ok:
+                # print the response status from API call
+                print('HTTP Status: ' + str(response.status_code))
+
+                with open(filename, 'w', newline='', encoding='utf-8') as f:
+                    f.write(response)
+                # print success message for site
+                print(response.text + ' ' + folder + ' records imported successfully') 
+
+        except RedcapErrror as e:
+            # print error result for unsucessful import
+            print('Error exporting ' + folder + '.csv file: ', response.text)
+
+# set up connection to REDCap API Import
+def redcap_import_api():
+    vaiables = main(os_path, openf, argv)
+    api_url = str(vaiables['kumc_redcap_api_url'])
+    api_import_token = str(vaiables['import_token'])
+    log_details.debug('API URL: %s', api_url)
+    import_directory = './import/temp/'
+    project_id = str(vaiables['project_id'])
+
+    # folders for imported files
+    folders = ['kumc','umb','uab']
+
+    for folder in folders:
+        # site csv file
+        filename = import_directory + folder + '/' + folder + '.csv'
 
         with open(filename, 'r') as f:
             reader = csv.reader(f)
@@ -262,7 +314,7 @@ def redcap_api():
 
         # data parameters
         data_param = {
-            'token': api_token,
+            'token': api_import_token,
             'content': 'record',
             'action': 'import',
             'format': 'csv',
@@ -322,17 +374,23 @@ def main(os_path, openf, argv):
         values['verify_ssl'] = config.getboolean('api', 'verify_ssl')
         
         # tokens
-        values['token_kumc'] = config.get(pid, 'token_kumc')
+        values['import_token'] = config.get(pid, 'import_token')
+        values['export_token'] = config.get(pid, 'export_token')
         values['token_chld'] = config.get(pid, 'token_chld')
         values['proj_token'] = config.get(pid, 'proj_token')
         values['file_dest'] = config.get(pid, 'file_dest')
+        values['project_id'] = config.get(pid, 'project_id')
+        values['chld_project_id'] = config.get(pid, 'chld_project_id')
+        values['test_project_id'] = config.get(pid, 'test_project_id')
 
         return values 
     return get_config()
         
 
 if __name__ == "__main__":
+    # export site(s) csvs from redcap through API
+    redcap_export_api()
     # map sites redcap projects and export to csvs
     mapped_csvs()
-    # import all converted sites csvs into redcap through API
-    redcap_api()
+    # import all converted site(s) csvs into redcap through API
+    redcap_import_api()
