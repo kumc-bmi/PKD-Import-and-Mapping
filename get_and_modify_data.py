@@ -276,7 +276,7 @@ def redcap_export_api():
                 'returnFormat': 'json'
             }
             
-            # make the API call to import records
+            # make the API call to export records
             response = requests.post(api_url, data=data_param)
             
             if response.ok:
@@ -286,10 +286,10 @@ def redcap_export_api():
                 with open(filename, 'w', newline='', encoding='utf-8') as f:
                     f.write(response)
                 # print success message for site
-                print(response.text + ' ' + folder + ' records imported successfully') 
+                print(response.text + ' ' + folder + ' records exported successfully') 
 
         except RedcapErrror as e:
-            # print error result for unsucessful import
+            # print error result for unsucessful export
             print('Error exporting ' + folder + '.csv file: ', response.text)
 
 # set up connection to REDCap API Import
