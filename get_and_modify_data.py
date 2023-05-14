@@ -12,7 +12,6 @@ import pandas as pd
 import os
 import requests
 import csv
-import json
 from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
@@ -256,22 +255,20 @@ def redcap_export_api():
     for folder in folders:
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
-        
-        # data parameters
+            # data parameters
         data_param = {
             'token': api_export_token,
             'content': 'record',
             'action': 'export',
-            'format': 'json',
+            'format': 'csv',
             'type': 'flat',
-            'csvDelimiter': '',
+            'csvDelimiter': ',',
             'rawOrLabel': 'raw',
             'rawOrLabelHeaders': 'raw',
             'exportCheckboxLabel': 'false',
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
             'project_id': project_id,
-            'returnContent': 'count',
             'returnFormat': 'json'
         }
         
@@ -283,23 +280,14 @@ def redcap_export_api():
         if response.ok:
             # print the response status from API call
             print('HTTP Status: ' + str(response.status_code))
-            
-            records = json.loads(response)
-            
-            field_names = records[0].keys()
 
-            with open(filename, 'wb') as f:
-                writer = csv.DictWriter(f, fieldnames=field_names)
-                writer.writeheader()
-                writer.writerows()
-                print(writer)
-                f.write(records)
-
+            with open(filename, 'w', newline='') as f:
+                f.write(response)
             # print success message for site
-            print(response.text + ' ' + folder + ' records exported successfully') 
+            print(response.text + ' ' + folder + ' data exported successfully') 
         else:
             # print error result for unsucessful export
-            print('Error exporting ' + folder + '.csv file: ', response.text)
+            print('Error exporting ' + folder + ' data: ', response.text)
 
 # set up connection to REDCap API Import
 def redcap_import_api():
