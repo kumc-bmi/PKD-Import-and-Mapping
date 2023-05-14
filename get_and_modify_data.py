@@ -12,6 +12,7 @@ import pandas as pd
 import os
 import requests
 import csv
+import json
 from sys import argv
 from os import path as os_path
 from __builtin__ import open as openf
@@ -255,12 +256,14 @@ def redcap_export_api():
     for folder in folders:
         # site csv file
         filename = export_directory + folder + '/' + folder + '.csv'
-            # data parameters
+        
+        # data parameters
         data_param = {
+            'fields': 'all',
             'token': api_export_token,
             'content': 'record',
             'action': 'export',
-            'format': 'csv',
+            'format': 'json',
             'type': 'flat',
             'csvDelimiter': '',
             'rawOrLabel': 'raw',
@@ -281,10 +284,18 @@ def redcap_export_api():
         if response.ok:
             # print the response status from API call
             print('HTTP Status: ' + str(response.status_code))
+            
+            records = json.loads(response)
+            
+            field_names = records[0].keys()
 
-            with open(filename, 'w') as f:
-                print(f)
-                f.write(response)
+            with open(filename, 'wb') as f:
+                writer = csv.DictWriter(f, fieldnames=field_names)
+                writer.writeheader()
+                writer.writerows()
+                print(writer)
+                f.write(records)
+
             # print success message for site
             print(response.text + ' ' + folder + ' records exported successfully') 
         else:
