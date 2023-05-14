@@ -259,7 +259,6 @@ def redcap_export_api():
         
         # data parameters
         data_param = {
-            'fields': 'all',
             'token': api_export_token,
             'content': 'record',
             'action': 'export',
