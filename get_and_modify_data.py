@@ -281,8 +281,10 @@ def redcap_export_api():
             # print the response status from API call
             print('HTTP Status: ' + str(response.status_code))
 
+            records = response.text
+
             with open(filename, 'w') as f:
-                f.write(response)
+                f.write(records)
             # print success message for site
             print(response.text + ' ' + folder + ' data exported successfully') 
         else:
