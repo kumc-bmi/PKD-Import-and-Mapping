@@ -269,6 +269,7 @@ def redcap_export_api():
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
             'project_id': project_id,
+            'returnContent': 'count',
             'returnFormat': 'json'
         }
         
