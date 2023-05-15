@@ -284,6 +284,9 @@ def redcap_export_api():
             'returnFormat': 'json'
         }
         
+        print(kumc_project_id)
+        print(token_kumc)
+
         # make the API call to export records
         response = requests.post(api_url, data=data_param)
 
