@@ -292,7 +292,9 @@ def redcap_export_api():
             print('HTTP Status: ' + str(response.status_code))
 
             records = response.text
-
+            
+            print(records)
+            
             with open(filename, 'w') as f:
                 f.write(records)
             # print success message for site
