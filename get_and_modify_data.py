@@ -273,30 +273,34 @@ def redcap_export_api():
             'action': 'export',
             'format': 'csv',
             'type': 'flat',
-            'csvDelimiter': ',',
+            'csv_label': 'false',
             'rawOrLabel': 'raw',
             'rawOrLabelHeaders': 'raw',
             'exportCheckboxLabel': 'false',
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
             'project_id': project_id,
-            'returnContent': 'count',
             'returnFormat': 'json'
         }
         
         # make the API call to export records
         response = requests.post(api_url, data=data_param)
+
+        print(response)
         
         if response.ok:
             # print the response status from API call
             print('HTTP Status: ' + str(response.status_code))
 
-            records = response.text
             
-            print(records)
-            
-            with open(filename, 'w') as f:
-                f.write(records)
+            record_content = response.content.decode('utf-8')
+
+            csv_records = csv.reader(record_content.splitlines(), delimiter=',')
+
+            with open(filename, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.write(f)
+                writer.writerows(csv_records)
+                
             # print success message for site
             print(response.text + ' ' + folder + ' data exported successfully') 
         else:
