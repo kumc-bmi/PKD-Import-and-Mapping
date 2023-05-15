@@ -56,7 +56,7 @@ def mapped_csvs():
     # fetch defined variables from sys
     vaiables = main(os_path, openf, argv)
     directory = str(vaiables['raw_data'])
-    export_directory = './export/temp/'
+    import_directory = './import/temp/'
 
     # empty array to store site names
     site_names = []
@@ -226,7 +226,7 @@ def mapped_csvs():
             site_final_df = site_final_df.applymap(missing)
             
         # export site dataframe to csv
-        site_final_df.to_csv(export_directory + site + '/' + site + '.csv', index=False, float_format=None)
+        site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
         # final converted site raw data
         site_csv_list.append(site_final_df)
@@ -235,7 +235,7 @@ def mapped_csvs():
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
 
     # export merged csv file to temporary directory called merged 
-    merge_site_cvs.to_csv(export_directory + 'merged/merged.csv', index=False, float_format=None)
+    merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
 
     # return merged file
     return merge_site_cvs
@@ -283,7 +283,9 @@ def redcap_export_api():
 
             records = response.text
 
-            with open(filename, 'w') as f:
+            print(records)
+
+            with open(filename, 'w', newline='') as f:
                 f.write(records)
             # print success message for site
             print(response.text + ' ' + folder + ' data exported successfully') 
