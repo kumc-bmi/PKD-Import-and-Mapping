@@ -287,7 +287,7 @@ def redcap_export_api():
         # make the API call to export records
         response = requests.post(api_url, data=data_param)
 
-        print(records)
+        print(response)
         
         if response.ok:
             # print the response status from API call
