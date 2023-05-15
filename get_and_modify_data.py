@@ -55,7 +55,7 @@ def mapped_csvs():
 
     # fetch defined variables from sys
     vaiables = main(os_path, openf, argv)
-    directory = str(vaiables['raw_data'])
+    directory = './export/temp/raw_data/'
     import_directory = './import/temp/'
 
     # empty array to store site names
@@ -244,20 +244,31 @@ def mapped_csvs():
 def redcap_export_api():
     vaiables = main(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
-    api_export_token = str(vaiables['export_token'])
+    token_kumc = str(vaiables['token_kumc'])
+    # token_chld = str(vaiables['token_chld'])
     log_details.debug('API URL: %s', api_url)
-    export_directory = './export/temp/'
-    project_id = str(vaiables['test_project_id'])
+    export_directory = './export/temp/raw_data/'
+    kumc_project_id = str(vaiables['kumc_project_id'])
+    # chld_project_id = str(vaiables['chld_project_id'])
 
     # folders for exported files
-    folders = ['uab']
+    folders = ['kumc']
 
     for folder in folders:
         # site csv file
-        filename = export_directory + folder + '/' + folder + '.csv'
-            # data parameters
+        filename = export_directory + folder + '.csv'
+
+        # assign token and project_id
+        if folder == 'kumc':
+            token = token_kumc
+            project_id = kumc_project_id
+        # elif folder == 'uab':
+        #     token = token_chld
+        #     project_id = chld_project_id
+        
+        # data parameters
         data_param = {
-            'token': api_export_token,
+            'token': token,
             'content': 'record',
             'action': 'export',
             'format': 'csv',
@@ -374,10 +385,12 @@ def main(os_path, openf, argv):
         # tokens
         values['import_token'] = config.get(pid, 'import_token')
         values['export_token'] = config.get(pid, 'export_token')
+        values['token_kumc'] = config.get(pid, 'token_kumc')
         values['token_chld'] = config.get(pid, 'token_chld')
         values['proj_token'] = config.get(pid, 'proj_token')
         values['file_dest'] = config.get(pid, 'file_dest')
         values['project_id'] = config.get(pid, 'project_id')
+        values['kumc_project_id'] = config.get(pid, 'kumc_project_id')
         values['chld_project_id'] = config.get(pid, 'chld_project_id')
         values['test_project_id'] = config.get(pid, 'test_project_id')
 
