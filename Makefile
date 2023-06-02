@@ -11,14 +11,14 @@ all: .make.venv .make.get_and_modify_data
 
 .make.venv:
 	$(PYENV)/bin/activate
-	which python
-	python -V
-	python -m pip install --upgrade pip
+	which python3
+	python3 -V
+	python3 -m pip install --upgrade pip
 	pip freeze
 	pip install -r requirements.txt  && \
 	pip freeze >  requirements_pip_freeze.txt  && \
-	which python
-	python -V
+	which python3
+	python3 -V
 	pip freeze
 	touch .make.venv
 
