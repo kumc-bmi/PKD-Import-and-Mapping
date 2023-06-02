@@ -1,5 +1,7 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
 
+.SHELLFLAGS := -x
+
 .PHONY: all clean
 
 clean:
@@ -9,8 +11,7 @@ all: .make.venv .make.get_and_modify_data
 
 .make.venv:
 	# "creating python virtual env"
-	(set +x; . $(PYENV)/bin/activate)
-	(set -x;)
+	. $(PYENV)/bin/activate
 	which python
 	python -V
 	python -m pip install --upgrade pip
