@@ -245,14 +245,14 @@ def redcap_export_api():
     vaiables = main(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
     token_kumc = str(vaiables['token_kumc'])
-    # token_chld = str(vaiables['token_chld'])
+    token_chld = str(vaiables['token_chld'])
     log_details.debug('API URL: %s', api_url)
     export_directory = './export/temp/raw_data/'
     kumc_project_id = str(vaiables['kumc_project_id'])
-    # chld_project_id = str(vaiables['chld_project_id'])
+    chld_project_id = str(vaiables['chld_project_id'])
 
     # folders for exported files
-    folders = ['kumc']
+    folders = ['kumc', 'uab']
 
     for folder in folders:
         # site csv file
@@ -262,9 +262,9 @@ def redcap_export_api():
         if folder == 'kumc':
             token = token_kumc
             project_id = kumc_project_id
-        # elif folder == 'uab':
-        #     token = token_chld
-        #     project_id = chld_project_id
+        elif folder == 'uab':
+            token = token_chld
+            project_id = chld_project_id
         
         # data parameters
         data_param = {
