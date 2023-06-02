@@ -9,17 +9,17 @@ all: .make.venv .make.get_and_modify_data
 
 .make.venv:
 	# "creating python virtual env"
-	which python3
-	python3 -V
-	python3 -m pip install --upgrade pip
-	pip3 freeze
-	pip3 install -r requirements.txt  && \
-	pip3 freeze >  requirements_pip_freeze.txt  && \
-	which python3
-	python3 -V
-	pip3 freeze
+	which python
+	python -V
+	python -m pip install --upgrade pip
+	pip freeze
+	pip install -r requirements.txt  && \
+	pip freeze >  requirements_pip_freeze.txt  && \
+	which python
+	python -V
+	pip freeze
 	touch .make.venv
 
 .make.get_and_modify_data: .make.venv
-	python3 get_and_modify_data.py $(config_file) 30282
+	python get_and_modify_data.py $(config_file) 30282
 	touch .make.get_and_modify_data
