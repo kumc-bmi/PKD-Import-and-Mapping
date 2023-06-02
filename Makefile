@@ -1,6 +1,6 @@
 ## Reference from the code in the repo redcapex(https://github.com/kumc-bmi/redcapex)
 
-.SHELLFLAGS := -x
+# .SHELLFLAGS := -x
 
 .PHONY: all clean
 
