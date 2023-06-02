@@ -262,9 +262,13 @@ def redcap_export_api():
         if folder == 'kumc':
             token = token_kumc
             project_id = kumc_project_id
+            print(kumc_project_id)
+            print(token_kumc)
         elif folder == 'uab':
             token = token_chld
             project_id = chld_project_id
+            print(chld_project_id)
+            print(token_chld)
         
         # data parameters
         data_param = {
@@ -283,9 +287,6 @@ def redcap_export_api():
             'returnContent': 'count',
             'returnFormat': 'json'
         }
-        
-        print(kumc_project_id)
-        print(token_kumc)
 
         # make the API call to export records
         response = requests.post(api_url, data=data_param)
