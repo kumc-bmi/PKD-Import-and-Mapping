@@ -9,7 +9,8 @@ all: .make.venv .make.get_and_modify_data
 
 .make.venv:
 	# "creating python virtual env"
-	. $(PYENV)/bin/activate
+	(set +x; . $(PYENV)/bin/activate)
+	(set -x;)
 	which python
 	python -V
 	python -m pip install --upgrade pip
