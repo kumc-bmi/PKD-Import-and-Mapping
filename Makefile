@@ -10,7 +10,7 @@ clean:
 all: .make.venv .make.get_and_modify_data
 
 .make.venv:
-	# "creating python virtual env"
+	echo "creating python virtual env"
 	$(PYENV)/bin/activate
 	which python
 	python -V
