@@ -14,7 +14,7 @@ import requests
 import csv
 from sys import argv
 from os import path as os_path
-from __builtin__ import open as openf
+from builtins import open as openf
 from itertools import groupby
 
 log_details = logging.getLogger(__name__)
