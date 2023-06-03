@@ -12,7 +12,7 @@ import pandas as pd
 import os
 import requests
 import csv
-import paramiko
+import pysftp
 from sys import argv
 from os import path as os_path
 from builtins import open as openf
@@ -278,22 +278,20 @@ def redcap_export_api():
             print(token_chld)
         elif folder == 'umb':
             # ssh transport
-            transport = paramiko.Transport((kumc_sftp_host, sftp_port))
-            transport.connect(username=kumc_sftp_username, password=kumc_sftp_pwd)
+            with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd) as sftp:
 
-            # create sftp client
-            sftp = transport.open_sftp()
-            
-            # Maryland source file name
-            umb_file = folder + '.csv'
+                # create sftp client
+                sftp.cwd(sftp_remote_path)
+                
+                # Maryland source file name
+                umb_file = folder + '.csv'
 
-            # download file
-            sftp.get(sftp_remote_path + umb_file, export_directory + folder + umb_file)
+                # download file
+                sftp.get(umb_file, export_directory + folder + umb_file)
 
-            # close session
-            sftp.close()
-            transport.close()
-
+                # close session
+                sftp.close()
+                
         # data parameters
         data_param = {
             'token': token,

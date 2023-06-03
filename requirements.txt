@@ -12,3 +12,4 @@ idna
 python-dateutil
 pytz
 six
+pysftp
