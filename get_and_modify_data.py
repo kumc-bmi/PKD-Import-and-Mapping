@@ -275,7 +275,7 @@ def redcap_export_api():
     sftp_port = 22
 
     # folders for exported files
-    folders = ['kumc', 'uab', 'umb']
+    folders = ['kumc', 'umb']
 
     for folder in folders:
         # site csv file
