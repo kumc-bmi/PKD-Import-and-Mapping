@@ -162,10 +162,6 @@ def mapped_csvs():
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
-
-        site_logic_column_mapping = dict(zip(site_logic_col_headers['src_var'], site_logic_col_headers['trg_var']))
-        
-        print(site_logic_column_mapping)
         
         # create a new dictionary with the updated keys
         updated_column_mapping = {}
