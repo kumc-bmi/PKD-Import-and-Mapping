@@ -13,7 +13,7 @@ all: .make.venv .make.get_and_modify_data
 	which python3
 	python3 -V
 	pip install --upgrade pip
-	pip3 install paramiko
+	pip3 install pysftp
 	pip3 install -r requirements.txt  && \
 	pip3 freeze >  requirements_pip_freeze.txt  && \
 	which python3
