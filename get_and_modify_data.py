@@ -90,6 +90,11 @@ def mapped_csvs():
         # get headers for each site
         site_col_headers = unique_header_cols_df[unique_header_cols_df['site'] == site]
 
+        # get logic headers for each site
+        site_logic_col_headers = unique_header_cols_logic[unique_header_cols_logic['site'] == site]
+
+        print(site_logic_col_headers)
+
         # source values from mapping file
         source_df = mapping_df[['site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl', 'trg_form_name', 'trg_logic']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
@@ -160,6 +165,10 @@ def mapped_csvs():
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
+
+        site_logic_column_mapping = dict(zip(site_logic_col_headers['src_var'], site_logic_col_headers['trg_var']))
+        
+        print(site_logic_column_mapping)
         
         # create a new dictionary with the updated keys
         updated_column_mapping = {}
