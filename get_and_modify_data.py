@@ -319,7 +319,7 @@ def redcap_export_api():
             with open(filename, 'w') as f:
                 f.write(records)
             # print success message for site
-            print(response.text + ' ' + folder + ' data exported successfully') 
+            print(folder + ' data exported successfully') 
         else:
             # print error result for unsucessful export
             print('Error exporting ' + folder + ' data: ', response.text)
