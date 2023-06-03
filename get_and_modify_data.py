@@ -276,24 +276,6 @@ def redcap_export_api():
             project_id = chld_project_id
             print(chld_project_id)
             print(token_chld)
-        if folder == 'umb':
-            cnopts = pysftp.CnOpts()
-            cnopts.hostkeys = None
-            # create connection
-            with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
-
-                # remote directory
-                sftp.cwd(sftp_remote_path)
-                
-                # Maryland source file name
-                umb_file = folder + '.csv'
-
-                # download file
-                sftp.get(umb_file, export_directory + umb_file)
-                print("umb csv file download complete")
-
-            # close session
-            sftp.close()
 
         # data parameters
         data_param = {
@@ -331,6 +313,25 @@ def redcap_export_api():
         else:
             # print error result for unsucessful export
             print('Error exporting ' + folder + ' data: ', response.text)
+        
+        if folder == 'umb':
+            cnopts = pysftp.CnOpts()
+            cnopts.hostkeys = None
+            # create connection
+            with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
+
+                # remote directory
+                sftp.cwd(sftp_remote_path)
+                
+                # Maryland source file name
+                umb_file = folder + '.csv'
+
+                # download file
+                sftp.get(umb_file, export_directory + umb_file)
+                print("umb csv file download complete")
+
+                # close session
+                sftp.close()
 
 # set up connection to REDCap API Import
 def redcap_import_api():
