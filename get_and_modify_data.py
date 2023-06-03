@@ -12,6 +12,7 @@ import pandas as pd
 import os
 import requests
 import csv
+import paramiko
 from sys import argv
 from os import path as os_path
 from builtins import open as openf
@@ -251,8 +252,14 @@ def redcap_export_api():
     kumc_project_id = str(vaiables['kumc_project_id'])
     chld_project_id = str(vaiables['chld_project_id'])
 
+    kumc_sftp_host = str(vaiables['kumc_sftp_host'])
+    kumc_sftp_username = str(vaiables['kumc_sftp_username'])
+    kumc_sftp_pwd = str(vaiables['kumc_sftp_pwd'])
+    sftp_remote_path = str(vaiables['sftp_remote_path'])
+    sftp_port = 22
+
     # folders for exported files
-    folders = ['kumc', 'uab']
+    folders = ['kumc', 'umb', 'uab']
 
     for folder in folders:
         # site csv file
@@ -269,7 +276,24 @@ def redcap_export_api():
             project_id = chld_project_id
             print(chld_project_id)
             print(token_chld)
-        
+        elif folder == 'umb':
+            # ssh transport
+            transport = paramiko.Transport((kumc_sftp_host, sftp_port))
+            transport.connect(username=kumc_sftp_username, password=kumc_sftp_pwd)
+
+            # create sftp client
+            sftp = transport.open_sftp()
+            
+            # Maryland source file name
+            umb_file = folder + '.csv'
+
+            # download file
+            sftp.get(sftp_remote_path + umb_file, export_directory + folder + umb_file)
+
+            # close session
+            sftp.close()
+            transport.close()
+
         # data parameters
         data_param = {
             'token': token,
@@ -399,6 +423,10 @@ def main(os_path, openf, argv):
         values['kumc_project_id'] = config.get(pid, 'kumc_project_id')
         values['chld_project_id'] = config.get(pid, 'chld_project_id')
         values['test_project_id'] = config.get(pid, 'test_project_id')
+        values['kumc_sftp_host'] = config.get(pid, 'kumc_sftp_host')
+        values['kumc_sftp_username'] = config.get(pid, 'kumc_sftp_username')
+        values['kumc_sftp_pwd'] = config.get(pid, 'kumc_sftp_pwd')
+        values['sftp_remote_path'] = config.get(pid, 'sftp_remote_path')
 
         return values 
     return get_config()
