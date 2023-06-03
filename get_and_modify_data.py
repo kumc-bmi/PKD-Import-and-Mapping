@@ -328,7 +328,7 @@ def redcap_export_api():
 
                 # download file
                 sftp.get(umb_file, export_directory + umb_file)
-                print("umb csv file download complete")
+                print("umb csv sftp file download complete")
 
                 # close session
                 sftp.close()
