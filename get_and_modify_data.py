@@ -271,7 +271,7 @@ def redcap_export_api():
             project_id = kumc_project_id
             print(kumc_project_id)
             print(token_kumc)
-        if folder == 'uab':
+        elif folder == 'uab':
             token = token_chld
             project_id = chld_project_id
             print(chld_project_id)
