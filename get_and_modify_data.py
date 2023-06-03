@@ -40,13 +40,13 @@ def mapped_csvs():
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 
     # ensure all values are lowercase
-    col_header_df = mapping_df[['src_var', 'site', 'trg_var', 'trg_logic', 'trg_val_calc']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
+    col_header_df_lower = mapping_df[['src_var', 'site', 'trg_var', 'trg_logic', 'trg_val_calc']].apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
     # drop columns with logic
-    col_header_df = col_header_df[~(col_header_df['trg_logic'] == 'y')]
+    col_header_df = col_header_df_lower[~(col_header_df_lower['trg_logic'] == 'y')]
 
     # columns with logic
-    col_header_logic = col_header_df[~(col_header_df['trg_logic'] != 'y')]
+    col_header_logic = col_header_df_lower[~(col_header_df_lower['trg_logic'] != 'y')]
 
     print(col_header_logic)
 
