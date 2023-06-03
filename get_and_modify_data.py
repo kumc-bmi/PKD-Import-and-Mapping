@@ -277,10 +277,10 @@ def redcap_export_api():
             print(chld_project_id)
             print(token_chld)
         elif folder == 'umb':
-            # ssh transport
+            # create connection
             with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd) as sftp:
 
-                # create sftp client
+                # remote directory
                 sftp.cwd(sftp_remote_path)
                 
                 # Maryland source file name
@@ -291,7 +291,7 @@ def redcap_export_api():
 
                 # close session
                 sftp.close()
-                
+
         # data parameters
         data_param = {
             'token': token,
