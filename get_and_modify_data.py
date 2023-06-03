@@ -259,7 +259,7 @@ def redcap_export_api():
     sftp_port = 22
 
     # folders for exported files
-    folders = ['kumc', 'umb', 'uab']
+    folders = ['kumc', 'uab', 'umb']
 
     for folder in folders:
         # site csv file
@@ -288,8 +288,12 @@ def redcap_export_api():
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
+                print(sftp_remote_path)
+                print(umb_file)
+
                 # download file
                 sftp.get(umb_file, export_directory + umb_file)
+                print("umb csv file download complete")
 
                 # close session
                 sftp.close()
