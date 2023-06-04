@@ -249,12 +249,13 @@ def mapped_csvs():
                 print(row['sualcostage'])
 
                 if (pd.isna(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
-                    logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
-                    print(row['sualcoenage'])
-                    print(row['age'])
-                    print(row['sualcostage'])
+                    row['age'] = pd.to_numeric(row['age'], errors='coerce')
+                    row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
+                    logic_row['sualcodur'] = (row['age'] - row['sualcostage']).astype(str)
                 elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and row['sualcostage'].astype(int) > 0 and row['sualcoenage'].astype(int) > 0):
-                    logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
+                    row['sualcoenage'] = pd.to_numeric(row['sualcoenage'], errors='coerce')
+                    row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
+                    logic_row['sualcodur'] = (row['sualcoenage'] - row['sualcostage']).astype(str)
                 else:
                     logic_row['sualcodur'] = ''
                 
