@@ -170,7 +170,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the kumc current row
                 logic_row = {'studyid': row['studyid']}
 
-                if row['diagnstatus'] == 'diagnosed with adpkd' and not np.isnan(row['age']):
+                if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']):
                     logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
                 else:
                     logic_row['diagnosisage'] = ''
@@ -215,51 +215,51 @@ def mapped_csvs():
                 
                 print(row['suteacups'])
 
-                if (not np.isnan(row['suteacups']) and row['suteacups'].astype(int) > 0):
+                if (pd.notna(row['suteacups']) and row['suteacups'].astype(int) > 0):
                     logic_row['teayn'] = 'yes'
-                elif (not np.isnan(row['suteacups']) and row['suteacups'] == '0'):
+                elif (pd.notna(row['suteacups']) and row['suteacups'] == '0'):
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
                 
-                if (not np.isnan(row['sucoffeecups']) and row['sucoffeecups'].astype(int) > 0):
+                if (pd.notna(row['sucoffeecups']) and row['sucoffeecups'].astype(int) > 0):
                     logic_row['coffeeyn'] = 'yes'
-                elif (not np.isnan(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
+                elif (pd.notna(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
                 
-                if (not np.isnan(row['susodacups']) and row['susodacups'].astype(int) > 0):
+                if (pd.notna(row['susodacups']) and row['susodacups'].astype(int) > 0):
                     logic_row['sodayn'] = 'yes'
-                elif (not np.isnan(row['susodacups']) and row['susodacups'] == '0'):
+                elif (pd.notna(row['susodacups']) and row['susodacups'] == '0'):
                     logic_row['sodayn'] = 'no'
                 else:
                     logic_row['sodayn'] = ''
 
-                if (not np.isnan(row['suteacups']) or not np.isnan(row['sucoffeecups']) or not np.isnan(row['susodacups'])):
+                if (pd.notna(row['suteacups']) or pd.notna(row['sucoffeecups']) or pd.notna(row['susodacups'])):
                     logic_row['caffintake'] = (row['suteacups'].astype(int) + row['sucoffeecups'].astype(int) + row['susodacups'].astype(int)).astype(str)
 
-                if (not np.isnan(row['sucaffenage']) and not np.isnan(row['sucaffstage']) and row['sucaffenage'].astype(int) >= 0):
+                if (pd.notna(row['sucaffenage']) and pd.notna(row['sucaffstage']) and row['sucaffenage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
-                elif (not np.isnan(row['age']) and not np.isnan(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
+                elif (pd.notna(row['age']) and pd.notna(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
                     logic_row['caffdur'] = ''
 
-                if (np.isnan(row['sualcoenage']) and not np.isnan(row['age']) and not np.isnan(row['sualcostage'])):
+                if (np.isnan(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
-                elif (not np.isnan(row['sualcoenage']) and not np.isnan(row['sualcostage']) and row['sualcoenage'].astype(int) > 0) :
+                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and row['sualcoenage'].astype(int) > 0) :
                     logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
                 else:
                     logic_row['sualcodur'] = ''
                 
-                if not np.isnan(row['height']):
+                if pd.notna(row['height']):
                     logic_row['height_m'] = (row['height'].astype(int) / 100).astype(str)
 
-                if not np.isnan(row['average_sysbp3']):
+                if pd.notna(row['average_sysbp3']):
                     logic_row['average_sysbp3'] = row['average_sysbp3']
 
-                if not np.isnan(row['average_diabp3']):
+                if pd.notna(row['average_diabp3']):
                     logic_row['average_diabp3'] = row['average_diabp3']
 
             if site == 'umb':
