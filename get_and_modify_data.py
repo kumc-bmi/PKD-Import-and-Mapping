@@ -173,7 +173,7 @@ def mapped_csvs():
                 if row['diagnstatus'] == 'diagnosed with adpkd':
                     logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
                 else:
-                    logic_row['diagnosisage'] = np.nan
+                    logic_row['diagnosisage'] = ''
 
                 if row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes':
                     logic_row['mthr'] = 'yes'
@@ -222,44 +222,44 @@ def mapped_csvs():
                 else:
                     logic_row['teayn'] = ''
                 
-                if row['sucoffeecups'].astype(int) > 0:
+                if (not np.isnan(row['sucoffeecups']) and row['sucoffeecups'].astype(int) > 0):
                     logic_row['coffeeyn'] = 'yes'
-                elif row['sucoffeecups'] == '0':
+                elif (not np.isnan(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
                 
-                if row['susodacups'].astype(int) > 0:
+                if (not np.isnan(row['susodacups']) and row['susodacups'].astype(int) > 0):
                     logic_row['sodayn'] = 'yes'
-                elif row['susodacups'] == '0':
+                elif (not np.isnan(row['susodacups']) and row['susodacups'] == '0'):
                     logic_row['sodayn'] = 'no'
                 else:
                     logic_row['sodayn'] = ''
 
-                if row['suteacups'] or row['sucoffeecups'] or row['susodacups']:
-                    logic_row['caffintake'] = row['suteacups'].astype(int) + row['sucoffeecups'].astype(int) + row['susodacups'].astype(int)
+                if (not np.isnan(row['suteacups']) or not np.isnan(row['sucoffeecups']) or not np.isnan(row['susodacups'])):
+                    logic_row['caffintake'] = (row['suteacups'].astype(int) + row['sucoffeecups'].astype(int) + row['susodacups'].astype(int)).astype(str)
 
-                if row['sucaffenage'].astype(int) >= 0:
-                    logic_row['caffdur'] = row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)
-                elif row['sucaffenage'] == '' and  row['sucaffstage'].astype(int) >= 0:
-                    logic_row['caffdur'] = row['age'].astype(int) - row['sucaffstage'].astype(int)
+                if (not np.isnan(row['sucaffenage']) and row['sucaffenage'].astype(int) >= 0):
+                    logic_row['caffdur'] = (row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
+                elif (not np.isnan(row['sucaffenage']) and row['sucaffenage'] == '' and  row['sucaffstage'].astype(int) >= 0):
+                    logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
-                    logic_row['caffdur'] = np.nan
+                    logic_row['caffdur'] = ''
 
-                if row['sualcoenage'] == '':
+                if (np.isnan(row['sualcoenage']) and row['sualcoenage']):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
-                elif row['sualcoenage'].astype(int) > 0:
-                    logic_row['sualcodur'] = row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)
+                elif (not np.isnan(row['sualcoenage']) and row['sualcoenage'].astype(int) > 0):
+                    logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
                 else:
-                    logic_row['sualcodur'] = np.nan
+                    logic_row['sualcodur'] = ''
                 
-                if row['height']:
-                    logic_row['height_m'] = row['height'].astype(int) / 100
+                if not np.isnan(row['height']):
+                    logic_row['height_m'] = (row['height'].astype(int) / 100).astype(str)
 
-                if row['average_sysbp3']:
+                if not np.isnan(row['average_sysbp3']):
                     logic_row['average_sysbp3'] = row['average_sysbp3']
 
-                if row['average_diabp3']:
+                if not np.isnan(row['average_diabp3']):
                     logic_row['average_diabp3'] = row['average_diabp3']
 
             if site == 'umb':
