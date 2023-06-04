@@ -13,6 +13,7 @@ import os
 import requests
 import csv
 import pysftp
+import numpy as np
 from sys import argv
 from os import path as os_path
 from builtins import open as openf
@@ -160,6 +161,226 @@ def mapped_csvs():
 
         print(site_data_df)
 
+        # create a logic DataFrame
+        logic_cols_df = pd.DataFrame(columns=['studyid', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
+                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'livercysts_mr_num'])
+
+        for index, row in site_data_df.iterrows():
+            if site == 'kumc':
+                # create a new dictionary to hold the values for the kumc current row
+                logic_row = {'studyid': row['studyid']}
+
+                if row['diagnstatus'] == 'diagnosed with adpkd':
+                    logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
+                else:
+                    logic_row['diagnosisage'] = np.nan
+
+                if row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes':
+                    logic_row['mthr'] = 'yes'
+                elif row['fm1rel'] == 'mother' and row['fm1diagn'] == 'no':
+                    logic_row['mthr'] = 'no'
+                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'yes':
+                    logic_row['mthr'] = 'yes'
+                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'no':
+                    logic_row['mthr'] = 'no'
+                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'yes':
+                    logic_row['mthr'] = 'yes'
+                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'no':
+                    logic_row['mthr'] = 'no'
+                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'yes':
+                    logic_row['mthr'] = 'yes'
+                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'no':
+                    logic_row['mthr'] = 'no'
+                else:
+                    logic_row['mthr'] = ''
+
+                if row['fm1rel'] == 'father' and row['fm1diagn'] == 'yes':
+                    logic_row['fthr'] = 'yes'
+                elif row['fm1rel'] == 'father' and row['fm1diagn'] == 'no':
+                    logic_row['fthr'] = 'no'
+                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'yes':
+                    logic_row['fthr'] = 'yes'
+                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'no':
+                    logic_row['fthr'] = 'no'
+                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'yes':
+                    logic_row['fthr'] = 'yes'
+                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'no':
+                    logic_row['fthr'] = 'no'
+                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'yes':
+                    logic_row['fthr'] = 'yes'
+                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'no':
+                    logic_row['fthr'] = 'no'
+                else:
+                    logic_row['fthr'] = ''
+                
+                if row['suteacups'] > 0:
+                    logic_row['teayn'] = 'yes'
+                elif row['suteacups'] == '0':
+                    logic_row['teayn'] = 'no'
+                else:
+                    logic_row['teayn'] = ''
+                
+                if row['sucoffeecups'] > 0:
+                    logic_row['coffeeyn'] = 'yes'
+                elif row['sucoffeecups'] == '0':
+                    logic_row['coffeeyn'] = 'no'
+                else:
+                    logic_row['coffeeyn'] = ''
+                
+                if row['susodacups'] > 0:
+                    logic_row['sodayn'] = 'yes'
+                elif row['susodacups'] == '0':
+                    logic_row['sodayn'] = 'no'
+                else:
+                    logic_row['sodayn'] = ''
+
+                if row['suteacups'] or row['sucoffeecups'] or row['susodacups']:
+                    logic_row['caffintake'] = row['suteacups'] + row['sucoffeecups'] + row['susodacups']
+
+                if row['sucaffenage'] >= 0:
+                    logic_row['caffdur'] = row['sucaffenage'] - row['sucaffstage']
+                elif row['sucaffenage'] == '' and  row['sucaffstage'] >= 0:
+                    logic_row['caffdur'] = row['age'] - row['sucaffstage']
+                else:
+                    logic_row['caffdur'] = np.na
+
+                if row['sualcoenage'] == '':
+                    logic_row['sualcodur'] = row['age'] - row['sualcostage']
+                elif row['sualcoenage'] > 0:
+                    logic_row['sualcodur'] = row['sualcoenage'] - row['sualcostage']
+                else:
+                    logic_row['sualcodur'] = np.na
+                
+                if row['height']:
+                    logic_row['height_m'] = row['height']/100
+
+                if row['average_sysbp3']:
+                    logic_row['average_sysbp3'] = row['average_sysbp3']
+
+                if row['average_diabp3']:
+                    logic_row['average_diabp3'] = row['average_diabp3']
+
+            if site == 'umb':
+                # create a new dictionary to hold the values for the umb current row
+                logic_row = {'studyid': row['pid']}
+                
+                if row['crrdate'] and row['cr4']:
+                    logic_row['age'] = row['crrdate'] - row['cr4']
+
+                if row['crrdate'] and row['cr4']:
+                    logic_row['pmhhtn_age_onset'] = row['crrdate'] - row['cr4']
+
+                if row['c5a'] and row['c5a'] == 'kg':
+                    logic_row['birth_weight'] = row['c5a'] * 1000
+                elif row['c5a'] and row['c5a'] == 'lb':
+                    logic_row['birth_weight'] = row['c5a'] * 453.6
+                elif row['c5a'] and row['c5a'] == 'oz':
+                    logic_row['birth_weight'] = row['c5a'] * 28.3
+                else:
+                    logic_row['birth_weight'] = ''
+
+                if row['cr28a'] and row['cr4']:
+                    logic_row['rpmenopage'] = row['cr28a'] - row['cr4']
+
+                if row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
+                    logic_row['teayn'] = 'yes'
+                elif row['cr66'] == 'yes, coffee' or row['cr66'] == 'no, (both)':
+                    logic_row['teayn'] = 'no'
+                else:
+                    logic_row['teayn'] = ''
+
+                if row['cr66'] == 'yes, coffee' or row['cr66'] == 'yes, both':
+                    logic_row['coffeeyn'] = 'yes'
+                elif row['cr66'] == 'yes, tea' or row['cr66'] == 'no, (both)':
+                    logic_row['coffeeyn'] = 'no'
+                else:
+                    logic_row['coffeeyn'] = ''
+
+                if row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
+                    logic_row['smokever'] = 'yes'
+                elif row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
+                    logic_row['smokever'] = 'no'
+                else:
+                    logic_row['smokever'] = ''
+
+                if row['hb30'] == 'yes' and row['hb30']:
+                    logic_row['sualcodur'] = row['crrdate'] - row['cr4']
+                elif row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
+                    logic_row['sualcodur'] = row['hb31a'] - row['hb29a']
+                else:
+                    logic_row['sualcodur'] = np.na
+
+                if row['hb30'] == 'yes' and row['hb35'] and row['hb36'] and row['hb37']:
+                    logic_row['sualcodrinks'] = row['hb35'] + row['hb36'] + row['hb37']
+                elif row['hb30'] == 'no' and row['hb32'] and row['hb33'] and row['hb34']:
+                    logic_row['sualcodrinks'] = row['hb32'] + row['hb33'] + row['hb34']
+                else:
+                    logic_row['sualcodrinks'] = np.na
+
+                if row['cm1'] == 'done' and (row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque' or
+                    row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque' or
+                    row['cm8'] == 'tolvaptan' or row['cm8'] == 'jynarque' or
+                    row['cm9'] == 'tolvaptan' or row['cm9'] == 'jynarque' or
+                    row['cm10'] == 'tolvaptan' or row['cm10'] == 'jynarque' or
+                    row['cm11'] == 'tolvaptan' or row['cm11'] == 'jynarque' or
+                    row['cm12'] == 'tolvaptan' or row['cm12'] == 'jynarque' or
+                    row['cm13'] == 'tolvaptan' or row['cm13'] == 'jynarque' or
+                    row['cm14'] == 'tolvaptan' or row['cm14'] == 'jynarque' or
+                    row['cm15'] == 'tolvaptan' or row['cm15'] == 'jynarque'):
+                    logic_row['tolvaptan_treat'] = 'yes'
+                elif row['cm1'] == 'done':
+                    logic_row['tolvaptan_treat'] = 'no'
+                else:
+                    logic_row['tolvaptan_treat'] = ''
+
+                if row['pf8a'] and row['pf8a'] != '':
+                    logic_row['height_m'] = row['pf8a']/100
+                elif row['pf8b'] and row['pf8b'] != '':
+                    logic_row['height_m'] = row['pf8b']*0.0254
+                else:
+                    logic_row['height_m'] = np.na
+                    
+                # logic_row['average_sysbp3'] =
+                # logic_row['average_diabp3'] =
+                # logic_row['urine_microalb'] =
+                # logic_row['subject_height'] =
+                # logic_row['livercysts_mr_num'] =
+
+            if site == 'uab':
+                # create a new dictionary to hold the values for the uab current row
+                logic_row = {'studyid': row['subject_id']}
+
+                if row['date_contact'] and row['birthdate']:
+                    logic_row['age'] = row['date_contact'] - row['birthdate']
+
+                if row['hypertdx'] and row['birthdate']:
+                    logic_row['pmhhtn_age_onset'] = row['hypertdx'] - row['birthdate']
+
+                if row['omedspec'] and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
+                    logic_row['tolvaptan_treat'] = 'yes'
+
+                if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine']:
+                    logic_row['creatinine'] = row['lstcreatine']
+                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/L' and row['lstcreatine']:
+                    logic_row['creatinine'] = row['lstcreatine']/88.4
+                else:
+                    logic_row['creatinine'] = ''
+
+                if row['album']:
+                    logic_row['albumin'] = row['album']/10
+
+                if row['wbc']:
+                    logic_row['wbc_k'] = row['wbc']/1000
+            
+            # create a new DataFrame from the logic_row dictionary
+            new_logic_row_df = pd.DataFrame.from_dict(logic_row, orient='index').T
+            
+            # concatenate the new DataFrame to the logic_cols_df DataFrame
+            logic_cols_df = pd.concat([logic_cols_df, new_logic_row_df], ignore_index=True, sort=True)
+
+            # remove string nan on dataframe
+        logic_cols_df =  logic_cols_df.fillna('')
+
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
         
@@ -237,6 +458,19 @@ def mapped_csvs():
 
             # apply missing function
             site_final_df = site_final_df.applymap(missing)
+        
+        if site == 'kumc':
+            # append race columns to kumc dataframe
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
+                                                            on=['studyid'], how='left')
+        if site == 'umb':
+            # append race columns to umb dataframe
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
+                                                                 'average_sysbp3','average_diabp3','urine_microalb','subject_height','livercysts_mr_num']], 
+                                                            on=['studyid'], how='left')
+        if site == 'uab':
+            # append race columns to uab dataframe
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid'], how='left')
             
         # export site dataframe to csv
         site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)
