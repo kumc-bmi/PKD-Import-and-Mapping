@@ -170,7 +170,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the kumc current row
                 logic_row = {'studyid': row['studyid']}
 
-                if not np.isnan(row['diagnstatus']) and row['diagnstatus'] == 'diagnosed with adpkd' and not np.isnan(row['age']) and not np.isnan(row['dmdat']) and not np.isnan(row['diagndate']):
+                if row['diagnstatus'] == 'diagnosed with adpkd' and not np.isnan(row['age']):
                     logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
                 else:
                     logic_row['diagnosisage'] = ''
