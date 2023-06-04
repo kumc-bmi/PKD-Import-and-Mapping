@@ -252,7 +252,6 @@ def mapped_csvs():
                     row['age'] = pd.to_numeric(row['age'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
                     logic_row['sualcodur'] = (row['age'] - row['sualcostage']).astype(str)
-                    print(logic_row['sualcodur'])
                 elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage'])):
                     row['sualcoenage'] = pd.to_numeric(row['sualcoenage'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
@@ -261,13 +260,17 @@ def mapped_csvs():
                     logic_row['sualcodur'] = ''
                 
                 if pd.notna(row['height']):
-                    logic_row['height_m'] = (row['height'].astype(int) / 100).astype(str)
+                    row['height'] = pd.to_numeric(row['height'], errors='coerce')
+                    logic_row['height_m'] = (row['height']/100).astype(str)
 
                 if pd.notna(row['average_sysbp3']):
                     logic_row['average_sysbp3'] = row['average_sysbp3']
 
                 if pd.notna(row['average_diabp3']):
                     logic_row['average_diabp3'] = row['average_diabp3']
+
+            print(logic_cols_df)
+            print(logic_row)
 
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
