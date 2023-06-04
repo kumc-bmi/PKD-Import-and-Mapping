@@ -213,7 +213,7 @@ def mapped_csvs():
                 else:
                     logic_row['fthr'] = ''
                 
-                print(row['suteacups'].astype(int))
+                print(row['suteacups'])
 
                 if row['suteacups'].astype(int) > 0:
                     logic_row['teayn'] = 'yes'
