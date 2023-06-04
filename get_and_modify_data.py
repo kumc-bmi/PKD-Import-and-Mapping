@@ -246,7 +246,7 @@ def mapped_csvs():
                 else:
                     logic_row['caffdur'] = ''
 
-                if (np.isnan(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
+                if (pd.isna(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
                 elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and row['sualcoenage'].astype(int) > 0) :
                     logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
