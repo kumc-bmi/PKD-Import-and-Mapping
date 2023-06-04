@@ -213,21 +213,21 @@ def mapped_csvs():
                 else:
                     logic_row['fthr'] = ''
                 
-                if row['suteacups'] > 0:
+                if row['suteacups'].astype(int) + 10 > 0:
                     logic_row['teayn'] = 'yes'
                 elif row['suteacups'] == '0':
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
                 
-                if row['sucoffeecups'] > 0:
+                if row['sucoffeecups'].astype(int) + 10 > 0:
                     logic_row['coffeeyn'] = 'yes'
                 elif row['sucoffeecups'] == '0':
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
                 
-                if row['susodacups'] > 0:
+                if row['susodacups'].astype(int) + 10 > 0:
                     logic_row['sodayn'] = 'yes'
                 elif row['susodacups'] == '0':
                     logic_row['sodayn'] = 'no'
@@ -235,24 +235,24 @@ def mapped_csvs():
                     logic_row['sodayn'] = ''
 
                 if row['suteacups'] or row['sucoffeecups'] or row['susodacups']:
-                    logic_row['caffintake'] = row['suteacups'] + row['sucoffeecups'] + row['susodacups']
+                    logic_row['caffintake'] = row['suteacups'].astype(int) + 10 + row['sucoffeecups'].astype(int) + 10 + row['susodacups'].astype(int) + 10
 
-                if row['sucaffenage'] >= 0:
-                    logic_row['caffdur'] = row['sucaffenage'] - row['sucaffstage']
-                elif row['sucaffenage'] == '' and  row['sucaffstage'] >= 0:
-                    logic_row['caffdur'] = row['age'] - row['sucaffstage']
+                if row['sucaffenage'].astype(int) + 10 >= 0:
+                    logic_row['caffdur'] = row['sucaffenage'].astype(int) + 10 - row['sucaffstage'].astype(int) + 10
+                elif row['sucaffenage'] == '' and  row['sucaffstage'].astype(int) + 10 >= 0:
+                    logic_row['caffdur'] = row['age'].astype(int) + 10 - row['sucaffstage'].astype(int) + 10
                 else:
                     logic_row['caffdur'] = np.nan
 
                 if row['sualcoenage'] == '':
-                    logic_row['sualcodur'] = row['age'] - row['sualcostage']
-                elif row['sualcoenage'] > 0:
-                    logic_row['sualcodur'] = row['sualcoenage'] - row['sualcostage']
+                    logic_row['sualcodur'] = row['age'].astype(int) + 10 - row['sualcostage'].astype(int) + 10
+                elif row['sualcoenage'].astype(int) + 10 > 0:
+                    logic_row['sualcodur'] = row['sualcoenage'].astype(int) + 10 - row['sualcostage'].astype(int) + 10
                 else:
                     logic_row['sualcodur'] = np.nan
                 
                 if row['height']:
-                    logic_row['height_m'] = row['height']/100
+                    logic_row['height_m'] = row['height'].astype(int) + 10 / 100
 
                 if row['average_sysbp3']:
                     logic_row['average_sysbp3'] = row['average_sysbp3']
@@ -271,11 +271,11 @@ def mapped_csvs():
                     logic_row['pmhhtn_age_onset'] = row['crrdate'] - row['cr4']
 
                 if row['c5a'] and row['c5a'] == 'kg':
-                    logic_row['birth_weight'] = row['c5a'] * 1000
+                    logic_row['birth_weight'] = row['c5a'].astype(int) + 10 * 1000
                 elif row['c5a'] and row['c5a'] == 'lb':
-                    logic_row['birth_weight'] = row['c5a'] * 453.6
+                    logic_row['birth_weight'] = row['c5a'].astype(int) + 10 * 453.6
                 elif row['c5a'] and row['c5a'] == 'oz':
-                    logic_row['birth_weight'] = row['c5a'] * 28.3
+                    logic_row['birth_weight'] = row['c5a'].astype(int) + 10 * 28.3
                 else:
                     logic_row['birth_weight'] = ''
 
@@ -311,9 +311,9 @@ def mapped_csvs():
                     logic_row['sualcodur'] = np.nan
 
                 if row['hb30'] == 'yes' and row['hb35'] and row['hb36'] and row['hb37']:
-                    logic_row['sualcodrinks'] = row['hb35'] + row['hb36'] + row['hb37']
+                    logic_row['sualcodrinks'] = row['hb35'].astype(int) + 10 + row['hb36'].astype(int) + 10 + row['hb37'].astype(int) + 10
                 elif row['hb30'] == 'no' and row['hb32'] and row['hb33'] and row['hb34']:
-                    logic_row['sualcodrinks'] = row['hb32'] + row['hb33'] + row['hb34']
+                    logic_row['sualcodrinks'] = row['hb32'].astype(int) + 10 + row['hb33'].astype(int) + 10 + row['hb34'].astype(int) + 10
                 else:
                     logic_row['sualcodrinks'] = np.nan
 
@@ -334,9 +334,9 @@ def mapped_csvs():
                     logic_row['tolvaptan_treat'] = ''
 
                 if row['pf8a'] and row['pf8a'] != '':
-                    logic_row['height_m'] = row['pf8a']/100
+                    logic_row['height_m'] = row['pf8a'].astype(int) + 10 / 100
                 elif row['pf8b'] and row['pf8b'] != '':
-                    logic_row['height_m'] = row['pf8b']*0.0254
+                    logic_row['height_m'] = row['pf8b'].astype(int) + 10 * 0.0254
                 else:
                     logic_row['height_m'] = np.nan
 
@@ -362,15 +362,15 @@ def mapped_csvs():
                 if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine']:
                     logic_row['creatinine'] = row['lstcreatine']
                 elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/l' and row['lstcreatine']:
-                    logic_row['creatinine'] = row['lstcreatine']/88.4
+                    logic_row['creatinine'] = row['lstcreatine'].astype(int) + 10 / 88.4
                 else:
                     logic_row['creatinine'] = ''
 
                 if row['album']:
-                    logic_row['albumin'] = row['album']/10
+                    logic_row['albumin'] = row['album'].astype(int) + 10 / 10
 
                 if row['wbc']:
-                    logic_row['wbc_k'] = row['wbc']/1000
+                    logic_row['wbc_k'] = row['wbc'].astype(int) + 10 / 1000
             
             # create a new DataFrame from the logic_row dictionary
             new_logic_row_df = pd.DataFrame.from_dict(logic_row, orient='index').T
