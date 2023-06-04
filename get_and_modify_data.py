@@ -213,21 +213,21 @@ def mapped_csvs():
                 else:
                     logic_row['fthr'] = ''
                 
-                if (pd.notna(row['suteacups']) and row['suteacups'].astype(int) > 0):
+                if (pd.notna(row['suteacups']) and pd.to_numeric(row['suteacups'], errors='coerce') > 0):
                     logic_row['teayn'] = 'yes'
                 elif (pd.notna(row['suteacups']) and row['suteacups'] == '0'):
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
                 
-                if (pd.notna(row['sucoffeecups']) and row['sucoffeecups'].astype(int) > 0):
+                if (pd.notna(row['sucoffeecups']) and pd.to_numeric(row['sucoffeecups'], errors='coerce') > 0):
                     logic_row['coffeeyn'] = 'yes'
                 elif (pd.notna(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
                 
-                if (pd.notna(row['susodacups']) and row['susodacups'].astype(int) > 0):
+                if (pd.notna(row['susodacups']) and pd.to_numeric(row['susodacups'], errors='coerce') > 0):
                     logic_row['sodayn'] = 'yes'
                 elif (pd.notna(row['susodacups']) and row['susodacups'] == '0'):
                     logic_row['sodayn'] = 'no'
@@ -237,9 +237,9 @@ def mapped_csvs():
                 if (pd.notna(row['suteacups']) or pd.notna(row['sucoffeecups']) or pd.notna(row['susodacups'])):
                     logic_row['caffintake'] = (row['suteacups'].astype(int) + row['sucoffeecups'].astype(int) + row['susodacups'].astype(int)).astype(str)
 
-                if (pd.notna(row['sucaffenage']) and pd.notna(row['sucaffstage']) and row['sucaffenage'].astype(int) >= 0):
+                if (pd.notna(row['sucaffenage']) and pd.notna(row['sucaffstage']) and pd.to_numeric(row['sucaffenage'], errors='coerce') >= 0):
                     logic_row['caffdur'] = (row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
-                elif (pd.notna(row['age']) and pd.notna(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
+                elif (pd.notna(row['age']) and pd.notna(row['sucaffstage']) and pd.to_numeric(row['sucaffstage'], errors='coerce') >= 0):
                     logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
                     logic_row['caffdur'] = ''
@@ -252,7 +252,7 @@ def mapped_csvs():
                     row['age'] = pd.to_numeric(row['age'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
                     logic_row['sualcodur'] = (row['age'] - row['sualcostage']).astype(str)
-                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage'])):
+                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and pd.to_numeric(row['sualcoenage'], errors='coerce') > 0 and pd.to_numeric(row['sualcostage'], errors='coerce') > 0):
                     row['sualcoenage'] = pd.to_numeric(row['sualcoenage'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
                     logic_row['sualcodur'] = (row['sualcoenage'] - row['sualcostage']).astype(str)
