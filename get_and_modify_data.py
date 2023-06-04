@@ -241,12 +241,12 @@ def mapped_csvs():
 
                 if (not np.isnan(row['sucaffenage']) and not np.isnan(row['sucaffstage']) and row['sucaffenage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
-                elif (not np.isnan(row['age']) and np.isnan(row['sucaffenage']) and not np.isnan(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
+                elif (not np.isnan(row['age']) and not np.isnan(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
                     logic_row['caffdur'] = ''
 
-                if (np.isnan(row['sualcoenage']) and row['sualcoenage']) and not np.isnan(row['age']) and not np.isnan(row['sualcostage']):
+                if (np.isnan(row['sualcoenage']) and not np.isnan(row['age']) and not np.isnan(row['sualcostage'])):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
                 elif (not np.isnan(row['sualcoenage']) and not np.isnan(row['sualcostage']) and row['sualcoenage'].astype(int) > 0) :
                     logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
