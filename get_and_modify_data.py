@@ -269,9 +269,6 @@ def mapped_csvs():
                 if pd.notna(row['average_diabp3']):
                     logic_row['average_diabp3'] = row['average_diabp3']
 
-            print(logic_cols_df)
-            print(logic_row)
-
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 logic_row = {'studyid': row['pid']}
@@ -392,6 +389,9 @@ def mapped_csvs():
 
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
+
+        print(new_logic_row_df)
+        print(logic_cols_df)
 
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
