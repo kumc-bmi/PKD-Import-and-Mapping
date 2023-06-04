@@ -213,8 +213,6 @@ def mapped_csvs():
                 else:
                     logic_row['fthr'] = ''
                 
-                print(row['suteacups'])
-
                 if (pd.notna(row['suteacups']) and row['suteacups'].astype(int) > 0):
                     logic_row['teayn'] = 'yes'
                 elif (pd.notna(row['suteacups']) and row['suteacups'] == '0'):
@@ -245,6 +243,10 @@ def mapped_csvs():
                     logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
                     logic_row['caffdur'] = ''
+
+                print(row['sualcoenage'])
+                print(row['age'])
+                print(row['sualcostage'])
 
                 if (pd.isna(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
