@@ -252,7 +252,8 @@ def mapped_csvs():
                     row['age'] = pd.to_numeric(row['age'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
                     logic_row['sualcodur'] = (row['age'] - row['sualcostage']).astype(str)
-                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and row['sualcostage'].astype(int) > 0 and row['sualcoenage'].astype(int) > 0):
+                    print(logic_row['sualcodur'])
+                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage'])):
                     row['sualcoenage'] = pd.to_numeric(row['sualcoenage'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
                     logic_row['sualcodur'] = (row['sualcoenage'] - row['sualcostage']).astype(str)
