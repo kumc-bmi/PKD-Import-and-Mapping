@@ -242,14 +242,14 @@ def mapped_csvs():
                 elif row['sucaffenage'] == '' and  row['sucaffstage'] >= 0:
                     logic_row['caffdur'] = row['age'] - row['sucaffstage']
                 else:
-                    logic_row['caffdur'] = np.na
+                    logic_row['caffdur'] = np.nan
 
                 if row['sualcoenage'] == '':
                     logic_row['sualcodur'] = row['age'] - row['sualcostage']
                 elif row['sualcoenage'] > 0:
                     logic_row['sualcodur'] = row['sualcoenage'] - row['sualcostage']
                 else:
-                    logic_row['sualcodur'] = np.na
+                    logic_row['sualcodur'] = np.nan
                 
                 if row['height']:
                     logic_row['height_m'] = row['height']/100
@@ -308,14 +308,14 @@ def mapped_csvs():
                 elif row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
                     logic_row['sualcodur'] = row['hb31a'] - row['hb29a']
                 else:
-                    logic_row['sualcodur'] = np.na
+                    logic_row['sualcodur'] = np.nan
 
                 if row['hb30'] == 'yes' and row['hb35'] and row['hb36'] and row['hb37']:
                     logic_row['sualcodrinks'] = row['hb35'] + row['hb36'] + row['hb37']
                 elif row['hb30'] == 'no' and row['hb32'] and row['hb33'] and row['hb34']:
                     logic_row['sualcodrinks'] = row['hb32'] + row['hb33'] + row['hb34']
                 else:
-                    logic_row['sualcodrinks'] = np.na
+                    logic_row['sualcodrinks'] = np.nan
 
                 if row['cm1'] == 'done' and (row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque' or
                     row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque' or
@@ -338,8 +338,8 @@ def mapped_csvs():
                 elif row['pf8b'] and row['pf8b'] != '':
                     logic_row['height_m'] = row['pf8b']*0.0254
                 else:
-                    logic_row['height_m'] = np.na
-                    
+                    logic_row['height_m'] = np.nan
+
                 # logic_row['average_sysbp3'] =
                 # logic_row['average_diabp3'] =
                 # logic_row['urine_microalb'] =
@@ -361,7 +361,7 @@ def mapped_csvs():
 
                 if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine']:
                     logic_row['creatinine'] = row['lstcreatine']
-                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/L' and row['lstcreatine']:
+                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/l' and row['lstcreatine']:
                     logic_row['creatinine'] = row['lstcreatine']/88.4
                 else:
                     logic_row['creatinine'] = ''
@@ -378,7 +378,7 @@ def mapped_csvs():
             # concatenate the new DataFrame to the logic_cols_df DataFrame
             logic_cols_df = pd.concat([logic_cols_df, new_logic_row_df], ignore_index=True, sort=True)
 
-            # remove string nan on dataframe
+        # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
 
         # create a dictionary that maps the corrected column names to the original names
