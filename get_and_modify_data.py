@@ -215,9 +215,9 @@ def mapped_csvs():
                 
                 print(row['suteacups'])
 
-                if row['suteacups'].astype(int) > 0:
+                if (not np.isnan(row['suteacups']) and row['suteacups'].astype(int) > 0):
                     logic_row['teayn'] = 'yes'
-                elif row['suteacups'] == '0':
+                elif (not np.isnan(row['suteacups']) and row['suteacups'] == '0'):
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
