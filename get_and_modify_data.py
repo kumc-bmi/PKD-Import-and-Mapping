@@ -170,7 +170,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the kumc current row
                 logic_row = {'studyid': row['studyid']}
 
-                if row['diagnstatus'] == 'diagnosed with adpkd':
+                if not np.isnan(row['diagnstatus']) and row['diagnstatus'] == 'diagnosed with adpkd' and not np.isnan(row['age']) and not np.isnan(row['dmdat']) and not np.isnan(row['diagndate']):
                     logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
                 else:
                     logic_row['diagnosisage'] = ''
@@ -239,16 +239,16 @@ def mapped_csvs():
                 if (not np.isnan(row['suteacups']) or not np.isnan(row['sucoffeecups']) or not np.isnan(row['susodacups'])):
                     logic_row['caffintake'] = (row['suteacups'].astype(int) + row['sucoffeecups'].astype(int) + row['susodacups'].astype(int)).astype(str)
 
-                if (not np.isnan(row['sucaffenage']) and row['sucaffenage'].astype(int) >= 0):
+                if (not np.isnan(row['sucaffenage']) and not np.isnan(row['sucaffstage']) and row['sucaffenage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['sucaffenage'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
-                elif (not np.isnan(row['sucaffenage']) and row['sucaffenage'] == '' and  row['sucaffstage'].astype(int) >= 0):
+                elif (not np.isnan(row['age']) and np.isnan(row['sucaffenage']) and not np.isnan(row['sucaffstage']) and row['sucaffstage'].astype(int) >= 0):
                     logic_row['caffdur'] = (row['age'].astype(int) - row['sucaffstage'].astype(int)).astype(str)
                 else:
                     logic_row['caffdur'] = ''
 
-                if (np.isnan(row['sualcoenage']) and row['sualcoenage']):
+                if (np.isnan(row['sualcoenage']) and row['sualcoenage']) and not np.isnan(row['age']) and not np.isnan(row['sualcostage']):
                     logic_row['sualcodur'] = row['age'].astype(int) - row['sualcostage'].astype(int)
-                elif (not np.isnan(row['sualcoenage']) and row['sualcoenage'].astype(int) > 0):
+                elif (not np.isnan(row['sualcoenage']) and not np.isnan(row['sualcostage']) and row['sualcoenage'].astype(int) > 0) :
                     logic_row['sualcodur'] = (row['sualcoenage'].astype(int) - row['sualcostage'].astype(int)).astype(str)
                 else:
                     logic_row['sualcodur'] = ''
