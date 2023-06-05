@@ -272,10 +272,10 @@ def mapped_csvs():
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     print(pd.to_datetime(row['crrdate']))
                     print(pd.to_datetime(row['cr4']))
-                    logic_row['age'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
+                    logic_row['age'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
+                    logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
                 if pd.notna(row['c5a']) and row['c5a'] == 'kg':
                     logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
@@ -287,7 +287,7 @@ def mapped_csvs():
                     logic_row['birth_weight'] = ''
 
                 if pd.notna(row['cr28a']) and (row['cr4']):
-                    logic_row['rpmenopage'] = (pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
+                    logic_row['rpmenopage'] = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
 
                 if row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
                     logic_row['teayn'] = 'yes'
@@ -311,9 +311,9 @@ def mapped_csvs():
                     logic_row['smokever'] = ''
 
                 if row['hb30'] == 'yes' and row['hb30']:
-                    logic_row['sualcodur'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
+                    logic_row['sualcodur'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
                 elif row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
-                    logic_row['sualcodur'] = (pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).dt.strftime('%Y-%m-%d')
+                    logic_row['sualcodur'] = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
                 else:
                     logic_row['sualcodur'] = ''
 
@@ -358,10 +358,10 @@ def mapped_csvs():
                 logic_row = {'studyid': row['subject_id']}
 
                 if row['date_contact'] and row['birthdate'] and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
-                    logic_row['age'] = (pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).astype(str)
+                    logic_row['age'] = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
 
                 if row['hypertdx'] and row['birthdate'] and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
-                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).astype(str)
+                    logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
 
                 if row['omedspec'] and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
                     logic_row['tolvaptan_treat'] = 'yes'
