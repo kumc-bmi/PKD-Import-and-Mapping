@@ -244,10 +244,6 @@ def mapped_csvs():
                 else:
                     logic_row['caffdur'] = ''
 
-                print(row['sualcoenage'])
-                print(row['age'])
-                print(row['sualcostage'])
-
                 if (pd.isna(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
                     row['age'] = pd.to_numeric(row['age'], errors='coerce')
                     row['sualcostage'] = pd.to_numeric(row['sualcostage'], errors='coerce')
@@ -273,23 +269,23 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the umb current row
                 logic_row = {'studyid': row['pid']}
                 
-                if row['crrdate'] and row['cr4']:
-                    logic_row['age'] = row['crrdate'] - row['cr4']
+                if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    logic_row['age'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
 
-                if row['crrdate'] and row['cr4']:
-                    logic_row['pmhhtn_age_onset'] = row['crrdate'] - row['cr4']
+                if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
 
-                if row['c5a'] and row['c5a'] == 'kg':
-                    logic_row['birth_weight'] = row['c5a'].astype(int) * 1000
-                elif row['c5a'] and row['c5a'] == 'lb':
-                    logic_row['birth_weight'] = row['c5a'].astype(int) * 453.6
-                elif row['c5a'] and row['c5a'] == 'oz':
-                    logic_row['birth_weight'] = row['c5a'].astype(int) * 28.3
+                if pd.notna(row['c5a']) and row['c5a'] == 'kg':
+                    logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
+                elif pd.notna(row['c5a']) and row['c5a'] == 'lb':
+                    logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 453.6).astype(str)
+                elif pd.notna(row['c5a']) and row['c5a'] == 'oz':
+                    logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 28.3).astype(str)
                 else:
                     logic_row['birth_weight'] = ''
 
-                if row['cr28a'] and row['cr4']:
-                    logic_row['rpmenopage'] = row['cr28a'] - row['cr4']
+                if pd.notna(row['cr28a']) and (row['cr4']):
+                    logic_row['rpmenopage'] = (pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).astype(str)
 
                 if row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
                     logic_row['teayn'] = 'yes'
@@ -313,18 +309,18 @@ def mapped_csvs():
                     logic_row['smokever'] = ''
 
                 if row['hb30'] == 'yes' and row['hb30']:
-                    logic_row['sualcodur'] = row['crrdate'] - row['cr4']
+                    logic_row['sualcodur'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
                 elif row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
-                    logic_row['sualcodur'] = row['hb31a'] - row['hb29a']
+                    logic_row['sualcodur'] = (pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).astype(str)
                 else:
-                    logic_row['sualcodur'] = np.nan
+                    logic_row['sualcodur'] = ''
 
                 if row['hb30'] == 'yes' and row['hb35'] and row['hb36'] and row['hb37']:
-                    logic_row['sualcodrinks'] = row['hb35'].astype(int) + row['hb36'].astype(int) + row['hb37'].astype(int)
+                    logic_row['sualcodrinks'] = (pd.to_numeric(row['hb35'], errors='coerce') + pd.to_numeric(row['hb36'], errors='coerce') + pd.to_numeric(row['hb37'], errors='coerce')).astype(str)
                 elif row['hb30'] == 'no' and row['hb32'] and row['hb33'] and row['hb34']:
-                    logic_row['sualcodrinks'] = row['hb32'].astype(int) + row['hb33'].astype(int) + row['hb34'].astype(int)
+                    logic_row['sualcodrinks'] = (pd.to_numeric(row['hb32'], errors='coerce') + pd.to_numeric(row['hb33'], errors='coerce') + pd.to_numeric(row['hb34'], errors='coerce')).astype(str)
                 else:
-                    logic_row['sualcodrinks'] = np.nan
+                    logic_row['sualcodrinks'] = ''
 
                 if row['cm1'] == 'done' and (row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque' or
                     row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque' or
@@ -342,12 +338,12 @@ def mapped_csvs():
                 else:
                     logic_row['tolvaptan_treat'] = ''
 
-                if row['pf8a'] and row['pf8a'] != '':
-                    logic_row['height_m'] = row['pf8a'].astype(int) / 100
-                elif row['pf8b'] and row['pf8b'] != '':
-                    logic_row['height_m'] = row['pf8b'].astype(int) * 0.0254
+                if row['pf8a'] and pd.notna(row['pf8a']) and row['pf8a'] != '':
+                    logic_row['height_m'] = (pd.to_numeric(row['pf8a'], errors='coerce') / 100).astype(str)
+                elif row['pf8b'] and pd.notna(row['pf8b']) and row['pf8b'] != '':
+                    logic_row['height_m'] = (pd.to_numeric(row['pf8b'], errors='coerce') * 0.0254).astype(str)
                 else:
-                    logic_row['height_m'] = np.nan
+                    logic_row['height_m'] = ''
 
                 # logic_row['average_sysbp3'] =
                 # logic_row['average_diabp3'] =
@@ -359,27 +355,27 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 logic_row = {'studyid': row['subject_id']}
 
-                if row['date_contact'] and row['birthdate']:
-                    logic_row['age'] = row['date_contact'] - row['birthdate']
+                if row['date_contact'] and row['birthdate'] and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
+                    logic_row['age'] = (pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).astype(str)
 
-                if row['hypertdx'] and row['birthdate']:
-                    logic_row['pmhhtn_age_onset'] = row['hypertdx'] - row['birthdate']
+                if row['hypertdx'] and row['birthdate'] and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
+                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).astype(str)
 
                 if row['omedspec'] and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
                     logic_row['tolvaptan_treat'] = 'yes'
 
-                if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine']:
+                if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine'] and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = row['lstcreatine']
-                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/l' and row['lstcreatine']:
-                    logic_row['creatinine'] = row['lstcreatine'].astype(int) / 88.4
+                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/l' and row['lstcreatine'] and pd.notna(row['lstcreatine']):
+                    logic_row['creatinine'] = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
                 else:
                     logic_row['creatinine'] = ''
 
-                if row['album']:
-                    logic_row['albumin'] = row['album'].astype(int) / 10
+                if row['album'] and pd.notna(row['album']):
+                    logic_row['albumin'] = (pd.to_numeric(row['album'], errors='coerce') / 10).astype(str)
 
-                if row['wbc']:
-                    logic_row['wbc_k'] = row['wbc'].astype(int) / 1000
+                if row['wbc'] and pd.notna(row['wbc']):
+                    logic_row['wbc_k'] = (pd.to_numeric(row['wbc'], errors='coerce') / 1000).astype(str)
             
             # create a new DataFrame from the logic_row dictionary
             new_logic_row_df = pd.DataFrame.from_dict(logic_row, orient='index').T
@@ -477,12 +473,12 @@ def mapped_csvs():
                                                             on=['studyid'], how='left')
         if site == 'umb':
             # append race columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
                                                                  'average_sysbp3','average_diabp3','urine_microalb','subject_height','livercysts_mr_num']], 
                                                             on=['studyid'], how='left')
         if site == 'uab':
             # append race columns to uab dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid'], how='left')
             
         # export site dataframe to csv
         site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)
