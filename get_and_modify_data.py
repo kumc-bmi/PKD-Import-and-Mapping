@@ -162,9 +162,13 @@ def mapped_csvs():
         print(site_data_df)
 
         if site == 'kumc':
-            print(site_data_df['studyid'])
-            print(pd.to_numeric(site_data_df['suteacups']))
-            print(site_data_df['suteacups'])
+            test_logic_cols_df = pd.DataFrame({
+                'studyid': site_data_df['studyid'],
+                'suteacups': site_data_df['suteacups']
+            })
+
+            print(test_logic_cols_df)
+            
             logic_cols_df = pd.DataFrame({
                 'studyid': site_data_df['studyid'],
                 'diagnosisage': site_data_df['age'] - (site_data_df['dmdat'] - site_data_df['diagndate']) if (site_data_df['diagnstatus'] == 'diagnosed with adpkd').all() and pd.notna(site_data_df['age']) and pd.notna(site_data_df['dmdat']) and pd.notna(site_data_df['diagndate']) else '',
