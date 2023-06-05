@@ -209,13 +209,13 @@ def mapped_csvs():
                             )
                         ),
                 'teayn': 'yes' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) > 0).all()) else (
-                         'no' if (pd.notna(site_data_df_filled['suteacups']) and (site_data_df_filled['suteacups'] == '0').all()) else ''
+                         'no' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) == 0).all()) else ''
                         ),
                 'coffeeyn': 'yes' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) > 0).all()) else (
-                            'no' if (pd.notna(site_data_df_filled['sucoffeecups']) and (site_data_df_filled['sucoffeecups'] == '0').all()) else ''
+                            'no' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) == 0).all()) else ''
                         ),
                 'sodayn': 'yes' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) > 0).all()) else (
-                            'no' if (pd.notna(site_data_df_filled['susodacups']) and (site_data_df_filled['susodacups'] == '0').all()) else ''
+                            'no' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) == 0).all()) else ''
                         ),
                 'caffintake': (pd.to_numeric(site_data_df_filled['suteacups']) + pd.to_numeric(site_data_df_filled['sucoffeecups']) + pd.to_numeric(site_data_df_filled['susodacups'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0).all()) else '',
                 'caffdur': (pd.to_numeric(site_data_df_filled['sucaffenage']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0).all()) else (
