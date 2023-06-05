@@ -269,12 +269,12 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the umb current row
                 logic_row = {'studyid': row['pid']}
                 
-                if ('crrdate', 'cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if ('crrdate') in row.index and ('cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     print(pd.to_datetime(row['crrdate']))
                     print(pd.to_datetime(row['cr4']))
                     logic_row['age'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
-                if ('crrdate', 'cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if ('crrdate') in row.index and ('cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
                 if ('c5a') in row.index and pd.notna(row['c5a']) and row['c5a'] == 'kg':
@@ -286,7 +286,7 @@ def mapped_csvs():
                 else:
                     logic_row['birth_weight'] = ''
 
-                if  ('cr28a', 'cr4') in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
+                if  ('cr28a') in row.index and ('cr4') in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
                     logic_row['rpmenopage'] = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
 
                 if ('cr66') in row.index and row['cr66'] in ('yes, tea', 'yes, both'):
@@ -303,23 +303,23 @@ def mapped_csvs():
                 else:
                     logic_row['coffeeyn'] = ''
 
-                if ('hb1', 'hb9', 'hb15') in row.index and row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
+                if ('hb1') in row.index and ('hb9') in row.index and ('hb15') in row.index and row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
                     logic_row['smokever'] = 'yes'
-                elif ('hb1', 'hb9', 'hb15') in row.index and row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
+                elif ('hb1') in row.index and ('hb9') in row.index and ('hb15') in row.index and row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
                     logic_row['smokever'] = 'no'
                 else:
                     logic_row['smokever'] = ''
 
                 if ('hb30') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodur'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
-                elif ('hb29a', 'hb30', 'hb31a') in row.index and row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
+                elif ('hb29a') in row.index and ('hb30') in row.index and ('hb31a') in row.index and row['hb30'] == 'no':
                     logic_row['sualcodur'] = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
                 else:
                     logic_row['sualcodur'] = ''
 
-                if ('hb30', 'hb35', 'hb36', 'hb37') in row.index and row['hb30'] == 'yes':
+                if ('hb30') in row.index and ('hb35') in row.index and ('hb36') in row.index and ('hb37') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb35'], errors='coerce') + pd.to_numeric(row['hb36'], errors='coerce') + pd.to_numeric(row['hb37'], errors='coerce')).astype(str)
-                elif ('hb30', 'hb32', 'hb33', 'hb34') in row.index and row['hb30'] == 'no':
+                elif ('hb30') in row.index and ('hb32') in row.index and ('hb33') in row.index and ('hb34') in row.index and row['hb30'] == 'no':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb32'], errors='coerce') + pd.to_numeric(row['hb33'], errors='coerce') + pd.to_numeric(row['hb34'], errors='coerce')).astype(str)
                 else:
                     logic_row['sualcodrinks'] = ''
@@ -358,18 +358,18 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 logic_row = {'studyid': row['subject_id']}
 
-                if ('date_contact', 'birthdate') in row.index and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
+                if ('date_contact') in row.index and ('birthdate') in row.index and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
                     logic_row['age'] = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
 
-                if ('hypertdx', 'birthdate') in row.index and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
+                if ('hypertdx') in row.index and ('birthdate') in row.index and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
                     logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
 
-                if ('omedspec') in row.index and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
+                if ('omedspec') in row.index and row['omedspec'] in ('tolvaptan', 'jynarque'):
                     logic_row['tolvaptan_treat'] = 'yes'
 
-                if  ('creatinelvl', 'lstcreatine') in row.index and row['creatinelvl'] == 'mg/dl' and pd.notna(row['lstcreatine']):
+                if  ('creatinelvl') in row.index and ('lstcreatine') in row.index and row['creatinelvl'] == 'mg/dl' and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = row['lstcreatine']
-                elif ('creatinelvl', 'lstcreatine') in row.index and row['creatinelvl'] == 'mmol/l' and pd.notna(row['lstcreatine']):
+                elif ('creatinelvl') in row.index and ('lstcreatine') in row.index and row['creatinelvl'] == 'mmol/l' and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
                 else:
                     logic_row['creatinine'] = ''
