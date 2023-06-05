@@ -163,7 +163,7 @@ def mapped_csvs():
 
         # create a logic DataFrame
         logic_cols_df = pd.DataFrame(columns=['studyid', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
-                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'livercysts_mr_num'])
+                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
 
         for index, row in site_data_df.iterrows():
             if site == 'kumc':
@@ -474,7 +474,7 @@ def mapped_csvs():
         if site == 'umb':
             # append race columns to umb dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
-                                                                 'average_sysbp3','average_diabp3','urine_microalb','subject_height','livercysts_mr_num']], 
+                                                                 'average_sysbp3','average_diabp3','urine_microalb','subject_height']], 
                                                             on=['studyid'], how='left')
         if site == 'uab':
             # append race columns to uab dataframe
