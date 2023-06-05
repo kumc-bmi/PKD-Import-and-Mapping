@@ -162,6 +162,7 @@ def mapped_csvs():
         print(site_data_df)
 
         if site == 'kumc':
+            print(site_data_df['studyid'])
             print(pd.to_numeric(site_data_df['suteacups']))
             print(site_data_df['suteacups'])
             logic_cols_df = pd.DataFrame({
