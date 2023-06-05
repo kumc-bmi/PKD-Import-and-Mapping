@@ -167,8 +167,7 @@ def mapped_csvs():
                 'suteacups': site_data_df['suteacups']
             })
 
-            kumc_kumc_cvs = pd.concat(test_logic_cols_df, axis=0, ignore_index=True, sort=False)
-            kumc_kumc_cvs.to_csv(import_directory + 'merged/test_kumc.csv', index=False, float_format=None)
+            test_logic_cols_df.to_csv(import_directory + 'merged/test_kumc.csv', index=False, float_format=None)
 
             print(test_logic_cols_df)
 
