@@ -446,9 +446,6 @@ def mapped_csvs():
             # create new DataFrame
             site_df_mapped = pd.DataFrame(df_mapped)
 
-            # attach site name to studyid
-            site_df_mapped['studyid'] = site_df_mapped['studyid'].apply(lambda x: site + '_' + str(x))
-
             # ensure studyid and redcap_event_name are first in df
             initial_cols = ['studyid', 'redcap_event_name']
 
@@ -482,7 +479,10 @@ def mapped_csvs():
         if site == 'uab':
             # append race columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid'], how='left')
-            
+        
+        # attach site name to studyid
+        site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
+
         # export site dataframe to csv
         site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)
 
