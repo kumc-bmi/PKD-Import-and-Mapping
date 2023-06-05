@@ -270,6 +270,8 @@ def mapped_csvs():
                 logic_row = {'studyid': row['pid']}
                 
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    print(pd.to_datetime(row['crrdate']))
+                    print(pd.to_datetime(row['cr4']))
                     logic_row['age'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
 
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
