@@ -170,7 +170,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the kumc current row
                 logic_row = {'studyid': row['studyid']}
 
-                if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']):
+                if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate']):
                     logic_row['diagnosisage'] = row['age'] - (row['dmdat'] - row['diagndate'])
                 else:
                     logic_row['diagnosisage'] = ''
@@ -270,10 +270,10 @@ def mapped_csvs():
                 logic_row = {'studyid': row['pid']}
                 
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    logic_row['age'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
+                    logic_row['age'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
 
                 if pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
+                    logic_row['pmhhtn_age_onset'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
 
                 if pd.notna(row['c5a']) and row['c5a'] == 'kg':
                     logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
@@ -285,7 +285,7 @@ def mapped_csvs():
                     logic_row['birth_weight'] = ''
 
                 if pd.notna(row['cr28a']) and (row['cr4']):
-                    logic_row['rpmenopage'] = (pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).astype(str)
+                    logic_row['rpmenopage'] = (pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
 
                 if row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
                     logic_row['teayn'] = 'yes'
@@ -309,9 +309,9 @@ def mapped_csvs():
                     logic_row['smokever'] = ''
 
                 if row['hb30'] == 'yes' and row['hb30']:
-                    logic_row['sualcodur'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).astype(str)
+                    logic_row['sualcodur'] = (pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).dt.strftime('%Y-%m-%d')
                 elif row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
-                    logic_row['sualcodur'] = (pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).astype(str)
+                    logic_row['sualcodur'] = (pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).dt.strftime('%Y-%m-%d')
                 else:
                     logic_row['sualcodur'] = ''
 
