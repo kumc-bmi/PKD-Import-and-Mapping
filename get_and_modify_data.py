@@ -303,23 +303,23 @@ def mapped_csvs():
                 else:
                     logic_row['coffeeyn'] = ''
 
-                if ('hb1') in row.index and ('hb9') in row.index and ('hb15') in row.index and row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
+                if (('hb1') in row.index and row['hb1'] == 'yes') or (('hb9') in row.index and row['hb9'] == 'yes') or (('hb15') in row.index and row['hb15'] == 'yes'):
                     logic_row['smokever'] = 'yes'
-                elif ('hb1') in row.index and ('hb9') in row.index and ('hb15') in row.index and row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
+                elif (('hb1') in row.index and row['hb1'] == 'no') or (('hb9') in row.index and row['hb9'] == 'no') or (('hb15') in row.index and row['hb15'] == 'no'):
                     logic_row['smokever'] = 'no'
                 else:
                     logic_row['smokever'] = ''
 
                 if ('hb30') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodur'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
-                elif ('hb29a') in row.index and ('hb30') in row.index and ('hb31a') in row.index and row['hb30'] == 'no':
+                elif ('hb29a') in row.index and ('hb31a') in row.index and ('hb30') in row.index and row['hb30'] == 'no':
                     logic_row['sualcodur'] = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
                 else:
                     logic_row['sualcodur'] = ''
 
-                if ('hb30') in row.index and ('hb35') in row.index and ('hb36') in row.index and ('hb37') in row.index and row['hb30'] == 'yes':
+                if ('hb35') in row.index and ('hb36') in row.index and ('hb37') in row.index and('hb30') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb35'], errors='coerce') + pd.to_numeric(row['hb36'], errors='coerce') + pd.to_numeric(row['hb37'], errors='coerce')).astype(str)
-                elif ('hb30') in row.index and ('hb32') in row.index and ('hb33') in row.index and ('hb34') in row.index and row['hb30'] == 'no':
+                elif ('hb32') in row.index and ('hb33') in row.index and ('hb34') in row.index and ('hb30') in row.index and row['hb30'] == 'no':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb32'], errors='coerce') + pd.to_numeric(row['hb33'], errors='coerce') + pd.to_numeric(row['hb34'], errors='coerce')).astype(str)
                 else:
                     logic_row['sualcodrinks'] = ''
@@ -358,18 +358,18 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 logic_row = {'studyid': row['subject_id']}
 
-                if ('date_contact') in row.index and ('birthdate') in row.index and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
+                if ('date_contact') in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     logic_row['age'] = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
 
-                if ('hypertdx') in row.index and ('birthdate') in row.index and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
+                if ('hypertdx') in row.index and pd.notna(row['hypertdx']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
 
                 if ('omedspec') in row.index and row['omedspec'] in ('tolvaptan', 'jynarque'):
                     logic_row['tolvaptan_treat'] = 'yes'
 
-                if  ('creatinelvl') in row.index and ('lstcreatine') in row.index and row['creatinelvl'] == 'mg/dl' and pd.notna(row['lstcreatine']):
+                if  ('creatinelvl') in row.index and row['creatinelvl'] == 'mg/dl' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = row['lstcreatine']
-                elif ('creatinelvl') in row.index and ('lstcreatine') in row.index and row['creatinelvl'] == 'mmol/l' and pd.notna(row['lstcreatine']):
+                elif ('creatinelvl') in row.index and row['creatinelvl'] == 'mmol/l' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
                 else:
                     logic_row['creatinine'] = ''
