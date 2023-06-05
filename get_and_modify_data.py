@@ -269,81 +269,81 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the umb current row
                 logic_row = {'studyid': row['pid']}
                 
-                if row['crrdate'] and row['cr4'] and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if ('crrdate', 'cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     print(pd.to_datetime(row['crrdate']))
                     print(pd.to_datetime(row['cr4']))
                     logic_row['age'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
-                if row['crrdate'] and row['cr4'] and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if ('crrdate', 'cr4') in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
 
-                if row['c5a'] and pd.notna(row['c5a']) and row['c5a'] == 'kg':
+                if ('c5a') in row.index and pd.notna(row['c5a']) and row['c5a'] == 'kg':
                     logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
-                elif row['c5a'] and pd.notna(row['c5a']) and row['c5a'] == 'lb':
+                elif ('c5a') in row.index and pd.notna(row['c5a']) and row['c5a'] == 'lb':
                     logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 453.6).astype(str)
-                elif row['c5a'] and pd.notna(row['c5a']) and row['c5a'] == 'oz':
+                elif ('c5a') in row.index and pd.notna(row['c5a']) and row['c5a'] == 'oz':
                     logic_row['birth_weight'] = (pd.to_numeric(row['c5a'], errors='coerce') * 28.3).astype(str)
                 else:
                     logic_row['birth_weight'] = ''
 
-                if  (row['cr4']) and row['cr28a'] and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
+                if  ('cr28a', 'cr4') in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
                     logic_row['rpmenopage'] = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
 
-                if row['cr66'] and row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
+                if ('cr66') in row.index and row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
                     logic_row['teayn'] = 'yes'
-                elif row['cr66'] and row['cr66'] == 'yes, coffee' or row['cr66'] == 'no, (both)':
+                elif ('cr66') in row.index and row['cr66'] == 'yes, coffee' or row['cr66'] == 'no, (both)':
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
 
-                if row['cr66'] and row['cr66'] == 'yes, coffee' or row['cr66'] == 'yes, both':
+                if ('cr66') in row.index and row['cr66'] == 'yes, coffee' or row['cr66'] == 'yes, both':
                     logic_row['coffeeyn'] = 'yes'
-                elif row['cr66'] and row['cr66'] == 'yes, tea' or row['cr66'] == 'no, (both)':
+                elif ('cr66') in row.index and row['cr66'] == 'yes, tea' or row['cr66'] == 'no, (both)':
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
 
-                if row['hb1'] and row['hb9'] and row['hb15'] and row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
+                if ('hb1', 'hb9', 'hb15') in row.index and row['hb1'] == 'yes' or row['hb9'] == 'yes' or row['hb15'] == 'yes':
                     logic_row['smokever'] = 'yes'
-                elif row['hb1'] and row['hb9'] and row['hb15'] and row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
+                elif ('hb1', 'hb9', 'hb15') in row.index and row['hb1'] == 'no' or row['hb9'] == 'no' or row['hb15'] == 'no':
                     logic_row['smokever'] = 'no'
                 else:
                     logic_row['smokever'] = ''
 
-                if row['hb30'] and row['hb30'] == 'yes':
+                if ('hb30') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodur'] = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
-                elif row['hb30'] and row['hb29'] and row['hb31'] and row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
+                elif ('hb29a', 'hb30', 'hb31a') in row.index and row['hb30'] == 'no' and row['hb31a'] and row['hb29a']:
                     logic_row['sualcodur'] = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
                 else:
                     logic_row['sualcodur'] = ''
 
-                if row['hb30'] and row['hb30'] == 'yes' and row['hb35'] and row['hb36'] and row['hb37']:
+                if ('hb30', 'hb35', 'hb36', 'hb37') in row.index and row['hb30'] == 'yes':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb35'], errors='coerce') + pd.to_numeric(row['hb36'], errors='coerce') + pd.to_numeric(row['hb37'], errors='coerce')).astype(str)
-                elif row['hb30'] and row['hb30'] == 'no' and row['hb32'] and row['hb33'] and row['hb34']:
+                elif ('hb30', 'hb32', 'hb33', 'hb34') in row.index and row['hb30'] == 'no':
                     logic_row['sualcodrinks'] = (pd.to_numeric(row['hb32'], errors='coerce') + pd.to_numeric(row['hb33'], errors='coerce') + pd.to_numeric(row['hb34'], errors='coerce')).astype(str)
                 else:
                     logic_row['sualcodrinks'] = ''
 
-                if row['cm1'] and row['cm1'] == 'done' and (
-                    (row['cm6'] and row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque') or
-                    (row['cm7'] and row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque') or
-                    (row['cm8'] and row['cm8'] == 'tolvaptan' or row['cm8'] == 'jynarque') or
-                    (row['cm9'] and row['cm9'] == 'tolvaptan' or row['cm9'] == 'jynarque') or
-                    (row['cm10'] and row['cm10'] == 'tolvaptan' or row['cm10'] == 'jynarque') or
-                    (row['cm11'] and row['cm11'] == 'tolvaptan' or row['cm11'] == 'jynarque') or
-                    (row['cm12'] and row['cm12'] == 'tolvaptan' or row['cm12'] == 'jynarque') or
-                    (row['cm13'] and row['cm13'] == 'tolvaptan' or row['cm13'] == 'jynarque') or
-                    (row['cm14'] and row['cm14'] == 'tolvaptan' or row['cm14'] == 'jynarque') or
-                    (row['cm15'] and row['cm15'] == 'tolvaptan' or row['cm15'] == 'jynarque')):
+                if ('cm1') in row.index and row['cm1'] == 'done' and (
+                    (('cm6') in row.index and row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque') or
+                    (('cm7') in row.index and row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque') or
+                    (('cm8') in row.index and row['cm8'] == 'tolvaptan' or row['cm8'] == 'jynarque') or
+                    (('cm9') in row.index and row['cm9'] == 'tolvaptan' or row['cm9'] == 'jynarque') or
+                    (('cm10') in row.index and row['cm10'] == 'tolvaptan' or row['cm10'] == 'jynarque') or
+                    (('cm11') in row.index and row['cm11'] == 'tolvaptan' or row['cm11'] == 'jynarque') or
+                    (('cm12') in row.index and row['cm12'] == 'tolvaptan' or row['cm12'] == 'jynarque') or
+                    (('cm13') in row.index and row['cm13'] == 'tolvaptan' or row['cm13'] == 'jynarque') or
+                    (('cm14') in row.index and row['cm14'] == 'tolvaptan' or row['cm14'] == 'jynarque') or
+                    (('cm15') in row.index and row['cm15'] == 'tolvaptan' or row['cm15'] == 'jynarque')):
                     logic_row['tolvaptan_treat'] = 'yes'
-                elif row['cm1'] and row['cm1'] == 'done':
+                elif ('cm1') in row.index and row['cm1'] and row['cm1'] == 'done':
                     logic_row['tolvaptan_treat'] = 'no'
                 else:
                     logic_row['tolvaptan_treat'] = ''
 
-                if row['pf8a'] and pd.notna(row['pf8a']) and row['pf8a'] != '':
+                if ('pf8a') in row.index and pd.notna(row['pf8a']) and row['pf8a'] != '':
                     logic_row['height_m'] = (pd.to_numeric(row['pf8a'], errors='coerce') / 100).astype(str)
-                elif row['pf8b'] and pd.notna(row['pf8b']) and row['pf8b'] != '':
+                elif ('pf8b') in row.index and pd.notna(row['pf8b']) and row['pf8b'] != '':
                     logic_row['height_m'] = (pd.to_numeric(row['pf8b'], errors='coerce') * 0.0254).astype(str)
                 else:
                     logic_row['height_m'] = ''
@@ -358,26 +358,26 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 logic_row = {'studyid': row['subject_id']}
 
-                if row['date_contact'] and row['birthdate'] and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
+                if ('date_contact', 'birthdate') in row.index and pd.notna(row['date_contact']) and pd.notna(row['birthdate']):
                     logic_row['age'] = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
 
-                if row['hypertdx'] and row['birthdate'] and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
+                if ('hypertdx', 'birthdate') in row.index and pd.notna(row['hypertdx']) and pd.notna(row['birthdate']):
                     logic_row['pmhhtn_age_onset'] = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
 
-                if row['omedspec'] and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
+                if ('omedspec') in row.index and row['omedspec'] == 'tolvaptan' or row['omedspec'] == 'jynarque':
                     logic_row['tolvaptan_treat'] = 'yes'
 
-                if  row['creatinelvl'] and row['creatinelvl'] == 'mg/dl' and row['lstcreatine'] and pd.notna(row['lstcreatine']):
+                if  ('creatinelvl', 'lstcreatine') in row.index and row['creatinelvl'] == 'mg/dl' and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = row['lstcreatine']
-                elif row['creatinelvl'] and row['creatinelvl'] == 'mmol/l' and row['lstcreatine'] and pd.notna(row['lstcreatine']):
+                elif ('creatinelvl', 'lstcreatine') in row.index and row['creatinelvl'] == 'mmol/l' and pd.notna(row['lstcreatine']):
                     logic_row['creatinine'] = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
                 else:
                     logic_row['creatinine'] = ''
 
-                if row['album'] and pd.notna(row['album']):
+                if ('album') in row.index and pd.notna(row['album']):
                     logic_row['albumin'] = (pd.to_numeric(row['album'], errors='coerce') / 10).astype(str)
 
-                if row['wbc'] and pd.notna(row['wbc']):
+                if ('wbc') in row.index and pd.notna(row['wbc']):
                     logic_row['wbc_k'] = (pd.to_numeric(row['wbc'], errors='coerce') / 1000).astype(str)
             
             # create a new DataFrame from the logic_row dictionary
