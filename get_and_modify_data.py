@@ -289,16 +289,16 @@ def mapped_csvs():
                 if  ('cr28a', 'cr4') in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
                     logic_row['rpmenopage'] = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
 
-                if ('cr66') in row.index and row['cr66'] == 'yes, tea' or row['cr66'] == 'yes, both':
+                if ('cr66') in row.index and row['cr66'] in ('yes, tea', 'yes, both'):
                     logic_row['teayn'] = 'yes'
-                elif ('cr66') in row.index and row['cr66'] == 'yes, coffee' or row['cr66'] == 'no, (both)':
+                elif ('cr66') in row.index and row['cr66'] in ('yes, coffee', 'no, (both)'):
                     logic_row['teayn'] = 'no'
                 else:
                     logic_row['teayn'] = ''
 
-                if ('cr66') in row.index and row['cr66'] == 'yes, coffee' or row['cr66'] == 'yes, both':
+                if ('cr66') in row.index and row['cr66'] in ('yes, coffee', 'yes, both'):
                     logic_row['coffeeyn'] = 'yes'
-                elif ('cr66') in row.index and row['cr66'] == 'yes, tea' or row['cr66'] == 'no, (both)':
+                elif ('cr66') in row.index and row['cr66'] in ('yes, tea', 'no, (both)'):
                     logic_row['coffeeyn'] = 'no'
                 else:
                     logic_row['coffeeyn'] = ''
@@ -325,18 +325,18 @@ def mapped_csvs():
                     logic_row['sualcodrinks'] = ''
 
                 if ('cm1') in row.index and row['cm1'] == 'done' and (
-                    (('cm6') in row.index and row['cm6'] == 'tolvaptan' or row['cm6'] == 'jynarque') or
-                    (('cm7') in row.index and row['cm7'] == 'tolvaptan' or row['cm7'] == 'jynarque') or
-                    (('cm8') in row.index and row['cm8'] == 'tolvaptan' or row['cm8'] == 'jynarque') or
-                    (('cm9') in row.index and row['cm9'] == 'tolvaptan' or row['cm9'] == 'jynarque') or
-                    (('cm10') in row.index and row['cm10'] == 'tolvaptan' or row['cm10'] == 'jynarque') or
-                    (('cm11') in row.index and row['cm11'] == 'tolvaptan' or row['cm11'] == 'jynarque') or
-                    (('cm12') in row.index and row['cm12'] == 'tolvaptan' or row['cm12'] == 'jynarque') or
-                    (('cm13') in row.index and row['cm13'] == 'tolvaptan' or row['cm13'] == 'jynarque') or
-                    (('cm14') in row.index and row['cm14'] == 'tolvaptan' or row['cm14'] == 'jynarque') or
-                    (('cm15') in row.index and row['cm15'] == 'tolvaptan' or row['cm15'] == 'jynarque')):
+                    (('cm6') in row.index and row['cm6'] in ('tolvaptan', 'jynarque')) or
+                    (('cm7') in row.index and row['cm7'] in ('tolvaptan', 'jynarque')) or
+                    (('cm8') in row.index and row['cm8'] in ('tolvaptan', 'jynarque')) or
+                    (('cm9') in row.index and row['cm9'] in ('tolvaptan', 'jynarque')) or
+                    (('cm10') in row.index and row['cm10'] in ('tolvaptan', 'jynarque')) or
+                    (('cm11') in row.index and row['cm11'] in ('tolvaptan', 'jynarque')) or
+                    (('cm12') in row.index and row['cm12'] in ('tolvaptan', 'jynarque')) or
+                    (('cm13') in row.index and row['cm13'] in ('tolvaptan', 'jynarque')) or
+                    (('cm14') in row.index and row['cm14'] in ('tolvaptan', 'jynarque')) or
+                    (('cm15') in row.index and row['cm15'] in ('tolvaptan', 'jynarque'))):
                     logic_row['tolvaptan_treat'] = 'yes'
-                elif ('cm1') in row.index and row['cm1'] and row['cm1'] == 'done':
+                elif ('cm1') in row.index and row['cm1'] == 'done':
                     logic_row['tolvaptan_treat'] = 'no'
                 else:
                     logic_row['tolvaptan_treat'] = ''
