@@ -49,15 +49,11 @@ def mapped_csvs():
     # columns with logic
     col_header_logic = col_header_df_lower[~(col_header_df_lower['trg_logic'] != 'y')]
 
-    print(col_header_logic)
-
     # select unique columns from all sites (KUMC, MARYLAND, ALABAMA) where master target columns are not null
     unique_header_cols = col_header_df.loc[col_header_df['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
 
     # select unique columns from logic fields (KUMC, MARYLAND, ALABAMA) where master target columns are not null
     unique_header_cols_logic = col_header_logic.loc[col_header_logic['trg_var'].notnull(), ['src_var', 'site', 'trg_var']].drop_duplicates(subset=['src_var', 'site', 'trg_var'], keep='first')
-
-    print(unique_header_cols_logic) 
     
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
@@ -422,8 +418,6 @@ def mapped_csvs():
 
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
-
-        print(logic_cols_df)
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
@@ -558,13 +552,9 @@ def redcap_export_api():
         if folder == 'kumc':
             token = token_kumc
             project_id = kumc_project_id
-            print(kumc_project_id)
-            print(token_kumc)
         elif folder == 'uab':
             token = token_chld
             project_id = chld_project_id
-            print(chld_project_id)
-            print(token_chld)
 
         # data parameters
         data_param = {
