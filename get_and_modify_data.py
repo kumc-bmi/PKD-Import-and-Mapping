@@ -234,6 +234,8 @@ def mapped_csvs():
 
                 if (pd.notna(row['suteacups']) or pd.notna(row['sucoffeecups']) or pd.notna(row['susodacups'])):
                     caffintake = (pd.to_numeric(row['suteacups'], errors='coerce') + pd.to_numeric(row['sucoffeecups'], errors='coerce') + pd.to_numeric(row['susodacups'], errors='coerce')).astype(str)
+                else:
+                    caffintake = ''
 
                 if (pd.notna(row['sucaffenage']) and pd.notna(row['sucaffstage']) and pd.to_numeric(row['sucaffenage'], errors='coerce') >= 0):
                     caffdur = (pd.to_numeric(row['sucaffenage'], errors='coerce') - pd.to_numeric(row['sucaffstage'], errors='coerce')).astype(str)
@@ -251,15 +253,21 @@ def mapped_csvs():
 
                 if pd.notna(row['height']):
                     height_m = (pd.to_numeric(row['height'], errors='coerce')/100).astype(str)
+                else:
+                    height_m = ''
 
                 if pd.notna(row['average_sysbp3']):
                     average_sysbp3 = row['average_sysbp3']
+                else:
+                    average_sysbp3 = ''
 
                 if pd.notna(row['average_diabp3']):
                     average_diabp3 = row['average_diabp3']
+                else:
+                    average_diabp3 = ''
                 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
+                new_logic_row = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
                 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -272,9 +280,13 @@ def mapped_csvs():
                     print(pd.to_datetime(row['crrdate']))
                     print(pd.to_datetime(row['cr4']))
                     age = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                else:
+                    age = ''
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     pmhhtn_age_onset = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                else:
+                    pmhhtn_age_onset = ''
 
                 if 'c5a' in row.index and pd.notna(row['c5a']) and row['c5a'] == 'kg':
                     birth_weight = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
@@ -287,6 +299,8 @@ def mapped_csvs():
 
                 if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
                     rpmenopage = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
+                else:
+                    rpmenopage = ''
 
                 if 'cr66' in row.index and row['cr66'] in ('yes, tea', 'yes, both'):
                     teayn = 'yes'
@@ -365,14 +379,20 @@ def mapped_csvs():
 
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
+                else:
+                    age = ''
 
                 if 'hypertdx' in row.index and pd.notna(row['hypertdx']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     pmhhtn_age_onset = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
+                else:
+                    pmhhtn_age_onset = ''
 
                 if 'omedspec' in row.index and row['omedspec'] in ('tolvaptan', 'jynarque'):
                     tolvaptan_treat = 'yes'
+                else:
+                    tolvaptan_treat = ''
 
-                if  'creatinelvl' in row.index and row['creatinelvl'] == 'mg/dl' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
+                if 'creatinelvl' in row.index and row['creatinelvl'] == 'mg/dl' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     creatinine = row['lstcreatine']
                 elif 'creatinelvl' in row.index and row['creatinelvl'] == 'mmol/l' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     creatinine = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
@@ -381,9 +401,13 @@ def mapped_csvs():
 
                 if 'album' in row.index and pd.notna(row['album']):
                     albumin = (pd.to_numeric(row['album'], errors='coerce') / 10).astype(str)
+                else:
+                    albumin = ''
 
                 if 'wbc' in row.index and pd.notna(row['wbc']):
                     wbc_k = (pd.to_numeric(row['wbc'], errors='coerce') / 1000).astype(str)
+                else:
+                    wbc_k = ''
 
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
