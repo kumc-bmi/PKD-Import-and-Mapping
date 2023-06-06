@@ -283,8 +283,6 @@ def mapped_csvs():
                     redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    print(pd.to_datetime(row['crrdate']))
-                    print(pd.to_datetime(row['cr4']))
                     age = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
                 else:
                     age = ''
