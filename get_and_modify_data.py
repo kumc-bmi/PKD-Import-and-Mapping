@@ -177,15 +177,15 @@ def mapped_csvs():
 
             logic_cols_df = pd.DataFrame({
                 'studyid': site_data_df_filled['studyid'],
-                'diagnosisage': site_data_df_filled['age'] - (site_data_df_filled['dmdat'] - site_data_df_filled['diagndate']) if (site_data_df_filled['diagnstatus'] == 'diagnosed with adpkd').all() and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['dmdat']) and pd.notna(site_data_df_filled['diagndate']) else '',
-                'mthr': 'yes' if (site_data_df_filled['fm1rel'] == 'mother').all() and (site_data_df_filled['fm1diagn'] == 'yes').all() else (
-                            'no' if (site_data_df_filled['fm1rel'] == 'mother').all() and (site_data_df_filled['fm1diagn'] == 'no').all() else (
-                                'yes' if (site_data_df_filled['fm2rel'] == 'mother').all() and (site_data_df_filled['fm2diagn'] == 'yes').all() else (
-                                    'no' if (site_data_df_filled['fm2rel'] == 'mother').all() and (site_data_df_filled['fm2diagn'] == 'no').all() else (
-                                        'yes' if (site_data_df_filled['fm3rel'] == 'mother').all() and (site_data_df_filled['fm3diagn'] == 'yes').all() else (
-                                            'no' if (site_data_df_filled['fm3rel'] == 'mother').all() and (site_data_df_filled['fm3diagn'] == 'no').all() else (
-                                                'yes' if (site_data_df_filled['fm4rel'] == 'mother').all() and (site_data_df_filled['fm4diagn'] == 'yes').all() else (
-                                                    'no' if (site_data_df_filled['fm4rel'] == 'mother').all() and (site_data_df_filled['fm4diagn'] == 'no').all() else ''
+                'diagnosisage': site_data_df_filled['age'] - (site_data_df_filled['dmdat'] - site_data_df_filled['diagndate']) if (site_data_df_filled['diagnstatus'] == 'diagnosed with adpkd') and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['dmdat']) and pd.notna(site_data_df_filled['diagndate']) else '',
+                'mthr': 'yes' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'yes') else (
+                            'no' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'no') else (
+                                'yes' if (site_data_df_filled['fm2rel'] == 'mother') and (site_data_df_filled['fm2diagn'] == 'yes') else (
+                                    'no' if (site_data_df_filled['fm2rel'] == 'mother') and (site_data_df_filled['fm2diagn'] == 'no') else (
+                                        'yes' if (site_data_df_filled['fm3rel'] == 'mother') and (site_data_df_filled['fm3diagn'] == 'yes') else (
+                                            'no' if (site_data_df_filled['fm3rel'] == 'mother') and (site_data_df_filled['fm3diagn'] == 'no') else (
+                                                'yes' if (site_data_df_filled['fm4rel'] == 'mother') and (site_data_df_filled['fm4diagn'] == 'yes') else (
+                                                    'no' if (site_data_df_filled['fm4rel'] == 'mother') and (site_data_df_filled['fm4diagn'] == 'no') else ''
                                                 )
                                             )
                                         )
@@ -193,14 +193,14 @@ def mapped_csvs():
                                 )
                             )
                         ),
-                'fthr': 'yes' if (site_data_df_filled['fm1rel'] == 'father').all() and (site_data_df_filled['fm1diagn'] == 'yes').all() else (
-                            'no' if (site_data_df_filled['fm1rel'] == 'father').all() and (site_data_df_filled['fm1diagn'] == 'no').all() else (
-                                'yes' if (site_data_df_filled['fm2rel'] == 'father').all() and (site_data_df_filled['fm2diagn'] == 'yes').all() else (
-                                    'no' if (site_data_df_filled['fm2rel'] == 'father').all() and (site_data_df_filled['fm2diagn'] == 'no').all() else (
-                                        'yes' if (site_data_df_filled['fm3rel'] == 'father').all() and (site_data_df_filled['fm3diagn'] == 'yes').all() else (
-                                            'no' if (site_data_df_filled['fm3rel'] == 'father').all() and (site_data_df_filled['fm3diagn'] == 'no').all() else (
-                                                'yes' if (site_data_df_filled['fm4rel'] == 'father').all() and (site_data_df_filled['fm4diagn'] == 'yes').all() else (
-                                                    'no' if (site_data_df_filled['fm4rel'] == 'father').all() and (site_data_df_filled['fm4diagn'] == 'no').all() else ''
+                'fthr': 'yes' if (site_data_df_filled['fm1rel'] == 'father') and (site_data_df_filled['fm1diagn'] == 'yes') else (
+                            'no' if (site_data_df_filled['fm1rel'] == 'father') and (site_data_df_filled['fm1diagn'] == 'no') else (
+                                'yes' if (site_data_df_filled['fm2rel'] == 'father') and (site_data_df_filled['fm2diagn'] == 'yes') else (
+                                    'no' if (site_data_df_filled['fm2rel'] == 'father') and (site_data_df_filled['fm2diagn'] == 'no') else (
+                                        'yes' if (site_data_df_filled['fm3rel'] == 'father') and (site_data_df_filled['fm3diagn'] == 'yes') else (
+                                            'no' if (site_data_df_filled['fm3rel'] == 'father') and (site_data_df_filled['fm3diagn'] == 'no') else (
+                                                'yes' if (site_data_df_filled['fm4rel'] == 'father') and (site_data_df_filled['fm4diagn'] == 'yes') else (
+                                                    'no' if (site_data_df_filled['fm4rel'] == 'father') and (site_data_df_filled['fm4diagn'] == 'no') else ''
                                                 )
                                             )
                                         )
@@ -208,21 +208,21 @@ def mapped_csvs():
                                 )
                             )
                         ),
-                'teayn': 'yes' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) > 0).all()) else (
-                         'no' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) == 0).all()) else ''
+                'teayn': 'yes' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) > 0)) else (
+                         'no' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) == 0)) else ''
                         ),
-                'coffeeyn': 'yes' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) > 0).all()) else (
-                            'no' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) == 0).all()) else ''
+                'coffeeyn': 'yes' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) > 0)) else (
+                            'no' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) == 0)) else ''
                         ),
-                'sodayn': 'yes' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) > 0).all()) else (
-                            'no' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) == 0).all()) else ''
+                'sodayn': 'yes' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) > 0)) else (
+                            'no' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) == 0)) else ''
                         ),
-                'caffintake': (pd.to_numeric(site_data_df_filled['suteacups']) + pd.to_numeric(site_data_df_filled['sucoffeecups']) + pd.to_numeric(site_data_df_filled['susodacups'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0).all()) else '',
-                'caffdur': (pd.to_numeric(site_data_df_filled['sucaffenage']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0).all()) else (
-                            (pd.to_numeric(site_data_df_filled['age']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffstage']) >= 0).all()) else ''
+                'caffintake': (pd.to_numeric(site_data_df_filled['suteacups']) + pd.to_numeric(site_data_df_filled['sucoffeecups']) + pd.to_numeric(site_data_df_filled['susodacups'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0)) else '',
+                'caffdur': (pd.to_numeric(site_data_df_filled['sucaffenage']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0)) else (
+                            (pd.to_numeric(site_data_df_filled['age']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffstage']) >= 0)) else ''
                         ),
                 'sualcodur': (pd.to_numeric(site_data_df_filled['age']) - pd.to_numeric(site_data_df_filled['sualcostage'])).astype(str) if (pd.isna(site_data_df_filled['sualcoenage']) and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['sualcostage'])) else (
-                            (pd.to_numeric(site_data_df_filled['sualcoenage']) - pd.to_numeric(site_data_df_filled['sualcostage'])).astype(str) if (pd.notna(site_data_df_filled['sualcoenage']) and pd.notna(site_data_df_filled['sualcostage']) and (pd.to_numeric(site_data_df_filled['sualcoenage']) > 0).all() and (pd.to_numeric(site_data_df_filled['sualcostage']) > 0).all()) else ''
+                            (pd.to_numeric(site_data_df_filled['sualcoenage']) - pd.to_numeric(site_data_df_filled['sualcostage'])).astype(str) if (pd.notna(site_data_df_filled['sualcoenage']) and pd.notna(site_data_df_filled['sualcostage']) and (pd.to_numeric(site_data_df_filled['sualcoenage']) > 0) and (pd.to_numeric(site_data_df_filled['sualcostage']) > 0)) else ''
                         ),
                 'height_m': (pd.to_numeric(site_data_df_filled['height'])/100).astype(str) if pd.notna(site_data_df_filled['height']) else '',
                 'average_sysbp3': site_data_df_filled['average_sysbp3'] if pd.notna(site_data_df_filled['average_sysbp3']) else '',
@@ -249,19 +249,19 @@ def mapped_csvs():
                             'no' if 'cr66' in site_data_df_filled.columns and site_data_df_filled['cr66'] in ('yes, tea', 'no, (both)') else ''
                         ),
 
-                'smokever': 'yes' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'yes').all()) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'yes').all()) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'yes').all()) else (
-                            'no' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'no').all()) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'no').all()) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'no').all()) else ''
+                'smokever': 'yes' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'yes')) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'yes')) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'yes')) else (
+                            'no' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'no')) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'no')) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'no')) else ''
                         ),
 
-                'sualcodur': str((pd.to_datetime(site_data_df_filled['crrdate']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'yes').all() else (
-                            str((pd.to_datetime(site_data_df_filled['hb31a']) - pd.to_datetime(site_data_df_filled['hb29a'])).days) if 'hb29a' in site_data_df_filled.columns and 'hb31a' in site_data_df_filled.columns and 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'no').all() else ''
+                'sualcodur': str((pd.to_datetime(site_data_df_filled['crrdate']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'yes') else (
+                            str((pd.to_datetime(site_data_df_filled['hb31a']) - pd.to_datetime(site_data_df_filled['hb29a'])).days) if 'hb29a' in site_data_df_filled.columns and 'hb31a' in site_data_df_filled.columns and 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'no') else ''
                         ),
 
-                'sualcodrinks': (pd.to_numeric(site_data_df_filled['hb35']) + pd.to_numeric(site_data_df_filled['hb36']) + pd.to_numeric(site_data_df_filled['hb37'])).astype(str) if 'hb35' in site_data_df_filled and 'hb36' in site_data_df_filled and 'hb37' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'yes').all() else (
-                            (pd.to_numeric(site_data_df_filled['hb32']) + pd.to_numeric(site_data_df_filled['hb33']) + pd.to_numeric(site_data_df_filled['hb34'])).astype(str) if 'hb32' in site_data_df_filled and 'hb33' in site_data_df_filled and 'hb34' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'no').all() else ''
+                'sualcodrinks': (pd.to_numeric(site_data_df_filled['hb35']) + pd.to_numeric(site_data_df_filled['hb36']) + pd.to_numeric(site_data_df_filled['hb37'])).astype(str) if 'hb35' in site_data_df_filled and 'hb36' in site_data_df_filled and 'hb37' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'yes') else (
+                            (pd.to_numeric(site_data_df_filled['hb32']) + pd.to_numeric(site_data_df_filled['hb33']) + pd.to_numeric(site_data_df_filled['hb34'])).astype(str) if 'hb32' in site_data_df_filled and 'hb33' in site_data_df_filled and 'hb34' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'no') else ''
                         ),
 
-                'tolvaptan_treat': 'yes' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done').all() and (
+                'tolvaptan_treat': 'yes' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done') and (
                                 ('cm6' in site_data_df_filled.columns and site_data_df_filled['cm6'] in ('tolvaptan', 'jynarque')) or
                                 ('cm7' in site_data_df_filled.columns and site_data_df_filled['cm7'] in ('tolvaptan', 'jynarque')) or
                                 ('cm8' in site_data_df_filled.columns and site_data_df_filled['cm8'] in ('tolvaptan', 'jynarque')) or
@@ -272,7 +272,7 @@ def mapped_csvs():
                                 ('cm13' in site_data_df_filled.columns and site_data_df_filled['cm13'] in ('tolvaptan', 'jynarque')) or
                                 ('cm14' in site_data_df_filled.columns and site_data_df_filled['cm14'] in ('tolvaptan', 'jynarque')) or
                                 ('cm15' in site_data_df_filled.columns and site_data_df_filled['cm15'] in ('tolvaptan', 'jynarque'))) else (
-                            'no' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done').all() else ''
+                            'no' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done') else ''
                         ),
                 
                 'height_m': (pd.to_numeric(site_data_df_filled['pf8a']) / 100).astype(str) if 'pf8a' in site_data_df_filled.columns and pd.notna(site_data_df_filled['pf8a']) and site_data_df_filled['pf8a'] != '' else (
@@ -291,8 +291,8 @@ def mapped_csvs():
                 'age': str((pd.to_datetime(site_data_df_filled['date_contact']) - pd.to_datetime(site_data_df_filled['birthdate'])).days) if 'date_contact' in site_data_df_filled.columns and 'birthdate' in site_data_df_filled.columns and pd.notna(site_data_df_filled['date_contact']) and pd.notna(site_data_df_filled['birthdate']) else '',
                 'pmhhtn_age_onset': str((pd.to_datetime(site_data_df_filled['hypertdx']) - pd.to_datetime(site_data_df_filled['birthdate'])).days) if 'hypertdx' in site_data_df_filled.columns and 'birthdate' in site_data_df_filled.columns and pd.notna(site_data_df_filled['hypertdx']) and pd.notna(site_data_df_filled['birthdate']) else '',
                 'tolvaptan_treat': 'yes' if 'omedspec' in site_data_df_filled.columns and site_data_df_filled['omedspec'] in ('tolvaptan', 'jynarque') else '',
-                'creatinine': site_data_df_filled['lstcreatine'] if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mg/dl').all() and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else (
-                            (pd.to_numeric(site_data_df_filled['lstcreatine']) / 88.4).astype(str) if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mmol/l').all() and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else ''
+                'creatinine': site_data_df_filled['lstcreatine'] if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mg/dl') and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else (
+                            (pd.to_numeric(site_data_df_filled['lstcreatine']) / 88.4).astype(str) if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mmol/l') and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else ''
                         ),
                 'albumin': (pd.to_numeric(site_data_df_filled['album']) / 10).astype(str) if 'album' in site_data_df_filled.columns and pd.notna(site_data_df_filled['album']) else '',
                 'wbc_k': (pd.to_numeric(site_data_df_filled['wbc']) / 1000).astype(str) if 'wbc' in site_data_df_filled.columns and pd.notna(site_data_df_filled['wbc']) else ''
