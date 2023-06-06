@@ -159,150 +159,245 @@ def mapped_csvs():
         # ensure all values are in lower case
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
-        print(site_data_df)
+        # create a logic DataFrame
+        logic_cols_df = pd.DataFrame(columns=['studyid', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
+                                                'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
 
-        site_data_df_filled = site_data_df.fillna('')
+        for index, row in site_data_df.iterrows():
+            if site == 'kumc':
+                # create a new dictionary to hold the values for the kumc current row
+                studyid = row['studyid']
 
-        print(site_data_df_filled)
+                if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate']):
+                    diagnosisage = row['age'] - (row['dmdat'] - row['diagndate'])
+                else:
+                    diagnosisage = ''
 
-        if site == 'kumc':
-            test_logic_cols_df = pd.DataFrame({
-                'studyid': site_data_df_filled['studyid'],
-                'suteacups': site_data_df_filled['suteacups']
-            })
+                if row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes':
+                    mthr = 'yes'
+                elif row['fm1rel'] == 'mother' and row['fm1diagn'] == 'no':
+                    mthr = 'no'
+                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'yes':
+                    mthr = 'yes'
+                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'no':
+                    mthr = 'no'
+                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'yes':
+                    mthr = 'yes'
+                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'no':
+                    mthr = 'no'
+                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'yes':
+                    mthr = 'yes'
+                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'no':
+                    mthr = 'no'
+                else:
+                    mthr = ''
 
-            test_logic_cols_df.to_csv(import_directory + 'merged/test_kumc.csv', index=False, float_format=None)
+                if row['fm1rel'] == 'father' and row['fm1diagn'] == 'yes':
+                    fthr = 'yes'
+                elif row['fm1rel'] == 'father' and row['fm1diagn'] == 'no':
+                    fthr = 'no'
+                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'yes':
+                    fthr = 'yes'
+                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'no':
+                    fthr = 'no'
+                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'yes':
+                    fthr = 'yes'
+                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'no':
+                    fthr = 'no'
+                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'yes':
+                    fthr = 'yes'
+                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'no':
+                    fthr = 'no'
+                else:
+                    fthr = ''
 
-            print(test_logic_cols_df)
+                if (pd.notna(row['suteacups']) and pd.to_numeric(row['suteacups'], errors='coerce') > 0):
+                    teayn = 'yes'
+                elif (pd.notna(row['suteacups']) and row['suteacups'] == '0'):
+                    teayn = 'no'
+                else:
+                    teayn = ''
 
-            logic_cols_df = pd.DataFrame({
-                'studyid': site_data_df_filled['studyid'],
-                # 'diagnosisage': site_data_df_filled['age'] - (site_data_df_filled['dmdat'] - site_data_df_filled['diagndate']) if (site_data_df_filled['diagnstatus'] == 'diagnosed with adpkd') and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['dmdat']) and pd.notna(site_data_df_filled['diagndate']) else None,
-                'mthr': 'yes' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'yes') else (
-                            'no' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'no') else (
-                                'yes' if (site_data_df_filled['fm2rel'] == 'mother') and (site_data_df_filled['fm2diagn'] == 'yes') else (
-                                    'no' if (site_data_df_filled['fm2rel'] == 'mother') and (site_data_df_filled['fm2diagn'] == 'no') else (
-                                        'yes' if (site_data_df_filled['fm3rel'] == 'mother') and (site_data_df_filled['fm3diagn'] == 'yes') else (
-                                            'no' if (site_data_df_filled['fm3rel'] == 'mother') and (site_data_df_filled['fm3diagn'] == 'no') else (
-                                                'yes' if (site_data_df_filled['fm4rel'] == 'mother') and (site_data_df_filled['fm4diagn'] == 'yes') else (
-                                                    'no' if (site_data_df_filled['fm4rel'] == 'mother') and (site_data_df_filled['fm4diagn'] == 'no') else None
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                'fthr': 'yes' if (site_data_df_filled['fm1rel'] == 'father') and (site_data_df_filled['fm1diagn'] == 'yes') else (
-                            'no' if (site_data_df_filled['fm1rel'] == 'father') and (site_data_df_filled['fm1diagn'] == 'no') else (
-                                'yes' if (site_data_df_filled['fm2rel'] == 'father') and (site_data_df_filled['fm2diagn'] == 'yes') else (
-                                    'no' if (site_data_df_filled['fm2rel'] == 'father') and (site_data_df_filled['fm2diagn'] == 'no') else (
-                                        'yes' if (site_data_df_filled['fm3rel'] == 'father') and (site_data_df_filled['fm3diagn'] == 'yes') else (
-                                            'no' if (site_data_df_filled['fm3rel'] == 'father') and (site_data_df_filled['fm3diagn'] == 'no') else (
-                                                'yes' if (site_data_df_filled['fm4rel'] == 'father') and (site_data_df_filled['fm4diagn'] == 'yes') else (
-                                                    'no' if (site_data_df_filled['fm4rel'] == 'father') and (site_data_df_filled['fm4diagn'] == 'no') else None
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                'teayn': 'yes' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) > 0)) else (
-                         'no' if (pd.notna(site_data_df_filled['suteacups']) and (pd.to_numeric(site_data_df_filled['suteacups']) == 0)) else None
-                        ),
-                'coffeeyn': 'yes' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) > 0)) else (
-                            'no' if (pd.notna(site_data_df_filled['sucoffeecups']) and (pd.to_numeric(site_data_df_filled['sucoffeecups']) == 0)) else None
-                        ),
-                'sodayn': 'yes' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) > 0)) else (
-                            'no' if (pd.notna(site_data_df_filled['susodacups']) and (pd.to_numeric(site_data_df_filled['susodacups']) == 0)) else None
-                        ),
-                'caffintake': (pd.to_numeric(site_data_df_filled['suteacups']) + pd.to_numeric(site_data_df_filled['sucoffeecups']) + pd.to_numeric(site_data_df_filled['susodacups'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0)) else None,
-                'caffdur': (pd.to_numeric(site_data_df_filled['sucaffenage']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['sucaffenage']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffenage']) >= 0)) else (
-                            (pd.to_numeric(site_data_df_filled['age']) - pd.to_numeric(site_data_df_filled['sucaffstage'])).astype(str) if (pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['sucaffstage']) and (pd.to_numeric(site_data_df_filled['sucaffstage']) >= 0)) else None
-                        ),
-                'sualcodur': (pd.to_numeric(site_data_df_filled['age']) - pd.to_numeric(site_data_df_filled['sualcostage'])).astype(str) if (pd.isna(site_data_df_filled['sualcoenage']) and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['sualcostage'])) else (
-                            (pd.to_numeric(site_data_df_filled['sualcoenage']) - pd.to_numeric(site_data_df_filled['sualcostage'])).astype(str) if (pd.notna(site_data_df_filled['sualcoenage']) and pd.notna(site_data_df_filled['sualcostage']) and (pd.to_numeric(site_data_df_filled['sualcoenage']) > 0) and (pd.to_numeric(site_data_df_filled['sualcostage']) > 0)) else None
-                        ),
-                'height_m': (pd.to_numeric(site_data_df_filled['height'])/100).astype(str) if pd.notna(site_data_df_filled['height']) else None,
-                'average_sysbp3': site_data_df_filled['average_sysbp3'] if pd.notna(site_data_df_filled['average_sysbp3']) else None,
-                'average_diabp3': site_data_df_filled['average_diabp3'] if pd.notna(site_data_df_filled['average_diabp3']) else None
-            })
+                if (pd.notna(row['sucoffeecups']) and pd.to_numeric(row['sucoffeecups'], errors='coerce') > 0):
+                    coffeeyn = 'yes'
+                elif (pd.notna(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
+                    coffeeyn = 'no'
+                else:
+                    coffeeyn = ''
+
+                if (pd.notna(row['susodacups']) and pd.to_numeric(row['susodacups'], errors='coerce') > 0):
+                    sodayn = 'yes'
+                elif (pd.notna(row['susodacups']) and row['susodacups'] == '0'):
+                    sodayn = 'no'
+                else:
+                    sodayn = ''
+
+                if (pd.notna(row['suteacups']) or pd.notna(row['sucoffeecups']) or pd.notna(row['susodacups'])):
+                    caffintake = (pd.to_numeric(row['suteacups'], errors='coerce') + pd.to_numeric(row['sucoffeecups'], errors='coerce') + pd.to_numeric(row['susodacups'], errors='coerce')).astype(str)
+
+                if (pd.notna(row['sucaffenage']) and pd.notna(row['sucaffstage']) and pd.to_numeric(row['sucaffenage'], errors='coerce') >= 0):
+                    caffdur = (pd.to_numeric(row['sucaffenage'], errors='coerce') - pd.to_numeric(row['sucaffstage'], errors='coerce')).astype(str)
+                elif (pd.notna(row['age']) and pd.notna(row['sucaffstage']) and pd.to_numeric(row['sucaffstage'], errors='coerce') >= 0):
+                    caffdur = (pd.to_numeric(row['age'], errors='coerce') - pd.to_numeric(row['sucaffstage'], errors='coerce')).astype(str)
+                else:
+                    caffdur = ''
+
+                if (pd.isna(row['sualcoenage']) and pd.notna(row['age']) and pd.notna(row['sualcostage'])):
+                    sualcodur = (pd.to_numeric(row['age'], errors='coerce') - pd.to_numeric(row['sualcostage'], errors='coerce')).astype(str)
+                elif (pd.notna(row['sualcoenage']) and pd.notna(row['sualcostage']) and pd.to_numeric(row['sualcoenage'], errors='coerce') > 0 and pd.to_numeric(row['sualcostage'], errors='coerce') > 0):
+                    sualcodur = (pd.to_numeric(row['sualcoenage'], errors='coerce') - pd.to_numeric(row['sualcostage'], errors='coerce')).astype(str)
+                else:
+                    sualcodur = ''
+
+                if pd.notna(row['height']):
+                    height_m = (pd.to_numeric(row['height'], errors='coerce')/100).astype(str)
+
+                if pd.notna(row['average_sysbp3']):
+                    average_sysbp3 = row['average_sysbp3']
+
+                if pd.notna(row['average_diabp3']):
+                    average_diabp3 = row['average_diabp3']
                 
-        if site == 'umb':
-            logic_cols_df = pd.DataFrame({
-                'studyid': site_data_df_filled['pid'],
-                'age': str((pd.to_datetime(site_data_df_filled['crrdate']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'crrdate' in site_data_df_filled.columns and 'cr4' in site_data_df_filled.columns and pd.notna(site_data_df_filled['crrdate']) and pd.notna(site_data_df_filled['cr4']) else None,
-                'pmhhtn_age_onset': str((pd.to_datetime(site_data_df_filled['crrdate']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'crrdate' in site_data_df_filled.columns and 'cr4' in site_data_df_filled.columns and pd.notna(site_data_df_filled['crrdate']) and pd.notna(site_data_df_filled['cr4']) else None,
-                'birth_weight': (pd.to_numeric(site_data_df_filled['c5a']) * 1000).astype(str) if 'c5a' in site_data_df_filled.columns and pd.notna(site_data_df_filled['c5a']) and site_data_df_filled['c5a'] == 'kg' else (
-                                    (pd.to_numeric(site_data_df_filled['c5a']) * 453.6).astype(str) if 'c5a' in site_data_df_filled.columns and pd.notna(site_data_df_filled['c5a']) and site_data_df_filled['c5a'] == 'lb' else (
-                                        (pd.to_numeric(site_data_df_filled['c5a']) * 28.3).astype(str) if  ('c5a') in site_data_df_filled.columns and pd.notna(site_data_df_filled['c5a']) and site_data_df_filled['c5a'] == 'oz' else None 
-                            )
-                        ),
-                'rpmenopage': str((pd.to_datetime(site_data_df_filled['cr28a']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'cr28a' in site_data_df_filled.columns and 'cr4' in site_data_df_filled.columns and pd.notna(site_data_df_filled['cr28a']) and pd.notna(site_data_df_filled['cr4']) else None,
-
-                'teayn': 'yes' if 'cr66' in site_data_df_filled.columns and site_data_df_filled['cr66'] in ('yes, tea', 'yes, both') else (
-                            'no' if 'cr66' in site_data_df_filled.columns and site_data_df_filled['cr66'] in ('yes, coffee', 'no, (both)') else None
-                        ),
-
-                'coffeeyn': 'yes' if 'cr66' in site_data_df_filled.columns and site_data_df_filled['cr66'] in ('yes, coffee', 'yes, both') else (
-                            'no' if 'cr66' in site_data_df_filled.columns and site_data_df_filled['cr66'] in ('yes, tea', 'no, (both)') else None
-                        ),
-
-                'smokever': 'yes' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'yes')) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'yes')) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'yes')) else (
-                            'no' if (('hb1') in site_data_df_filled.columns and (site_data_df_filled['hb1'] == 'no')) or (('hb9') in site_data_df_filled.columns and (site_data_df_filled['hb9'] == 'no')) or (('hb15') in site_data_df_filled.columns and (site_data_df_filled['hb15'] == 'no')) else None
-                        ),
-
-                'sualcodur': str((pd.to_datetime(site_data_df_filled['crrdate']) - pd.to_datetime(site_data_df_filled['cr4'])).days) if 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'yes') else (
-                            str((pd.to_datetime(site_data_df_filled['hb31a']) - pd.to_datetime(site_data_df_filled['hb29a'])).days) if 'hb29a' in site_data_df_filled.columns and 'hb31a' in site_data_df_filled.columns and 'hb30' in site_data_df_filled.columns and (site_data_df_filled['hb30'] == 'no') else None
-                        ),
-
-                'sualcodrinks': (pd.to_numeric(site_data_df_filled['hb35']) + pd.to_numeric(site_data_df_filled['hb36']) + pd.to_numeric(site_data_df_filled['hb37'])).astype(str) if 'hb35' in site_data_df_filled and 'hb36' in site_data_df_filled and 'hb37' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'yes') else (
-                            (pd.to_numeric(site_data_df_filled['hb32']) + pd.to_numeric(site_data_df_filled['hb33']) + pd.to_numeric(site_data_df_filled['hb34'])).astype(str) if 'hb32' in site_data_df_filled and 'hb33' in site_data_df_filled and 'hb34' in site_data_df_filled and 'hb30' in site_data_df_filled and (site_data_df_filled['hb30'] == 'no') else None
-                        ),
-
-                'tolvaptan_treat': 'yes' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done') and (
-                                ('cm6' in site_data_df_filled.columns and site_data_df_filled['cm6'] in ('tolvaptan', 'jynarque')) or
-                                ('cm7' in site_data_df_filled.columns and site_data_df_filled['cm7'] in ('tolvaptan', 'jynarque')) or
-                                ('cm8' in site_data_df_filled.columns and site_data_df_filled['cm8'] in ('tolvaptan', 'jynarque')) or
-                                ('cm9' in site_data_df_filled.columns and site_data_df_filled['cm9'] in ('tolvaptan', 'jynarque')) or
-                                ('cm10' in site_data_df_filled.columns and site_data_df_filled['cm10'] in ('tolvaptan', 'jynarque')) or
-                                ('cm11' in site_data_df_filled.columns and site_data_df_filled['cm11'] in ('tolvaptan', 'jynarque')) or
-                                ('cm12' in site_data_df_filled.columns and site_data_df_filled['cm12'] in ('tolvaptan', 'jynarque')) or
-                                ('cm13' in site_data_df_filled.columns and site_data_df_filled['cm13'] in ('tolvaptan', 'jynarque')) or
-                                ('cm14' in site_data_df_filled.columns and site_data_df_filled['cm14'] in ('tolvaptan', 'jynarque')) or
-                                ('cm15' in site_data_df_filled.columns and site_data_df_filled['cm15'] in ('tolvaptan', 'jynarque'))) else (
-                            'no' if 'cm1' in site_data_df_filled.columns and (site_data_df_filled['cm1'] == 'done') else None
-                        ),
+                # create a new DataFrame from the logic_row dictionary
+                new_logic_row_df = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 
+                                    'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
                 
-                'height_m': (pd.to_numeric(site_data_df_filled['pf8a']) / 100).astype(str) if 'pf8a' in site_data_df_filled.columns and pd.notna(site_data_df_filled['pf8a']) and site_data_df_filled['pf8a'] != None else (
-                            (pd.to_numeric(site_data_df_filled['pf8b']) * 0.0254).astype(str) if 'pf8b' in site_data_df_filled.columns and pd.notna(site_data_df_filled['pf8b']) and site_data_df_filled['pf8b'] != None else None
-                        )
-            })
-            # logic_row['average_sysbp3'] =
-            # logic_row['average_diabp3'] =
-            # logic_row['urine_microalb'] =
-            # logic_row['subject_height'] =
-            # logic_row['livercysts_mr_num'] =
+                # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
 
-        if site == 'uab':
-            logic_cols_df = pd.DataFrame({
-                'studyid': row['subject_id'],
-                'age': str((pd.to_datetime(site_data_df_filled['date_contact']) - pd.to_datetime(site_data_df_filled['birthdate'])).days) if 'date_contact' in site_data_df_filled.columns and 'birthdate' in site_data_df_filled.columns and pd.notna(site_data_df_filled['date_contact']) and pd.notna(site_data_df_filled['birthdate']) else None,
-                'pmhhtn_age_onset': str((pd.to_datetime(site_data_df_filled['hypertdx']) - pd.to_datetime(site_data_df_filled['birthdate'])).days) if 'hypertdx' in site_data_df_filled.columns and 'birthdate' in site_data_df_filled.columns and pd.notna(site_data_df_filled['hypertdx']) and pd.notna(site_data_df_filled['birthdate']) else None,
-                'tolvaptan_treat': 'yes' if 'omedspec' in site_data_df_filled.columns and site_data_df_filled['omedspec'] in ('tolvaptan', 'jynarque') else None,
-                'creatinine': site_data_df_filled['lstcreatine'] if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mg/dl') and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else (
-                            (pd.to_numeric(site_data_df_filled['lstcreatine']) / 88.4).astype(str) if 'creatinelvl' in site_data_df_filled.columns and (site_data_df_filled['creatinelvl'] == 'mmol/l') and 'lstcreatine' in site_data_df_filled.columns and pd.notna(site_data_df_filled['lstcreatine']) else None
-                        ),
-                'albumin': (pd.to_numeric(site_data_df_filled['album']) / 10).astype(str) if 'album' in site_data_df_filled.columns and pd.notna(site_data_df_filled['album']) else None,
-                'wbc_k': (pd.to_numeric(site_data_df_filled['wbc']) / 1000).astype(str) if 'wbc' in site_data_df_filled.columns and pd.notna(site_data_df_filled['wbc']) else None
-            })
-            
+            if site == 'umb':
+                # create a new dictionary to hold the values for the umb current row
+                studyid = row['pid']
+
+                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    print(pd.to_datetime(row['crrdate']))
+                    print(pd.to_datetime(row['cr4']))
+                    age = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+
+                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    pmhhtn_age_onset = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+
+                if 'c5a' in row.index and pd.notna(row['c5a']) and row['c5a'] == 'kg':
+                    birth_weight = (pd.to_numeric(row['c5a'], errors='coerce') * 1000).astype(str)
+                elif 'c5a' in row.index and pd.notna(row['c5a']) and row['c5a'] == 'lb':
+                    birth_weight = (pd.to_numeric(row['c5a'], errors='coerce') * 453.6).astype(str)
+                elif 'c5a' in row.index and pd.notna(row['c5a']) and row['c5a'] == 'oz':
+                    birth_weight = (pd.to_numeric(row['c5a'], errors='coerce') * 28.3).astype(str)
+                else:
+                    birth_weight = ''
+
+                if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
+                    rpmenopage = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
+
+                if 'cr66' in row.index and row['cr66'] in ('yes, tea', 'yes, both'):
+                    teayn = 'yes'
+                elif 'cr66' in row.index and row['cr66'] in ('yes, coffee', 'no, (both)'):
+                    teayn = 'no'
+                else:
+                    teayn = ''
+
+                if 'cr66' in row.index and row['cr66'] in ('yes, coffee', 'yes, both'):
+                    coffeeyn = 'yes'
+                elif 'cr66' in row.index and row['cr66'] in ('yes, tea', 'no, (both)'):
+                    coffeeyn = 'no'
+                else:
+                    coffeeyn = ''
+
+                if ('hb1' in row.index and row['hb1'] == 'yes') or ('hb9' in row.index and row['hb9'] == 'yes') or ('hb15' in row.index and row['hb15'] == 'yes'):
+                    smokever = 'yes'
+                elif ('hb1' in row.index and row['hb1'] == 'no') or ('hb9' in row.index and row['hb9'] == 'no') or ('hb15' in row.index and row['hb15'] == 'no'):
+                    smokever = 'no'
+                else:
+                    smokever = ''
+
+                if 'hb30' in row.index and row['hb30'] == 'yes':
+                    sualcodur = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no':
+                    sualcodur = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
+                else:
+                    sualcodur = ''
+
+                if 'hb35' in row.index and 'hb36' in row.index and 'hb37' in row.index and'hb30' in row.index and row['hb30'] == 'yes':
+                    sualcodrinks = (pd.to_numeric(row['hb35'], errors='coerce') + pd.to_numeric(row['hb36'], errors='coerce') + pd.to_numeric(row['hb37'], errors='coerce')).astype(str)
+                elif 'hb32' in row.index and 'hb33' in row.index and 'hb34' in row.index and 'hb30' in row.index and row['hb30'] == 'no':
+                    sualcodrinks = (pd.to_numeric(row['hb32'], errors='coerce') + pd.to_numeric(row['hb33'], errors='coerce') + pd.to_numeric(row['hb34'], errors='coerce')).astype(str)
+                else:
+                    sualcodrinks = ''
+
+                if 'cm1' in row.index and row['cm1'] == 'done' and (
+                    ('cm6' in row.index and row['cm6'] in ('tolvaptan', 'jynarque')) or
+                    ('cm7' in row.index and row['cm7'] in ('tolvaptan', 'jynarque')) or
+                    ('cm8' in row.index and row['cm8'] in ('tolvaptan', 'jynarque')) or
+                    ('cm9' in row.index and row['cm9'] in ('tolvaptan', 'jynarque')) or
+                    ('cm10' in row.index and row['cm10'] in ('tolvaptan', 'jynarque')) or
+                    ('cm11' in row.index and row['cm11'] in ('tolvaptan', 'jynarque')) or
+                    ('cm12' in row.index and row['cm12'] in ('tolvaptan', 'jynarque')) or
+                    ('cm13' in row.index and row['cm13'] in ('tolvaptan', 'jynarque')) or
+                    ('cm14' in row.index and row['cm14'] in ('tolvaptan', 'jynarque')) or
+                    ('cm15' in row.index and row['cm15'] in ('tolvaptan', 'jynarque'))):
+                    tolvaptan_treat = 'yes'
+                elif 'cm1' in row.index and row['cm1'] == 'done':
+                    tolvaptan_treat = 'no'
+                else:
+                    tolvaptan_treat = ''
+
+                if 'pf8a' in row.index and pd.notna(row['pf8a']) and row['pf8a'] != '':
+                    height_m = (pd.to_numeric(row['pf8a'], errors='coerce') / 100).astype(str)
+                elif 'pf8b' in row.index and pd.notna(row['pf8b']) and row['pf8b'] != '':
+                    height_m = (pd.to_numeric(row['pf8b'], errors='coerce') * 0.0254).astype(str)
+                else:
+                    height_m = ''
+
+                # average_sysbp3'] =
+                # average_diabp3'] =
+                # urine_microalb'] =
+                # subject_height'] =
+                # livercysts_mr_num'] =
+
+            # create a new DataFrame from the logic_row dictionary
+                new_logic_row_df = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur,
+                                    'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
+                
+                # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
+
+            if site == 'uab':
+                # create a new dictionary to hold the values for the uab current row
+                studyid = row['subject_id']
+
+                if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
+                    age = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
+
+                if 'hypertdx' in row.index and pd.notna(row['hypertdx']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
+                    pmhhtn_age_onset = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
+
+                if 'omedspec' in row.index and row['omedspec'] in ('tolvaptan', 'jynarque'):
+                    tolvaptan_treat = 'yes'
+
+                if  'creatinelvl' in row.index and row['creatinelvl'] == 'mg/dl' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
+                    creatinine = row['lstcreatine']
+                elif 'creatinelvl' in row.index and row['creatinelvl'] == 'mmol/l' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
+                    creatinine = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
+                else:
+                    creatinine = ''
+
+                if 'album' in row.index and pd.notna(row['album']):
+                    albumin = (pd.to_numeric(row['album'], errors='coerce') / 10).astype(str)
+
+                if 'wbc' in row.index and pd.notna(row['wbc']):
+                    wbc_k = (pd.to_numeric(row['wbc'], errors='coerce') / 1000).astype(str)
+
+                # create a new DataFrame from the logic_row dictionary
+                new_logic_row_df = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
+
+                # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
+
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
 
         print(logic_cols_df)
-
+       
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
         
@@ -384,8 +479,7 @@ def mapped_csvs():
                                                             on=['studyid'], how='left')
         if site == 'umb':
             # append race columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
-                                                                 'average_sysbp3','average_diabp3','urine_microalb','subject_height']], 
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m']], 
                                                             on=['studyid'], how='left')
         if site == 'uab':
             # append race columns to uab dataframe
