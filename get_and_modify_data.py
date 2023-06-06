@@ -175,61 +175,61 @@ def mapped_csvs():
                     diagnosisage = ''
 
                 if row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes':
-                    mthr = 'yes'
+                    mthr = '1'
                 elif row['fm1rel'] == 'mother' and row['fm1diagn'] == 'no':
-                    mthr = 'no'
+                    mthr = '0'
                 elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'yes':
-                    mthr = 'yes'
+                    mthr = '1'
                 elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'no':
-                    mthr = 'no'
+                    mthr = '0'
                 elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'yes':
-                    mthr = 'yes'
+                    mthr = '1'
                 elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'no':
-                    mthr = 'no'
+                    mthr = '0'
                 elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'yes':
-                    mthr = 'yes'
+                    mthr = '1'
                 elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'no':
-                    mthr = 'no'
+                    mthr = '0'
                 else:
                     mthr = ''
 
                 if row['fm1rel'] == 'father' and row['fm1diagn'] == 'yes':
-                    fthr = 'yes'
+                    fthr = '1'
                 elif row['fm1rel'] == 'father' and row['fm1diagn'] == 'no':
-                    fthr = 'no'
+                    fthr = '0'
                 elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'yes':
-                    fthr = 'yes'
+                    fthr = '1'
                 elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'no':
-                    fthr = 'no'
+                    fthr = '0'
                 elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'yes':
-                    fthr = 'yes'
+                    fthr = '1'
                 elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'no':
-                    fthr = 'no'
+                    fthr = '0'
                 elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'yes':
-                    fthr = 'yes'
+                    fthr = '1'
                 elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'no':
-                    fthr = 'no'
+                    fthr = '0'
                 else:
                     fthr = ''
 
                 if (pd.notna(row['suteacups']) and pd.to_numeric(row['suteacups'], errors='coerce') > 0):
-                    teayn = 'yes'
+                    teayn = '1'
                 elif (pd.notna(row['suteacups']) and row['suteacups'] == '0'):
-                    teayn = 'no'
+                    teayn = '0'
                 else:
                     teayn = ''
 
                 if (pd.notna(row['sucoffeecups']) and pd.to_numeric(row['sucoffeecups'], errors='coerce') > 0):
-                    coffeeyn = 'yes'
+                    coffeeyn = '1'
                 elif (pd.notna(row['sucoffeecups']) and row['sucoffeecups'] == '0'):
-                    coffeeyn = 'no'
+                    coffeeyn = '0'
                 else:
                     coffeeyn = ''
 
                 if (pd.notna(row['susodacups']) and pd.to_numeric(row['susodacups'], errors='coerce') > 0):
-                    sodayn = 'yes'
+                    sodayn = '1'
                 elif (pd.notna(row['susodacups']) and row['susodacups'] == '0'):
-                    sodayn = 'no'
+                    sodayn = '0'
                 else:
                     sodayn = ''
 
@@ -309,23 +309,23 @@ def mapped_csvs():
                     rpmenopage = ''
 
                 if 'cr66' in row.index and row['cr66'] in ('yes, tea', 'yes, both'):
-                    teayn = 'yes'
+                    teayn = '1'
                 elif 'cr66' in row.index and row['cr66'] in ('yes, coffee', 'no, (both)'):
-                    teayn = 'no'
+                    teayn = '0'
                 else:
                     teayn = ''
 
                 if 'cr66' in row.index and row['cr66'] in ('yes, coffee', 'yes, both'):
-                    coffeeyn = 'yes'
+                    coffeeyn = '1'
                 elif 'cr66' in row.index and row['cr66'] in ('yes, tea', 'no, (both)'):
-                    coffeeyn = 'no'
+                    coffeeyn = '0'
                 else:
                     coffeeyn = ''
 
                 if ('hb1' in row.index and row['hb1'] == 'yes') or ('hb9' in row.index and row['hb9'] == 'yes') or ('hb15' in row.index and row['hb15'] == 'yes'):
-                    smokever = 'yes'
+                    smokever = '1'
                 elif ('hb1' in row.index and row['hb1'] == 'no') or ('hb9' in row.index and row['hb9'] == 'no') or ('hb15' in row.index and row['hb15'] == 'no'):
-                    smokever = 'no'
+                    smokever = '0'
                 else:
                     smokever = ''
 
@@ -354,9 +354,9 @@ def mapped_csvs():
                     ('cm13' in row.index and row['cm13'] in ('tolvaptan', 'jynarque')) or
                     ('cm14' in row.index and row['cm14'] in ('tolvaptan', 'jynarque')) or
                     ('cm15' in row.index and row['cm15'] in ('tolvaptan', 'jynarque'))):
-                    tolvaptan_treat = 'yes'
+                    tolvaptan_treat = '1'
                 elif 'cm1' in row.index and row['cm1'] == 'done':
-                    tolvaptan_treat = 'no'
+                    tolvaptan_treat = '0'
                 else:
                     tolvaptan_treat = ''
 
@@ -395,7 +395,7 @@ def mapped_csvs():
                     pmhhtn_age_onset = ''
 
                 if 'omedspec' in row.index and row['omedspec'] in ('tolvaptan', 'jynarque'):
-                    tolvaptan_treat = 'yes'
+                    tolvaptan_treat = '1'
                 else:
                     tolvaptan_treat = ''
 
