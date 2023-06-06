@@ -283,12 +283,12 @@ def mapped_csvs():
                     redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    age = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                    age = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
                 else:
                     age = ''
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    pmhhtn_age_onset = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                    pmhhtn_age_onset = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
                 else:
                     pmhhtn_age_onset = ''
 
@@ -302,7 +302,7 @@ def mapped_csvs():
                     birth_weight = ''
 
                 if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
-                    rpmenopage = str((pd.to_datetime(row['cr28a']) - pd.to_datetime(row['cr4'])).days)
+                    rpmenopage = str((pd.to_datetime(row['cr28a'])).year - (pd.to_datetime(row['cr4'])).year)
                 else:
                     rpmenopage = ''
 
@@ -328,9 +328,9 @@ def mapped_csvs():
                     smokever = ''
 
                 if 'hb30' in row.index and row['hb30'] == 'yes':
-                    sualcodur = str((pd.to_datetime(row['crrdate']) - pd.to_datetime(row['cr4'])).days)
+                    sualcodur = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
                 elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no':
-                    sualcodur = str((pd.to_datetime(row['hb31a']) - pd.to_datetime(row['hb29a'])).days)
+                    sualcodur = str((pd.to_datetime(row['hb31a'])).year - (pd.to_datetime(row['hb29a'])).year)
                 else:
                     sualcodur = ''
 
@@ -383,12 +383,12 @@ def mapped_csvs():
                 redcap_event_name = row['redcap_event_name']
             
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
-                    age = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
+                    age = str((pd.to_datetime(row['date_contact'])).year - (pd.to_datetime(row['birthdate'])).year)
                 else:
                     age = ''
 
                 if 'hypertdx' in row.index and pd.notna(row['hypertdx']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
-                    pmhhtn_age_onset = str((pd.to_datetime(row['hypertdx']) - pd.to_datetime(row['birthdate'])).days)
+                    pmhhtn_age_onset = str((pd.to_datetime(row['hypertdx'])).year - (pd.to_datetime(row['birthdate'])).year)
                 else:
                     pmhhtn_age_onset = ''
 
