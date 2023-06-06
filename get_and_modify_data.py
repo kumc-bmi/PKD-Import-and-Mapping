@@ -177,7 +177,7 @@ def mapped_csvs():
 
             logic_cols_df = pd.DataFrame({
                 'studyid': site_data_df_filled['studyid'],
-                'diagnosisage': site_data_df_filled['age'] - (site_data_df_filled['dmdat'] - site_data_df_filled['diagndate']) if (site_data_df_filled['diagnstatus'] == 'diagnosed with adpkd') and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['dmdat']) and pd.notna(site_data_df_filled['diagndate']) else '',
+                'diagnosisage': site_data_df_filled['age'] - (site_data_df_filled['dmdat'] - site_data_df_filled['diagndate']) if (site_data_df_filled['diagnstatus'] == 'diagnosed with adpkd') and pd.notna(site_data_df_filled['age']) and pd.notna(site_data_df_filled['dmdat']) and pd.notna(site_data_df_filled['diagndate']) else None,
                 'mthr': 'yes' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'yes') else (
                             'no' if (site_data_df_filled['fm1rel'] == 'mother') and (site_data_df_filled['fm1diagn'] == 'no') else (
                                 'yes' if (site_data_df_filled['fm2rel'] == 'mother') and (site_data_df_filled['fm2diagn'] == 'yes') else (
