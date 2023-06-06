@@ -160,13 +160,14 @@ def mapped_csvs():
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # create a logic DataFrame
-        logic_cols_df = pd.DataFrame(columns=['studyid', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
+        logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
 
         for index, row in site_data_df.iterrows():
             if site == 'kumc':
                 # create a new dictionary to hold the values for the kumc current row
                 studyid = row['studyid']
+                redcap_event_name = row['redcap_event_name']
 
                 if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate']):
                     diagnosisage = row['age'] - (row['dmdat'] - row['diagndate'])
@@ -267,7 +268,7 @@ def mapped_csvs():
                     average_diabp3 = ''
                 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
                 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -275,6 +276,11 @@ def mapped_csvs():
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
+                
+                if 'redcap_event_name' in row.index: 
+                    redcap_event_name = row['redcap_event_name']
+                else:
+                    redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     print(pd.to_datetime(row['crrdate']))
@@ -368,7 +374,7 @@ def mapped_csvs():
                 # livercysts_mr_num'] =
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
                 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -376,7 +382,8 @@ def mapped_csvs():
             if site == 'uab':
                 # create a new dictionary to hold the values for the uab current row
                 studyid = row['subject_id']
-
+                redcap_event_name = row['redcap_event_name']
+            
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact']) - pd.to_datetime(row['birthdate'])).days)
                 else:
@@ -410,7 +417,7 @@ def mapped_csvs():
                     wbc_k = ''
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -497,15 +504,15 @@ def mapped_csvs():
         
         if site == 'kumc':
             # append race columns to kumc dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
-                                                            on=['studyid'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name', 'diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
+                                                            on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
             # append race columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m']], 
-                                                            on=['studyid'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m']], 
+                                                            on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
             # append race columns to uab dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
         
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
