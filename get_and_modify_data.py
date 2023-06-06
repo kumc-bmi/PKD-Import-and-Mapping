@@ -161,7 +161,7 @@ def mapped_csvs():
 
         # create a logic DataFrame
         logic_cols_df = pd.DataFrame(columns=['studyid', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
-                                                'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
+                                             'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
 
         for index, row in site_data_df.iterrows():
             if site == 'kumc':
@@ -259,11 +259,10 @@ def mapped_csvs():
                     average_diabp3 = row['average_diabp3']
                 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row_df = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 
-                                    'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
+                new_logic_row = {'studyid': studyid, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
                 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
@@ -354,12 +353,11 @@ def mapped_csvs():
                 # subject_height'] =
                 # livercysts_mr_num'] =
 
-            # create a new DataFrame from the logic_row dictionary
-                new_logic_row_df = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur,
-                                    'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
+                # create a new DataFrame from the logic_row dictionary
+                new_logic_row = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
                 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
             if site == 'uab':
                 # create a new dictionary to hold the values for the uab current row
@@ -388,10 +386,10 @@ def mapped_csvs():
                     wbc_k = (pd.to_numeric(row['wbc'], errors='coerce') / 1000).astype(str)
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row_df = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
+                new_logic_row = {'studyid': studyid, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row_df])], ignore_index=True)
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
