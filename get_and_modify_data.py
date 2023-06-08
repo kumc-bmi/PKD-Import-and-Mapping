@@ -422,13 +422,13 @@ def mapped_csvs():
                  # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-        # remove string nan on dataframe
-        logic_cols_df =  logic_cols_df.fillna('')
+            # remove string nan on dataframe
+            logic_cols_df =  logic_cols_df.fillna('')
 
-         # combine rows with related data based on studyid and redcap_event_name
-        logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+            # combine rows with related data based on studyid and redcap_event_name
+            logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
-        logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
+            logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
