@@ -272,6 +272,12 @@ def mapped_csvs():
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
 
+                # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+
+                # combine rows with related data based on studyid and redcap_event_name
+                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
@@ -373,6 +379,12 @@ def mapped_csvs():
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
 
+                # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+
+                # combine rows with related data based on studyid and redcap_event_name
+                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+
             if site == 'uab':
                 # create a new dictionary to hold the values for the uab current row
                 studyid = row['subject_id']
@@ -413,14 +425,16 @@ def mapped_csvs():
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
 
-        # concatenate the new DataFrame to the logic_cols_df DataFrame
-        logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+                 # concatenate the new DataFrame to the logic_cols_df DataFrame
+                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+
+                # combine rows with related data based on studyid and redcap_event_name
+                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
 
-        # combine rows with related data based on studyid and redcap_event_name
-        # logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+        logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
@@ -485,6 +499,9 @@ def mapped_csvs():
             # make sure all NaN and None values in dataframe are replaced with empty strings
             site_final_df.fillna('', inplace=True)
 
+            # group the dataframe by studyid and redcap_event_name and merge the rows
+            site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+
             # event dictionary
             event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
 
@@ -506,9 +523,6 @@ def mapped_csvs():
             # append race columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
         
-        # group the dataframe by studyid and redcap_event_name and merge the rows
-        site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-            
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
 
