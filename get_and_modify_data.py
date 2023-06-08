@@ -416,6 +416,8 @@ def mapped_csvs():
         # concatenate the new DataFrame to the logic_cols_df DataFrame
         logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
+        logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
+
         # combine rows with related data based on studyid and redcap_event_name
         logic_cols_df = logic_cols_df.groupby([studyid, redcap_event_name]).agg(lambda x: ' '.join(x)).reset_index()
 
