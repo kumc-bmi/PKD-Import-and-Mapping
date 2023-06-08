@@ -165,45 +165,50 @@ def mapped_csvs():
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
 
-                if row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate']):
-                    diagnosisage = row['age'] - (row['dmdat'] - row['diagndate'])
+                if redcap_event_name == 'onetime_forms_and_arm_1':
+                    redcap_event_name = 'baseline_arm_1'
+                else:
+                    redcap_event_name = redcap_event_name
+
+                if (row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate'])) or (row['diagnstatus'] == '1' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate'])):
+                    diagnosisage = str(pd.to_numeric(row['age']) - pd.to_numeric(pd.to_datetime(row['dmdat']).year - pd.to_datetime(row['diagndate']).year))
                 else:
                     diagnosisage = ''
 
-                if row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes':
+                if (row['fm1rel'] == 'mother' and row['fm1diagn'] == 'yes') or (row['fm1rel'] == '1' and row['fm1diagn'] == '1'):
                     mthr = '1'
-                elif row['fm1rel'] == 'mother' and row['fm1diagn'] == 'no':
+                elif (row['fm1rel'] == 'mother' and row['fm1diagn'] == 'no') or (row['fm1rel'] == '1' and row['fm1diagn'] == '0'):
                     mthr = '0'
-                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'yes':
+                elif (row['fm2rel'] == 'mother' and row['fm2diagn'] == 'yes') or (row['fm2rel'] == '1' and row['fm2diagn'] == '1'):
                     mthr = '1'
-                elif row['fm2rel'] == 'mother' and row['fm2diagn'] == 'no':
+                elif (row['fm2rel'] == 'mother' and row['fm2diagn'] == 'no') or (row['fm2rel'] == '1' and row['fm2diagn'] == '0'):
                     mthr = '0'
-                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'yes':
+                elif (row['fm3rel'] == 'mother' and row['fm3diagn'] == 'yes') or (row['fm3rel'] == '1' and row['fm3diagn'] == '1'):
                     mthr = '1'
-                elif row['fm3rel'] == 'mother' and row['fm3diagn'] == 'no':
+                elif (row['fm3rel'] == 'mother' and row['fm3diagn'] == 'no') or (row['fm3rel'] == '1' and row['fm3diagn'] == '0'):
                     mthr = '0'
-                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'yes':
+                elif (row['fm4rel'] == 'mother' and row['fm4diagn'] == 'yes') or (row['fm4rel'] == '1' and row['fm4diagn'] == '1'):
                     mthr = '1'
-                elif row['fm4rel'] == 'mother' and row['fm4diagn'] == 'no':
+                elif (row['fm4rel'] == 'mother' and row['fm4diagn'] == 'no') or (row['fm4rel'] == '1' and row['fm4diagn'] == '0'):
                     mthr = '0'
                 else:
                     mthr = ''
 
-                if row['fm1rel'] == 'father' and row['fm1diagn'] == 'yes':
+                if (row['fm1rel'] == 'father' and row['fm1diagn'] == 'yes') or (row['fm1rel'] == '2' and row['fm1diagn'] == '1'):
                     fthr = '1'
-                elif row['fm1rel'] == 'father' and row['fm1diagn'] == 'no':
+                elif (row['fm1rel'] == 'father' and row['fm1diagn'] == 'no') or (row['fm1rel'] == '2' and row['fm1diagn'] == '0'):
                     fthr = '0'
-                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'yes':
+                elif (row['fm2rel'] == 'father' and row['fm2diagn'] == 'yes') or (row['fm2rel'] == '2' and row['fm2diagn'] == '1'):
                     fthr = '1'
-                elif row['fm2rel'] == 'father' and row['fm2diagn'] == 'no':
+                elif (row['fm2rel'] == 'father' and row['fm2diagn'] == 'no') or (row['fm2rel'] == '2' and row['fm2diagn'] == '0'):
                     fthr = '0'
-                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'yes':
+                elif (row['fm3rel'] == 'father' and row['fm3diagn'] == 'yes') or (row['fm3rel'] == '2' and row['fm3diagn'] == '1'):
                     fthr = '1'
-                elif row['fm3rel'] == 'father' and row['fm3diagn'] == 'no':
+                elif (row['fm3rel'] == 'father' and row['fm3diagn'] == 'no') or (row['fm3rel'] == '2' and row['fm3diagn'] == '0'):
                     fthr = '0'
-                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'yes':
+                elif (row['fm4rel'] == 'father' and row['fm4diagn'] == 'yes') or (row['fm4rel'] == '2' and row['fm4diagn'] == '1'):
                     fthr = '1'
-                elif row['fm4rel'] == 'father' and row['fm4diagn'] == 'no':
+                elif (row['fm4rel'] == 'father' and row['fm4diagn'] == 'no') or (row['fm4rel'] == '2' and row['fm4diagn'] == '0'):
                     fthr = '0'
                 else:
                     fthr = ''
@@ -265,9 +270,6 @@ def mapped_csvs():
                 
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
-                
-                # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
@@ -369,9 +371,6 @@ def mapped_csvs():
 
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
-                
-                # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
             if site == 'uab':
                 # create a new dictionary to hold the values for the uab current row
@@ -413,11 +412,16 @@ def mapped_csvs():
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
 
-                # concatenate the new DataFrame to the logic_cols_df DataFrame
-                logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+        # concatenate the new DataFrame to the logic_cols_df DataFrame
+        logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
+
+        # combine rows with related data based on studyid and redcap_event_name
+        logic_cols_df = logic_cols_df.groupby([studyid, redcap_event_name]).agg(lambda x: ' '.join(x)).reset_index()
 
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
+
+        print(logic_cols_df)
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
