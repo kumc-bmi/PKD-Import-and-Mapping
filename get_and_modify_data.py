@@ -416,17 +416,11 @@ def mapped_csvs():
         # concatenate the new DataFrame to the logic_cols_df DataFrame
         logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-        logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
-
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
-        
+
         # combine rows with related data based on studyid and redcap_event_name
-        # logic_cols_df = logic_cols_df.groupby([studyid, redcap_event_name]).agg(lambda x: x.iloc[0] if x.all() else '').reset_index()
-
-        logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
-        print(logic_cols_df)
+        # logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
@@ -491,9 +485,6 @@ def mapped_csvs():
             # make sure all NaN and None values in dataframe are replaced with empty strings
             site_final_df.fillna('', inplace=True)
 
-            # group the dataframe by studyid and redcap_event_name and merge the rows
-            site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
             # event dictionary
             event_dict = dict(zip(site_src_val['trg_val'], site_src_val['source_val_combined']))
 
@@ -515,6 +506,9 @@ def mapped_csvs():
             # append race columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
         
+        # group the dataframe by studyid and redcap_event_name and merge the rows
+        site_final_df = site_final_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+            
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
 
