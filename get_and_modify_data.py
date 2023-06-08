@@ -165,6 +165,7 @@ def mapped_csvs():
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
 
+                # convert onetime_forms_and_arm_1 to baseline_arm_1 for kumc
                 if redcap_event_name == 'onetime_forms_and_arm_1':
                     redcap_event_name = 'baseline_arm_1'
                 else:
