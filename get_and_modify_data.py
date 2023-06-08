@@ -418,11 +418,13 @@ def mapped_csvs():
 
         logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
-        # combine rows with related data based on studyid and redcap_event_name
-        logic_cols_df = logic_cols_df.groupby([studyid, redcap_event_name]).agg(lambda x: x.iloc[0] if x.all() else '').reset_index()
-
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
+        
+        # combine rows with related data based on studyid and redcap_event_name
+        # logic_cols_df = logic_cols_df.groupby([studyid, redcap_event_name]).agg(lambda x: x.iloc[0] if x.all() else '').reset_index()
+
+        logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         print(logic_cols_df)
        
