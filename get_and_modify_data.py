@@ -275,9 +275,6 @@ def mapped_csvs():
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-                # combine rows with related data based on studyid and redcap_event_name
-                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
@@ -382,9 +379,6 @@ def mapped_csvs():
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-                # combine rows with related data based on studyid and redcap_event_name
-                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
             if site == 'uab':
                 # create a new dictionary to hold the values for the uab current row
                 studyid = row['subject_id']
@@ -428,11 +422,11 @@ def mapped_csvs():
                  # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-                # combine rows with related data based on studyid and redcap_event_name
-                logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
         # remove string nan on dataframe
         logic_cols_df =  logic_cols_df.fillna('')
+
+         # combine rows with related data based on studyid and redcap_event_name
+        logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
        
