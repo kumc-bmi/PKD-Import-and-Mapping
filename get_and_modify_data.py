@@ -162,21 +162,23 @@ def mapped_csvs():
         if site == 'kumc':
            # convert onetime forms to baseline arm
            site_data_df.loc[site_data_df['redcap_event_name'] == 'onetime_forms_and_arm_1', 'redcap_event_name'] = 'baseline_arm_1'
-        
-        # if site == 'kumc':
-        #     # combine rows with related data based on studyid and redcap_event_name
-        #     site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-        
-        # merge non empty values in a column
-        def combine_rows(column):
-            column = column[column != '']
-            return column.iloc[0] if len(column) > 0 else ''
+
+        site_data_df.to_csv(import_directory + 'merged/' + site + '_onetime.csv', index=False, float_format=None)
         
         if site == 'kumc':
-            study_events = ['studyid', 'redcap_event_name']
-            column_diff = site_data_df.columns.difference(study_events)
-            combined_df = site_data_df.groupby(study_events)[column_diff].apply(combine_rows).reset_index()
-            site_data_df = pd.concat([combined_df, site_data_df[site_data_df.columns.difference(study_events)]], axis=1)
+            # combine rows with related data based on studyid and redcap_event_name
+            site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name'], as_index=False).agg(lambda x: ''.join(x))
+        
+        # # merge non empty values in a column
+        # def combine_rows(column):
+        #     column = column[column != '']
+        #     return column.iloc[0] if len(column) > 0 else ''
+        
+        # if site == 'kumc':
+        #     study_events = ['studyid', 'redcap_event_name']
+        #     column_diff = site_data_df.columns.difference(study_events)
+        #     combined_df = site_data_df.groupby(study_events)[column_diff].apply(combine_rows).reset_index()
+        #     site_data_df = pd.concat([combined_df, site_data_df[site_data_df.columns.difference(study_events)]], axis=1)
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
