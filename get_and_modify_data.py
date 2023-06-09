@@ -159,12 +159,13 @@ def mapped_csvs():
         logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
         
-        
         if site == 'kumc':
            # convert onetime forms to baseline arm
            site_data_df.loc[site_data_df['redcap_event_name'] == 'onetime_forms_and_arm_1', 'redcap_event_name'] = 'baseline_arm_1'
-           # combine rows with related data based on studyid and redcap_event_name
-           site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+        
+        if site == 'kumc':
+            # combine rows with related data based on studyid and redcap_event_name
+            site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
