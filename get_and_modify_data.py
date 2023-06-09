@@ -163,9 +163,9 @@ def mapped_csvs():
            # convert onetime forms to baseline arm
            site_data_df.loc[site_data_df['redcap_event_name'] == 'onetime_forms_and_arm_1', 'redcap_event_name'] = 'baseline_arm_1'
         
-        if site == 'kumc':
-            # combine rows with related data based on studyid and redcap_event_name
-            site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+        # if site == 'kumc':
+        #     # combine rows with related data based on studyid and redcap_event_name
+        #     site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
