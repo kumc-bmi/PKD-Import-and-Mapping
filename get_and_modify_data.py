@@ -163,8 +163,6 @@ def mapped_csvs():
            # convert onetime forms to baseline arm
            site_data_df.loc[site_data_df['redcap_event_name'] == 'onetime_forms_and_arm_1', 'redcap_event_name'] = 'baseline_arm_1'
 
-        site_data_df.to_csv(import_directory + 'merged/' + site + '_onetime.csv', index=False, float_format=None)
-
         # make sure all NaN and None values in dataframe are replaced with empty strings
         site_data_df.fillna('', inplace=True)
         
@@ -172,7 +170,7 @@ def mapped_csvs():
             # combine rows with related data based on studyid and redcap_event_name
             site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
         
-
+        # export processed all records including logic fields to csv
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
         for index, row in site_data_df.iterrows():
