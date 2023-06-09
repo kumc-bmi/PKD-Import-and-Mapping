@@ -172,16 +172,6 @@ def mapped_csvs():
             # combine rows with related data based on studyid and redcap_event_name
             site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
         
-        # # merge non empty values in a column
-        # def combine_rows(column):
-        #     column = column[column != '']
-        #     return column.iloc[0] if len(column) > 0 else ''
-        
-        # if site == 'kumc':
-        #     study_events = ['studyid', 'redcap_event_name']
-        #     column_diff = site_data_df.columns.difference(study_events)
-        #     combined_df = site_data_df.groupby(study_events)[column_diff].apply(combine_rows).reset_index()
-        #     site_data_df = pd.concat([combined_df, site_data_df[site_data_df.columns.difference(study_events)]], axis=1)
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
@@ -442,8 +432,8 @@ def mapped_csvs():
                  # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
 
-            # remove string nan on dataframe
-            logic_cols_df =  logic_cols_df.fillna('')
+        # remove string nan on dataframe
+        logic_cols_df = logic_cols_df.replace('nan', '')
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
