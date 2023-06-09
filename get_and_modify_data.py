@@ -166,6 +166,9 @@ def mapped_csvs():
         # if site == 'kumc':
         #     # combine rows with related data based on studyid and redcap_event_name
         #     site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+        
+        if site == 'kumc':
+            site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x) if x.dtype == 'object' else x).reset_index()
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
