@@ -176,7 +176,7 @@ def mapped_csvs():
             study_events = ['studyid', 'redcap_event_name']
             column_diff = site_data_df.columns.difference(study_events)
             combined_df = site_data_df.groupby(study_events)[column_diff].apply(combine_rows).reset_index()
-            site_data_df = pd.concat([combined_df, site_data_df[site_data_df.columns.defference(study_events)]], axis=1)
+            site_data_df = pd.concat([combined_df, site_data_df[site_data_df.columns.difference(study_events)]], axis=1)
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
