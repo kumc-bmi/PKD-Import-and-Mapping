@@ -167,8 +167,16 @@ def mapped_csvs():
         #     # combine rows with related data based on studyid and redcap_event_name
         #     site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
         
+        # merge non empty values in a column
+        def combine_rows(column):
+            column = column[column != '']
+            return column.iloc[0] if len(column) > 0 else ''
+        
         if site == 'kumc':
-            site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x) if x.dtype == 'object' else x).reset_index()
+            study_events = ['studyid', 'redcap_event_name']
+            column_diff = site_data_df.columns.difference(study_events)
+            combined_df = site_data_df.groupby(study_events)[column_diff].apply(combine_rows).reset_index()
+            site_data_df = site_data_df.merge(combined_df, on=study_events, how='left')
 
         site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
