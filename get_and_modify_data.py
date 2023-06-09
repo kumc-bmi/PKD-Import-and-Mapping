@@ -158,18 +158,21 @@ def mapped_csvs():
         # create a logic DataFrame
         logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
+        
+        
+        if site == 'kumc':
+           # convert onetime forms to baseline arm
+           site_data_df.loc[site_data_df['redcap_event_name'] == 'onetime_forms_and_arm_1', 'redcap_event_name'] = 'baseline_arm_1'
+           # combine rows with related data based on studyid and redcap_event_name
+           site_data_df = site_data_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
+
+        site_data_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
 
         for index, row in site_data_df.iterrows():
             if site == 'kumc':
                 # create a new dictionary to hold the values for the kumc current row
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
-
-                # convert onetime_forms_and_arm_1 to baseline_arm_1 for kumc
-                if redcap_event_name == 'onetime_forms_and_arm_1':
-                    redcap_event_name = 'baseline_arm_1'
-                else:
-                    redcap_event_name = redcap_event_name
 
                 if (row['diagnstatus'] == 'diagnosed with adpkd' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate'])) or (row['diagnstatus'] == '1' and pd.notna(row['age']) and pd.notna(row['dmdat']) and pd.notna(row['diagndate'])):
                     diagnosisage = str(pd.to_numeric(row['age']) - pd.to_numeric(pd.to_datetime(row['dmdat']).year - pd.to_datetime(row['diagndate']).year))
@@ -424,11 +427,6 @@ def mapped_csvs():
 
             # remove string nan on dataframe
             logic_cols_df =  logic_cols_df.fillna('')
-
-            # combine rows with related data based on studyid and redcap_event_name
-            logic_cols_df.groupby(['studyid', 'redcap_event_name']).agg(lambda x: ''.join(x)).reset_index()
-
-            logic_cols_df.to_csv(import_directory + 'merged/' + site + '_to_be_merged.csv', index=False, float_format=None)
        
         # create a dictionary that maps the corrected column names to the original names
         site_column_mapping = dict(zip(site_col_headers['src_var'], site_col_headers['trg_var']))
