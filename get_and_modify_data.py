@@ -541,7 +541,8 @@ def mapped_csvs():
 # set up connection to REDCap API Export
 def redcap_export_api():
     vaiables = main(os_path, openf, argv)
-    api_url = str(vaiables['kumc_redcap_api_url'])
+    kumc_api_url = str(vaiables['kumc_redcap_api_url'])
+    cri_api_url =  str(vaiables['chld_redcap_api_url'])
     token_kumc = str(vaiables['token_kumc'])
     token_chld = str(vaiables['token_chld'])
     log_details.debug('API URL: %s', api_url)
@@ -566,9 +567,11 @@ def redcap_export_api():
         if folder == 'kumc':
             token = token_kumc
             project_id = kumc_project_id
+            api_url = kumc_api_url
         elif folder == 'uab':
             token = token_chld
             project_id = chld_project_id
+            api_url = cri_api_url
 
         # data parameters
         data_param = {
