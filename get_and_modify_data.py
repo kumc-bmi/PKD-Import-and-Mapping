@@ -567,12 +567,13 @@ def redcap_export_api():
             token = token_kumc
             project_id = kumc_project_id
             api_url = kumc_api_url
-            log_details.debug('API URL: %s', api_url)
         elif folder == 'uab':
             token = token_chld
             project_id = chld_project_id
             api_url = cri_api_url
-            log_details.debug('API URL: %s', api_url)
+        
+        # log details
+        log_details.debug('API URL: %s', api_url)
 
         # data parameters
         data_param = {
