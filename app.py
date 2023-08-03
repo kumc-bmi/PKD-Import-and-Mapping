@@ -82,14 +82,13 @@ sys.path.append(os.path.abspath(dir_path))
 
 # print(extract, transform, load)
 
-import extract
-import transform
-import load
-import app
+from extract import redcap_export_api
+from transform import mapped_csvs
+from load import redcap_import_api
 
 # export site(s) csvs from redcap through API
-extract.redcap_export_api()
+redcap_export_api()
 # map sites redcap projects and export to csvs
-transform.mapped_csvs()
+mapped_csvs()
 # import all converted site(s) csvs into redcap through API
-load.redcap_import_api()
+redcap_import_api()
