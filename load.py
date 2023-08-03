@@ -5,7 +5,7 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-from app import main_attributes, os_path, openf, argv, log_details, requests, csv
+from .app import *
 
 # set up connection to REDCap API Import
 def redcap_import_api():

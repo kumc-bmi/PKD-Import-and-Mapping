@@ -17,9 +17,9 @@ from os import path as os_path
 from builtins import open as openf
 from itertools import groupby
 
-from extract import redcap_export_api
-from transform import mapped_csvs
-from load import redcap_import_api
+from .extract import redcap_export_api
+from .transform import mapped_csvs
+from .load import redcap_import_api
 
 if __name__ == "__main__":
     # export site(s) csvs from redcap through API

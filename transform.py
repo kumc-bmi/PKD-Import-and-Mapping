@@ -5,7 +5,7 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-from app import os, pd, groupby
+from .app import *
 
 # function for missing values
 def missing(x):

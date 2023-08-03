@@ -5,7 +5,7 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-from app import main_attributes, os_path, openf, argv, log_details, requests, logging
+from .app import *
 
 log_details = logging.getLogger(__name__)
 
