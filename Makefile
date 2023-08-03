@@ -7,7 +7,7 @@
 clean:
 	rm -f .make.* || true
 
-all: .make.venv .make.get_and_modify_data
+all: .make.venv .make.app .make.extract .make.transform .make.load
 
 .make.venv:
 	which python3
@@ -20,6 +20,18 @@ all: .make.venv .make.get_and_modify_data
 	pip3 freeze
 	touch .make.venv
 
-.make.get_and_modify_data: .make.venv
-	python get_and_modify_data.py $(config_file) 30282
-	touch .make.get_and_modify_data
+.make.app: .make.venv
+	python app.py $(config_file) 30282
+	touch .make.app
+
+.make.extract: .make.venv .make.app
+	python extract.py $(config_file) 30282
+	touch .make.extract
+
+.make.transform: .make.venv .make.extract
+	python transform.py $(config_file) 30282
+	touch .make.transform
+
+.make.load: .make.venv .make.transform
+	python load.py $(config_file) 30282
+	touch .make.load
