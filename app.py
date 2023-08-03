@@ -76,8 +76,6 @@ dir_path = "/var/lib/jenkins/jobs/PKI MULTI-SITE REGISTRY/workspace/"
 # set system path
 sys.path.append(os.path.abspath(dir_path))
 
-print(sys.path.append(os.path.abspath(dir_path)))
-
 # extract = os.path.join(dir_path, "extract.py")
 # transform = os.path.join(dir_path, "transform.py")
 # load = os.path.join(dir_path, "load.py")
@@ -87,6 +85,7 @@ print(sys.path.append(os.path.abspath(dir_path)))
 import extract
 import transform
 import load
+import app
 
 # export site(s) csvs from redcap through API
 extract.redcap_export_api()
