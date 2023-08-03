@@ -153,4 +153,3 @@ def main_attributes(os_path, openf, argv):
 
         return values 
     return get_config()
-
