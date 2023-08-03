@@ -5,7 +5,7 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-from app import *
+# from app import *
 
 # set up connection to REDCap API Import
 def redcap_import_api():

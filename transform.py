@@ -5,7 +5,7 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-from app import *
+# from app import *
 
 # function for missing values
 def missing(x):
