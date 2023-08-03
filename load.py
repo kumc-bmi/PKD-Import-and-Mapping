@@ -12,7 +12,7 @@ def redcap_import_api():
     vaiables = main_attributes(os_path, openf, argv)
     api_url = str(vaiables['kumc_redcap_api_url'])
     api_import_token = str(vaiables['import_token'])
-    log_details.debug('API URL: %s', api_url)
+    logging.getLogger(__name__).debug('API URL: %s', api_url)
     import_directory = './import/temp/'
     project_id = str(vaiables['project_id'])
 
