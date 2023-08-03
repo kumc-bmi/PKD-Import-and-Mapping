@@ -7,7 +7,7 @@
 clean:
 	rm -f .make.* || true
 
-all: .make.venv .make.app .make.extract .make.transform .make.load
+all: .make.venv .make.env_attrs .make.app .make.extract .make.transform .make.load
 
 .make.venv:
 	which python3
@@ -20,7 +20,11 @@ all: .make.venv .make.app .make.extract .make.transform .make.load
 	pip3 freeze
 	touch .make.venv
 
-.make.app: .make.venv
+.make.env_attrs: .make.venv
+	python env_attrs.py $(config_file) 30282
+	touch .make.env_attrs
+
+.make.app: .make.venv .make.env_attrs
 	python app.py $(config_file) 30282
 	touch .make.app
 

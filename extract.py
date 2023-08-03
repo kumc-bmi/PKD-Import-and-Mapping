@@ -5,7 +5,16 @@ Authors:
 - Sravani Chandakaq
 - Lav Patel
 """
-# from app import *
+import os
+import sys
+
+# set directory path
+dir_path = "/var/lib/jenkins/jobs/PKI MULTI-SITE REGISTRY/workspace/"
+
+# set system path
+sys.path.append(os.path.abspath(dir_path))
+
+from env_attrs import *
 
 # set up connection to REDCap API Export
 def redcap_export_api():
