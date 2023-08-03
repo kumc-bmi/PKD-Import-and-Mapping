@@ -9,6 +9,7 @@ import configparser
 import logging
 import pandas as pd
 import os
+import sys
 import requests
 import csv
 import pysftp
@@ -69,13 +70,25 @@ def main_attributes(os_path, openf, argv):
         return values 
     return get_config()
 
-from .extract import redcap_export_api
-from .transform import mapped_csvs
-from .load import redcap_import_api
+# set directory path
+dir_path = "/var/lib/jenkins/jobs/PKI MULTI-SITE REGISTRY/workspace/"
+
+# set system path
+sys.path.append(os.path.abspath(dir_path))
+
+# extract = os.path.join(dir_path, "extract.py")
+# transform = os.path.join(dir_path, "transform.py")
+# load = os.path.join(dir_path, "load.py")
+
+# print(extract, transform, load)
+
+import extract
+import transform
+import load
 
 # export site(s) csvs from redcap through API
-redcap_export_api()
+extract.redcap_export_api()
 # map sites redcap projects and export to csvs
-mapped_csvs()
+transform.mapped_csvs()
 # import all converted site(s) csvs into redcap through API
-redcap_import_api()
+load.redcap_import_api()
