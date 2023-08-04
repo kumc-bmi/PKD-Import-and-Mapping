@@ -119,14 +119,14 @@ def redcap_export_api():
                     
                     file_path = latest_file
 
-                    date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+                date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-                    file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
-                    os.rename(file_path, file_backup_path)
+                file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
+                os.rename(file_path, file_backup_path)
 
-                    umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
-                    os.rename(file_backup_path, umb_file_path)
-                    umb_file = folder + '.csv'
+                umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
+                os.rename(file_backup_path, umb_file_path)
+                umb_file = folder + '.csv'
                 
                 # download file
                 sftp.get(umb_file, export_directory + umb_file)
