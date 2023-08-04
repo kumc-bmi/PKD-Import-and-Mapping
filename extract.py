@@ -106,6 +106,7 @@ def redcap_export_api():
                 file_path = os.path.join(sftp_remote_path, umb_file)
 
                 if not os.path.exists(file_path):
+                    print(file_path)
                     csv_files = glob.glob(os.path.join(file_path, "*.csv"))
                     print(csv_files)
                     csv_files = [file for file in csv_files if os.path.basename(file) != folder + '.csv']
