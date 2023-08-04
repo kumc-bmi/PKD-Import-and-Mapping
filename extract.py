@@ -103,9 +103,7 @@ def redcap_export_api():
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
-                file_path = os.path.join(sftp_remote_path, umb_file)
-
-                if not os.path.exists(file_path):
+                if not os.path.exists(sftp_remote_path):
                     print(file_path)
                     csv_files = glob.glob(os.path.join(file_path, "*.csv"))
                     print(csv_files)
