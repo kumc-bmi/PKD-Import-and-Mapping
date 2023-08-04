@@ -108,13 +108,14 @@ def redcap_export_api():
 
                 # remote directory
                 sftp.cwd(sftp_remote_path)
-                
-                print(sftp_remote_path)
 
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
                 file_path = os.path.join(sftp_remote_path, umb_file)
+
+                print(file_path)
+
                 if not os.path.exists(file_path):
                     latest_file = recent_csv_file(sftp_remote_path)
                     if not latest_file:
