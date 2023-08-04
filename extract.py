@@ -109,12 +109,13 @@ def redcap_export_api():
                     csv_files = [file for file in all_files if file.lower().endswith(".csv")]
                     print(csv_files)
                     csv_files = [file for file in csv_files if os.path.basename(file) != sftp_remote_path + folder + '.csv']
+                    
                     if not csv_files:
                         print("no .csv file exists or umb.csv exists")
                         print(csv_files)
                         csv_file = folder + '.csv'
                     else:
-                        csv_file = max(sftp_remote_path + csv_files, key=os.path.getatime)
+                        csv_file = max(csv_files, key=lambda file: os.path.getctime(os.path.join(sftp_remote_path, file)))
                     
                     file_path = csv_file
 
