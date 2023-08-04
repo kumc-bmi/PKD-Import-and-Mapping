@@ -103,29 +103,40 @@ def redcap_export_api():
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
-                if not os.path.exists(sftp_remote_path):
-                    print(sftp_remote_path)
-                    all_files = sftp.listdir()
-                    csv_files = [file for file in all_files if file.lower().endswith(".csv")]
-                    csv_files = [file for file in csv_files if os.path.basename(file) != sftp_remote_path + folder + '.csv']
-                    print(csv_files)
-                    if not csv_files:
-                        print("no .csv file exists or umb.csv exists")
-                        print(csv_files)
-                        csv_file = folder + '.csv'
+                csv_files = [file for file in sftp.listdir() if file.lower().endswith(".csv")]
+
+                for csv_file in csv_files:
+                    if csv_file.lower() != umb_file:
+                        sftp.rename(csv_file, umb_file)
+                        break
+                    elif csv_file.lower() == umb_file:
+                        break
                     else:
-                        csv_file = max(csv_files, key=lambda file: os.path.getctime(os.path.join(sftp_remote_path, file)))
+                        raise Exception("No CSV file found in directory or called '{}'".format(umb_file))
+
+                # if not os.path.exists(sftp_remote_path):
+                #     print(sftp_remote_path)
+                #     all_files = sftp.listdir()
+                #     csv_files = [file for file in all_files if file.lower().endswith(".csv")]
+                #     csv_files = [file for file in csv_files if os.path.basename(file) != sftp_remote_path + folder + '.csv']
+                #     print(csv_files)
+                #     if not csv_files:
+                #         print("no .csv file exists or umb.csv exists")
+                #         print(csv_files)
+                #         csv_file = folder + '.csv'
+                #     else:
+                #         csv_file = max(csv_files, key=lambda file: os.path.getctime(os.path.join(sftp_remote_path, file)))
                     
-                    file_path = csv_file
+                #     file_path = csv_file
 
-                date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+                # date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-                file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
-                os.rename(file_path, file_backup_path)
+                # file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
+                # sftp.rename(file_path, file_backup_path)
 
-                umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
-                os.rename(file_backup_path, umb_file_path)
-                umb_file = folder + '.csv'
+                # umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
+                # os.rename(file_backup_path, umb_file_path)
+                # umb_file = folder + '.csv'
                 
                 # download file
                 sftp.get(umb_file, export_directory + umb_file)
