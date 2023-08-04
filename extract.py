@@ -40,55 +40,56 @@ def redcap_export_api():
         # site csv file
         filename = export_directory + folder + '.csv'
 
-        # assign token and project_id
-        if folder == 'kumc':
-            token = token_kumc
-            project_id = kumc_project_id
-            api_url = kumc_api_url
-        elif folder == 'uab':
-            token = token_chld
-            project_id = chld_project_id
-            api_url = cri_api_url
-        
-        # log details
-        logging.getLogger(__name__).debug('API URL: %s', api_url)
+        for folder in ['kumc', 'uab']:
+            # assign token and project_id
+            if folder == 'kumc':
+                token = token_kumc
+                project_id = kumc_project_id
+                api_url = kumc_api_url
+            elif folder == 'uab':
+                token = token_chld
+                project_id = chld_project_id
+                api_url = cri_api_url
+            
+            # log details
+            logging.getLogger(__name__).debug('API URL: %s', api_url)
 
-        # data parameters
-        data_param = {
-            'token': token,
-            'content': 'record',
-            'action': 'export',
-            'format': 'csv',
-            'type': 'flat',
-            'csvDelimiter': ',',
-            'rawOrLabel': 'raw',
-            'rawOrLabelHeaders': 'raw',
-            'exportCheckboxLabel': 'false',
-            'exportSurveyFields': 'false',
-            'exportDataAccessGroups': 'false',
-            'project_id': project_id,
-            'returnContent': 'count',
-            'returnFormat': 'json'
-        }
+            # data parameters
+            data_param = {
+                'token': token,
+                'content': 'record',
+                'action': 'export',
+                'format': 'csv',
+                'type': 'flat',
+                'csvDelimiter': ',',
+                'rawOrLabel': 'raw',
+                'rawOrLabelHeaders': 'raw',
+                'exportCheckboxLabel': 'false',
+                'exportSurveyFields': 'false',
+                'exportDataAccessGroups': 'false',
+                'project_id': project_id,
+                'returnContent': 'count',
+                'returnFormat': 'json'
+            }
 
-        # make the API call to export records
-        response = requests.post(api_url, data=data_param)
+            # make the API call to export records
+            response = requests.post(api_url, data=data_param)
 
-        print(response)
-        
-        if response.ok:
-            # print the response status from API call
-            print('HTTP Status: ' + str(response.status_code))
+            print(response)
+            
+            if response.ok:
+                # print the response status from API call
+                print('HTTP Status: ' + str(response.status_code))
 
-            records = response.text
+                records = response.text
 
-            with open(filename, 'w') as f:
-                f.write(records)
-            # print success message for site
-            print(folder + ' data exported successfully') 
-        else:
-            # print error result for unsucessful export
-            print('Error exporting ' + folder + ' data: ', response.text)
+                with open(filename, 'w') as f:
+                    f.write(records)
+                # print success message for site
+                print(folder + ' data exported successfully') 
+            else:
+                # print error result for unsucessful export
+                print('Error exporting ' + folder + ' data: ', response.text)
         
         if folder == 'umb':
 
