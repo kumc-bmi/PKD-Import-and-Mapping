@@ -91,6 +91,14 @@ def redcap_export_api():
             print('Error exporting ' + folder + ' data: ', response.text)
         
         if folder == 'umb':
+
+            def recent_csv_file(dir):
+                csv_files = glob.glob(os.path.join(dir, "*.csv"))
+                csv_files = [file for file in csv_files if os.path.basename(file) != folder + '.csv']
+                if csv_files:
+                    return max(csv_files, key=os.path.getatime)
+                return None
+
             cnopts = pysftp.CnOpts()
             cnopts.hostkeys = None
             # create connection
@@ -102,6 +110,24 @@ def redcap_export_api():
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
+                file_path =  os.path.join(sftp_remote_path, umb_file)
+                if not os.path.exists(file_path):
+                    latest_file = recent_csv_file(sftp_remote_path)
+                    if not latest_file:
+                        print("umb.csv file does not exist")
+                        return
+                    
+                    file_path = latest_file
+
+                    date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+                    file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
+                    os.rename(file_path, file_backup_path)
+
+                    umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
+                    os.rename(file_backup_path, umb_file_path)
+                    umb_file = folder + '.csv'
+                
                 # download file
                 sftp.get(umb_file, export_directory + umb_file)
                 print("umb csv sftp file download complete")
