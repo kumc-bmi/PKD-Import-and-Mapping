@@ -112,10 +112,10 @@ def redcap_export_api():
                 # Maryland source file name
                 umb_file = folder + '.csv'
 
-                file_path =  os.path.join(sftp_remote_path, umb_file)
+                file_path = os.path.join(sftp.cwd(sftp_remote_path), umb_file)
                 print(file_path)
                 if not os.path.exists(file_path):
-                    latest_file = recent_csv_file(sftp_remote_path)
+                    latest_file = recent_csv_file(sftp.cwd(sftp_remote_path))
                     print(latest_file)
                     if not latest_file:
                         print("umb.csv file does not exist")
@@ -126,10 +126,10 @@ def redcap_export_api():
 
                 date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-                file_backup_path = os.path.join(sftp_remote_path, folder + "_" + date_time + ".csv")
+                file_backup_path = os.path.join(sftp.cwd(sftp_remote_path), folder + "_" + date_time + ".csv")
                 os.rename(file_path, file_backup_path)
 
-                umb_file_path = os.path.join(sftp_remote_path, folder + ".csv")
+                umb_file_path = os.path.join(sftp.cwd(sftp_remote_path), folder + ".csv")
                 os.rename(file_backup_path, umb_file_path)
                 umb_file = folder + '.csv'
                 
