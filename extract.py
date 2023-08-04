@@ -111,13 +111,16 @@ def redcap_export_api():
                 umb_file = folder + '.csv'
 
                 file_path =  os.path.join(sftp_remote_path, umb_file)
+                print(file_path)
                 if not os.path.exists(file_path):
                     latest_file = recent_csv_file(sftp_remote_path)
+                    print(latest_file)
                     if not latest_file:
                         print("umb.csv file does not exist")
                         return
                     
                     file_path = latest_file
+                    print(file_path)
 
                 date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
