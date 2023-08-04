@@ -40,65 +40,57 @@ def redcap_export_api():
         # site csv file
         filename = export_directory + folder + '.csv'
 
-        for folder in ['kumc', 'uab']:
-            # assign token and project_id
-            if folder == 'kumc':
-                token = token_kumc
-                project_id = kumc_project_id
-                api_url = kumc_api_url
-            elif folder == 'uab':
-                token = token_chld
-                project_id = chld_project_id
-                api_url = cri_api_url
-            
-            # log details
-            logging.getLogger(__name__).debug('API URL: %s', api_url)
+        # assign token and project_id
+        if folder == 'kumc':
+            token = token_kumc
+            project_id = kumc_project_id
+            api_url = kumc_api_url
+        elif folder == 'uab':
+            token = token_chld
+            project_id = chld_project_id
+            api_url = cri_api_url
+        
+        # log details
+        logging.getLogger(__name__).debug('API URL: %s', api_url)
 
-            # data parameters
-            data_param = {
-                'token': token,
-                'content': 'record',
-                'action': 'export',
-                'format': 'csv',
-                'type': 'flat',
-                'csvDelimiter': ',',
-                'rawOrLabel': 'raw',
-                'rawOrLabelHeaders': 'raw',
-                'exportCheckboxLabel': 'false',
-                'exportSurveyFields': 'false',
-                'exportDataAccessGroups': 'false',
-                'project_id': project_id,
-                'returnContent': 'count',
-                'returnFormat': 'json'
-            }
+        # data parameters
+        data_param = {
+            'token': token,
+            'content': 'record',
+            'action': 'export',
+            'format': 'csv',
+            'type': 'flat',
+            'csvDelimiter': ',',
+            'rawOrLabel': 'raw',
+            'rawOrLabelHeaders': 'raw',
+            'exportCheckboxLabel': 'false',
+            'exportSurveyFields': 'false',
+            'exportDataAccessGroups': 'false',
+            'project_id': project_id,
+            'returnContent': 'count',
+            'returnFormat': 'json'
+        }
 
-            # make the API call to export records
-            response = requests.post(api_url, data=data_param)
+        # make the API call to export records
+        response = requests.post(api_url, data=data_param)
 
-            print(response)
-            
-            if response.ok:
-                # print the response status from API call
-                print('HTTP Status: ' + str(response.status_code))
+        print(response)
+        
+        if response.ok:
+            # print the response status from API call
+            print('HTTP Status: ' + str(response.status_code))
 
-                records = response.text
+            records = response.text
 
-                with open(filename, 'w') as f:
-                    f.write(records)
-                # print success message for site
-                print(folder + ' data exported successfully') 
-            else:
-                # print error result for unsucessful export
-                print('Error exporting ' + folder + ' data: ', response.text)
+            with open(filename, 'w') as f:
+                f.write(records)
+            # print success message for site
+            print(folder + ' data exported successfully') 
+        else:
+            # print error result for unsucessful export
+            print('Error exporting ' + folder + ' data: ', response.text)
         
         if folder == 'umb':
-
-            def recent_csv_file(dir):
-                csv_files = glob.glob(os.path.join(dir, "*.csv"))
-                csv_files = [file for file in csv_files if os.path.basename(file) != folder + '.csv']
-                if csv_files:
-                    return max(csv_files, key=os.path.getatime)
-                return None
 
             cnopts = pysftp.CnOpts()
             cnopts.hostkeys = None
@@ -114,13 +106,16 @@ def redcap_export_api():
                 file_path = os.path.join(sftp_remote_path, umb_file)
 
                 if not os.path.exists(file_path):
-                    latest_file = recent_csv_file(sftp_remote_path)
-                    print(latest_file)
-                    if not latest_file:
+                    csv_files = glob.glob(os.path.join(file_path, "*.csv"))
+                    print(csv_files)
+                    csv_files = [file for file in csv_files if os.path.basename(file) != folder + '.csv']
+                    if csv_files:
+                        csv_files = max(csv_files, key=os.path.getatime)
+                    if not csv_files:
                         print("umb.csv file does not exist")
                         return
                     
-                    file_path = latest_file
+                    file_path = csv_files
 
                 date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
