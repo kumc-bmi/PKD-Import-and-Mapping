@@ -36,6 +36,7 @@ def uab():
     uab_final = 'uab.csv'
 
     uab_pattern = r'_\d+\.csv$'
+    uab_filtered = r'$filtered_'
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
@@ -113,6 +114,15 @@ def uab():
             map_column_head(uab_file, year_eight_map)
         else:
             os.rename(directory + uab_file, directory + "filtered_" + uab_file)
+
+    for filename in os.listdir(directory):
+        uab_base_name = 'filtered_clean_updated_uab_1.csv'
+        base_df = pd.read_csv(uab_base_name)
+        filename_df = pd.read_csv(filename)
+        if re.search(uab_filtered, filename) and  filename != uab_base_name:
+            non_retain = [col for col in filename_df.columns if col not in base_df.columns]
+            filename_df.drop(columns=non_retain, inplace=True)
+            filename_df.to_csv(directory + filename, index=False, float_format=None)
         
     for file in uab_files:
         if not uab_files:
@@ -131,14 +141,14 @@ def uab():
                         for row in csv_reader:
                             csv_writer.writerow(row)
 
-                    print("Merged " + file + " into:", uab_final)
-        
-    for filename in os.listdir(directory):
-        if re.search(uab_pattern, filename):
-            print(uab_pattern)
-            print(filename)
-            os.remove(directory + filename)
-            print(f"Deleted: {filename}")
+                print("Merged " + file + " into:", uab_final)
+
+    # for filename in os.listdir(directory):
+    #     if re.search(uab_pattern, filename):
+    #         print(uab_pattern)
+    #         print(filename)
+    #         os.remove(directory + filename)
+    #         print(f"Deleted: {filename}")
 
 
 def mapped_csvs():
