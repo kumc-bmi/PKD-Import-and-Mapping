@@ -46,22 +46,18 @@ def uab():
         with open(directory + file, 'r') as csvfile:
             csv_reader = csv.reader(csvfile)
             header = next(csv_reader)
-            print(csv_reader)
 
             uab_data.append(header)
             previous_row = next(csv_reader)
 
             for row in csv_reader:
-                print(row)
                 compressed_row = []
                 for prev_row_cell, row_cell in zip(previous_row, row):
-                    print(prev_row_cell)
-                    print(row_cell)
                     compressed_row.append(row_cell if row_cell.strip() else prev_row_cell)
                 uab_data.append(compressed_row)
                 previous_row = compressed_row
 
-        output_filename = file + "updated"
+        output_filename = "updated" + file
 
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
@@ -76,7 +72,7 @@ def uab():
                 csv_writer = None
 
                 for file in uab_files:
-                    file = file + 'updated'
+                    file = 'updated' + file
                     with open(os.path.join(directory, file), 'r') as input_file:
                         csv_reader = csv.reader(input_file)
                         if csv_writer is None:
