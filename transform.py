@@ -43,7 +43,7 @@ def uab():
             uab_files.append(filename)
 
     for file in uab_files:
-        with open(directory + file, 'r') as csvfile:
+        with open(directory + file + ".csv", 'r') as csvfile:
             csvreader = csv.DictReader(csvfile)
             for row in csvreader:
                 for key, value in row.items():
@@ -52,7 +52,7 @@ def uab():
                     else:
                         uab_data[key].append(uab_data[key][-1] if key in uab_data else '')
 
-        output_filename = file + 'updated'
+        output_filename = file + "updated.csv"
 
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
