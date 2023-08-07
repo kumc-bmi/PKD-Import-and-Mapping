@@ -42,6 +42,7 @@ def uab():
         if re.search(uab_pattern, filename):
             uab_files.append(filename)
 
+    # compress uab_files
     for file in uab_files:
         uab_data = []
         with open(directory + file, 'r') as csvfile:
@@ -64,7 +65,8 @@ def uab():
             csv_writer = csv.writer(csvfile)
             for row in uab_data:
                 csv_writer.writerow(row)
-
+    
+    # remove duplicate rows form updated uab files
     for file in uab_files:
         file = "updated_" + file
         updated_uab_df = pd.read_csv(directory + file, dtype=str)
@@ -72,9 +74,10 @@ def uab():
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
     
+    # rename column headers based on base_arm file
     for file in uab_files:
         # rename csv column header function
-        def map_column_head(clean_uab_file, mapping_filename):
+        def map_column_head(clean_uab_file, mapping_filename, redcap_event_name):
             mapping_dict = {}
             with open(mapping_filename, 'r') as mapping_file:
                 for line in mapping_file:
@@ -82,6 +85,7 @@ def uab():
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file, dtype=str)
             df.rename(columns=mapping_dict, inplace=True)
+            df["redcap_event_name"] = redcap_event_name
             df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
@@ -97,30 +101,31 @@ def uab():
         uab_file = "clean_updated_" + file
 
         if uab_file == "clean_updated_uab_2.csv":
-            map_column_head(uab_file, year_one_map)
+            map_column_head(uab_file, year_one_map, "year_1_arm_1")
         elif uab_file == "clean_updated_uab_3.csv":
-            map_column_head(uab_file, year_two_map)
+            map_column_head(uab_file, year_two_map, "year_2_arm_1")
         elif uab_file == "clean_updated_uab_4.csv":
-            map_column_head(uab_file, year_three_map)
+            map_column_head(uab_file, year_three_map, "year_3_arm_1")
         elif uab_file == "clean_updated_uab_5.csv":
-            map_column_head(uab_file, year_four_map)
+            map_column_head(uab_file, year_four_map, "year_4_arm_1")
         elif uab_file == "clean_updated_uab_6.csv":
-            map_column_head(uab_file, year_five_map)
+            map_column_head(uab_file, year_five_map, "year_5_arm_1")
         elif uab_file == "clean_updated_uab_7.csv":
-            map_column_head(uab_file, year_six_map)
+            map_column_head(uab_file, year_six_map, "year_6_arm_1")
         elif uab_file == "clean_updated_uab_8.csv":
-            map_column_head(uab_file, year_seven_map)
+            map_column_head(uab_file, year_seven_map, "year_7_arm_1")
         elif uab_file == "clean_updated_uab_9.csv":
-            map_column_head(uab_file, year_eight_map)
+            map_column_head(uab_file, year_eight_map, "year_8_arm_1")
         else:
-            os.rename(directory + uab_file, directory + "filtered_" + uab_file)
+            df = pd.read_csv(directory + uab_file, dtype=str)
+            df["redcap_event_name"] = "baseline_arm_1"
+            df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
     for filename in os.listdir(directory):
         uab_base_name = 'filtered_clean_updated_uab_1.csv'
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             base_df = pd.read_csv(directory + uab_base_name, dtype=str)
             filename_df = pd.read_csv(directory + filename, dtype=str)
-            print(filename)
             non_retain = [col for col in filename_df.columns if col not in base_df.columns]
             filename_df.drop(columns=non_retain, inplace=True)
             filename_df.to_csv(directory + filename, index=False, float_format=None)
@@ -146,8 +151,6 @@ def uab():
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
-            print(uab_pattern)
-            print(filename)
             os.remove(directory + filename)
             print(f"Deleted: {filename}")
 
