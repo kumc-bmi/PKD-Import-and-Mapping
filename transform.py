@@ -119,11 +119,13 @@ def uab():
         uab_base_name = 'filtered_clean_updated_uab_1.csv'
         base_df = pd.read_csv(directory + uab_base_name)
         filename_df = pd.read_csv(directory + filename)
-        print(filename)
-        if re.search(uab_filtered, filename) and  filename != uab_base_name:
-            non_retain = [col for col in filename_df.columns if col not in base_df.columns]
-            filename_df.drop(columns=non_retain, inplace=True)
-            filename_df.to_csv(directory + filename, index=False, float_format=None)
+        if re.search(uab_filtered, filename):
+            print(filename)
+            if filename != uab_base_name:
+                print(filename)
+                non_retain = [col for col in filename_df.columns if col not in base_df.columns]
+                filename_df.drop(columns=non_retain, inplace=True)
+                filename_df.to_csv(directory + filename, index=False, float_format=None)
         
     for file in uab_files:
         if not uab_files:
