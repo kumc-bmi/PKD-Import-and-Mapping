@@ -79,7 +79,7 @@ def uab():
                 csv_writer = None
 
                 for file in uab_files:
-                    file = "clean_" + file
+                    file = "clean_updated_" + file
                     with open(os.path.join(directory, file), 'r') as input_file:
                         csv_reader = csv.reader(input_file)
                         if csv_writer is None:
