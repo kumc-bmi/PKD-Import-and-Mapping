@@ -36,7 +36,7 @@ def uab():
     uab_final = 'uab.csv'
 
     uab_pattern = r'_\d+\.csv$'
-    uab_filtered = r'$filtered_'
+    uab_filtered = "filtered_"
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
@@ -67,7 +67,7 @@ def uab():
 
     for file in uab_files:
         file = "updated_" + file
-        updated_uab_df = pd.read_csv(directory + file)
+        updated_uab_df = pd.read_csv(directory + file, dtype=str)
         updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
@@ -80,7 +80,7 @@ def uab():
                 for line in mapping_file:
                     base_name, arm_name = line.strip().split(',')
                     mapping_dict[arm_name] = base_name
-            df = pd.read_csv(directory + clean_uab_file)
+            df = pd.read_csv(directory + clean_uab_file, dtype=str)
             df.rename(columns=mapping_dict, inplace=True)
             df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
@@ -117,16 +117,13 @@ def uab():
 
     for filename in os.listdir(directory):
         uab_base_name = 'filtered_clean_updated_uab_1.csv'
-        base_df = pd.read_csv(directory + uab_base_name)
-        filename_df = pd.read_csv(directory + filename)
-        print(uab_filtered)
-        if re.search(uab_filtered, filename):
+        if filename.startswith(uab_filtered) and filename != uab_base_name:
+            base_df = pd.read_csv(directory + uab_base_name, dtype=str)
+            filename_df = pd.read_csv(directory + filename, dtype=str)
             print(filename)
-            if filename != uab_base_name:
-                print(filename)
-                non_retain = [col for col in filename_df.columns if col not in base_df.columns]
-                filename_df.drop(columns=non_retain, inplace=True)
-                filename_df.to_csv(directory + filename, index=False, float_format=None)
+            non_retain = [col for col in filename_df.columns if col not in base_df.columns]
+            filename_df.drop(columns=non_retain, inplace=True)
+            filename_df.to_csv(directory + filename, index=False, float_format=None)
         
     for file in uab_files:
         if not uab_files:
