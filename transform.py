@@ -77,7 +77,7 @@ def uab():
             mapping_dict = {}
             with open(mapping_filename, 'r') as mapping_file:
                 for line in mapping_file:
-                    arm_name, base_name = line.strip().split(',')
+                    base_name, arm_name = line.strip().split(',')
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file)
             df.rename(columns=mapping_dict, inplace=True)
