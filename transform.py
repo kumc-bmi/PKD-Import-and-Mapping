@@ -43,7 +43,7 @@ def uab():
             uab_files.append(filename)
 
     for file in uab_files:
-        with open(file, 'r') as csvfile:
+        with open(directory + file, 'r') as csvfile:
             csvreader = csv.DictReader(csvfile)
             for row in csvreader:
                 for key, value in row.items():
@@ -54,7 +54,7 @@ def uab():
 
         output_filename = file + 'updated'
 
-        with open(output_filename, 'w', newline='') as csvfile:
+        with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(csvreader.fieldnames)
             for i in range(len(uab_data['subject_id'])):
@@ -65,7 +65,7 @@ def uab():
         if not uab_files:
             print("No uab files found to merge.")
         else:
-            with open(uab_final, 'w', newline='') as output_file:
+            with open(directory + uab_final, 'w', newline='') as output_file:
                 csv_writer = None
 
                 for file in uab_files:
@@ -88,7 +88,7 @@ def mapped_csvs():
     
     # uab file cleanup and merge
     uab()
-    
+
     # moving mapping csv into dataframe
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 
