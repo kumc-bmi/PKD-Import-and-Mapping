@@ -70,6 +70,10 @@ def uab():
         updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
+
+    def remove_column_not_mapped(df, mapping_dict):
+        retain_mapped_columns = [col for col in df.columns if col in mapping_dict]
+        return df[retain_mapped_columns]
     
     for file in uab_files:
         # rename csv column header function
@@ -81,8 +85,8 @@ def uab():
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file)
             df.rename(columns=mapping_dict, inplace=True)
-            print(df)
-            df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
+            df_filtered = remove_column_not_mapped(df, mapping_dict)
+            df_filtered.to_csv(directory + "filtered_" + clean_uab_file, index=False)
 
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
