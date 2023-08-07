@@ -144,12 +144,12 @@ def uab():
 
                 print("Merged " + file + " into:", uab_final)
 
-    # for filename in os.listdir(directory):
-    #     if re.search(uab_pattern, filename):
-    #         print(uab_pattern)
-    #         print(filename)
-    #         os.remove(directory + filename)
-    #         print(f"Deleted: {filename}")
+    for filename in os.listdir(directory):
+        if re.search(uab_pattern, filename):
+            print(uab_pattern)
+            print(filename)
+            os.remove(directory + filename)
+            print(f"Deleted: {filename}")
 
 
 def mapped_csvs():
