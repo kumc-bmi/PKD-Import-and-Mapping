@@ -43,22 +43,28 @@ def uab():
             uab_files.append(filename)
 
     for file in uab_files:
-        with open(directory + file + ".csv", 'r') as csvfile:
-            csvreader = csv.DictReader(csvfile)
-            for row in csvreader:
+        with open(directory + file, 'r') as csvfile:
+            csv_reader = csv.DictReader(csvfile)
+            print(csv_reader)
+            for row in csv_reader:
+                print(row)
                 for key, value in row.items():
+                    print(key)
+                    print(value)
                     if value.strip():
                         uab_data.setdefault(key, []).append(value)
+                        print(uab_data)
                     else:
                         uab_data[key].append(uab_data[key][-1] if key in uab_data else '')
+                        print(uab_data)
 
-        output_filename = file + "updated.csv"
+        output_filename = file + "updated"
 
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
-            csv_writer.writerow(csvreader.fieldnames)
+            csv_writer.writerow(csv_reader.fieldnames)
             for i in range(len(uab_data['subject_id'])):
-                row = [uab_data[field][i] for field in csvreader.fieldnames]
+                row = [uab_data[field][i] for field in csv_reader.fieldnames]
                 csv_writer.writerow(row)
         
     for file in uab_files:
