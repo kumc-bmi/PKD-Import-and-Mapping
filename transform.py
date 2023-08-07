@@ -86,6 +86,9 @@ def mapped_csvs():
     # site, src_var, trg_var => (sites, column headers, target column header)
     # TRGCALCFIELD => calculated field
     
+    # uab file cleanup and merge
+    uab()
+    
     # moving mapping csv into dataframe
     mapping_df = pd.read_csv('./csvs/mapping.csv', skip_blank_lines=True, dtype=str)
 

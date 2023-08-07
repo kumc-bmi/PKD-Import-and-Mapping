@@ -143,7 +143,7 @@ def redcap_export_api():
                     # print error result for unsucessful export
                     print('Error exporting ' + filename + ' data: ', response.text)
             
-            print("All" + folder + ' data exported successfully')
+            print("All " + folder + ' data exported successfully')
         else:
             folder == 'umb'
             cnopts = pysftp.CnOpts()
