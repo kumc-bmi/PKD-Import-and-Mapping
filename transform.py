@@ -16,6 +16,9 @@ sys.path.append(os.path.abspath(dir_path))
 
 from env_attrs import *
 
+# set export directory path
+directory = './export/temp/raw_data/'
+
 # function for missing values
 def missing(x):
     if x == 'unk':
@@ -26,6 +29,57 @@ def missing(x):
         return '88'
     else:
         return x
+# extract site name for csv filename
+def uab():
+    
+    uab_files = []
+    uab_data = {}
+    uab_final = 'uab.csv'
+
+    uab_pattern = r'_\d+\.csv$'
+
+    for filename in os.listdir(directory):
+        if re.search(uab_pattern, filename):
+            uab_files.append(filename)
+
+    for file in uab_files:
+        with open(file, 'r') as csvfile:
+            csvreader = csv.DictReader(csvfile)
+            for row in csvreader:
+                for key, value in row.items():
+                    if value.strip():
+                        uab_data.setdefault(key, []).append(value)
+                    else:
+                        uab_data[key].append(uab_data[key][-1] if key in uab_data else '')
+
+        output_filename = file + 'updated'
+
+        with open(output_filename, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(csvreader.fieldnames)
+            for i in range(len(uab_data['subject_id'])):
+                row = [uab_data[field][i] for field in csvreader.fieldnames]
+                csv_writer.writerow(row)
+        
+    for file in uab_files:
+        if not uab_files:
+            print("No uab files found to merge.")
+        else:
+            with open(uab_final, 'w', newline='') as output_file:
+                csv_writer = None
+
+                for file in uab_files:
+                    file = file + 'updated'
+                    with open(os.path.join(directory, file), 'r') as input_file:
+                        csv_reader = csv.reader(input_file)
+                        if csv_writer is None:
+                            csv_writer = csv.writer(output_file)
+                            csv_writer.writerow(next(csv_reader))
+                        for row in csv_reader:
+                            csv_writer.writerow(row)
+                
+            print("Merged " + file + " into:", uab_final)
+
 
 def mapped_csvs():
     # based on site convert src_var to trg_var
@@ -57,7 +111,6 @@ def mapped_csvs():
     site_csv_list = []
 
     # fetch defined variables from sys
-    directory = './export/temp/raw_data/'
     import_directory = './import/temp/'
 
     # empty array to store site names

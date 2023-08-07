@@ -138,10 +138,12 @@ def redcap_export_api():
                     with open(filename, 'w') as f:
                         f.write(records)
                     # print success message for site
-                    print(folder + ' data exported successfully') 
+                    print(filename + ' exported successfully') 
                 else:
                     # print error result for unsucessful export
-                    print('Error exporting ' + folder + ' data: ', response.text)
+                    print('Error exporting ' + filename + ' data: ', response.text)
+            
+            print("All" + folder + ' data exported successfully')
         else:
             folder == 'umb'
             cnopts = pysftp.CnOpts()
