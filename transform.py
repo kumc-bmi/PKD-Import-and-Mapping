@@ -70,10 +70,6 @@ def uab():
         updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
-
-    def remove_column_not_mapped(df, mapping_dict):
-        retain_mapped_columns = [col for col in df.columns if col in mapping_dict]
-        return df[retain_mapped_columns]
     
     for file in uab_files:
         # rename csv column header function
@@ -85,8 +81,7 @@ def uab():
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file)
             df.rename(columns=mapping_dict, inplace=True)
-            df_filtered = remove_column_not_mapped(df, mapping_dict)
-            df_filtered.to_csv(directory + "filtered_" + clean_uab_file, index=False)
+            df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
@@ -119,7 +114,6 @@ def uab():
         else:
             os.rename(directory + uab_file, directory + "filtered_" + uab_file)
         
-        
     for file in uab_files:
         if not uab_files:
             print("No uab files found to merge.")
@@ -138,6 +132,11 @@ def uab():
                             csv_writer.writerow(row)
                 
             print("Merged " + file + " into:", uab_final)
+        
+    for filename in os.listdir(directory):
+        if uab_pattern in filename:
+            os.remove(os.path.join(directory, filename))
+            print(f"Deleted: {filename}")
 
 
 def mapped_csvs():
