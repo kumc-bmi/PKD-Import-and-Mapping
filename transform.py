@@ -131,10 +131,10 @@ def uab():
                         for row in csv_reader:
                             csv_writer.writerow(row)
                 
-            print("Merged " + file + " into:", uab_final)
+                print("Merged " + file + " into:", uab_final)
         
     for filename in os.listdir(directory):
-        if uab_pattern in filename:
+        if re.search(uab_pattern, filename):
             print(uab_pattern)
             print(filename)
             os.remove(directory, filename)
