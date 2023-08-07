@@ -119,6 +119,7 @@ def uab():
         uab_base_name = 'filtered_clean_updated_uab_1.csv'
         base_df = pd.read_csv(directory + uab_base_name)
         filename_df = pd.read_csv(directory + filename)
+        print(uab_filtered)
         if re.search(uab_filtered, filename):
             print(filename)
             if filename != uab_base_name:
