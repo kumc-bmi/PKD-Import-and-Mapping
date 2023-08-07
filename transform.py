@@ -114,7 +114,7 @@ def uab():
         elif uab_file == "clean_updated_uab_9.csv":
             map_column_head(uab_file, year_eight_map)
         else:
-            break
+            os.rename(directory + uab_file, directory + "filter_" + uab_file)
         
         
     for file in uab_files:
