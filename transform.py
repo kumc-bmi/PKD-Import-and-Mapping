@@ -63,6 +63,12 @@ def uab():
             csv_writer = csv.writer(csvfile)
             for row in uab_data:
                 csv_writer.writerow(row)
+
+    for file in uab_files:
+        output_filename = "updated_" + file
+        updated_uab_df = pd.read_csv(directory + output_filename)
+        updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
+        updated_uab_df.to_csv(directory + file + '_updated.csv', index=False, float_format=None)
         
     for file in uab_files:
         if not uab_files:
