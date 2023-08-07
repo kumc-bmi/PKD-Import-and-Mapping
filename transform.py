@@ -33,7 +33,6 @@ def missing(x):
 def uab():
     
     uab_files = []
-    uab_data = []
     uab_final = 'uab.csv'
 
     uab_pattern = r'_\d+\.csv$'
@@ -43,6 +42,7 @@ def uab():
             uab_files.append(filename)
 
     for file in uab_files:
+        uab_data = []
         with open(directory + file, 'r') as csvfile:
             csv_reader = csv.reader(csvfile)
             header = next(csv_reader)
@@ -57,7 +57,7 @@ def uab():
                 uab_data.append(compressed_row)
                 previous_row = compressed_row
 
-        output_filename = "updated" + file
+        output_filename = "updated_" + file
 
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
@@ -72,7 +72,7 @@ def uab():
                 csv_writer = None
 
                 for file in uab_files:
-                    file = 'updated' + file
+                    file = "updated_" + file
                     with open(os.path.join(directory, file), 'r') as input_file:
                         csv_reader = csv.reader(input_file)
                         if csv_writer is None:
