@@ -33,7 +33,7 @@ def missing(x):
 def uab():
     
     uab_files = []
-    uab_data = {}
+    uab_data = []
     uab_final = 'uab.csv'
 
     uab_pattern = r'_\d+\.csv$'
@@ -44,27 +44,28 @@ def uab():
 
     for file in uab_files:
         with open(directory + file, 'r') as csvfile:
-            csv_reader = csv.DictReader(csvfile)
+            csv_reader = csv.reader(csvfile)
+            header = next(csv_reader)
             print(csv_reader)
+
+            uab_data.append(header)
+            previous_row = next(csv_reader)
+
             for row in csv_reader:
                 print(row)
-                for key, value in row.items():
-                    print(key)
-                    print(value)
-                    if value.strip():
-                        uab_data.setdefault(key, []).append(value)
-                        print(uab_data)
-                    else:
-                        uab_data[key].append(uab_data[key][-1] if key in uab_data else '')
-                        print(uab_data)
+                compressed_row = []
+                for prev_row_cell, row_cell in zip(previous_row, row):
+                    print(prev_row_cell)
+                    print(row_cell)
+                    compressed_row.append(row_cell if row_cell.strip() else prev_row_cell)
+                uab_data.append(compressed_row)
+                previous_row = compressed_row
 
         output_filename = file + "updated"
 
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
-            csv_writer.writerow(csv_reader.fieldnames)
-            for i in range(len(uab_data['subject_id'])):
-                row = [uab_data[field][i] for field in csv_reader.fieldnames]
+            for row in uab_data:
                 csv_writer.writerow(row)
         
     for file in uab_files:
