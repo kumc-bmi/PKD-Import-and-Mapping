@@ -97,23 +97,21 @@ def uab():
 
         uab_file = "clean_updated_" + file
 
-        print(uab_file)
-
-        if uab_file == "clean_updated_uab_1.csv":
+        if uab_file == "clean_updated_uab_2.csv":
             map_column_head(uab_file, year_one_map)
-        elif uab_file == "clean_updated_uab_2.csv":
-            map_column_head(uab_file, year_two_map)
         elif uab_file == "clean_updated_uab_3.csv":
-            map_column_head(uab_file, year_three_map)
+            map_column_head(uab_file, year_two_map)
         elif uab_file == "clean_updated_uab_4.csv":
-            map_column_head(uab_file, year_four_map)
+            map_column_head(uab_file, year_three_map)
         elif uab_file == "clean_updated_uab_5.csv":
-            map_column_head(uab_file, year_five_map)
+            map_column_head(uab_file, year_four_map)
         elif uab_file == "clean_updated_uab_6.csv":
-            map_column_head(uab_file, year_six_map)
+            map_column_head(uab_file, year_five_map)
         elif uab_file == "clean_updated_uab_7.csv":
-            map_column_head(uab_file, year_seven_map)
+            map_column_head(uab_file, year_six_map)
         elif uab_file == "clean_updated_uab_8.csv":
+            map_column_head(uab_file, year_seven_map)
+        elif uab_file == "clean_updated_uab_9.csv":
             map_column_head(uab_file, year_eight_map)
         else:
             break
