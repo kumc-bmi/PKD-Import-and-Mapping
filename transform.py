@@ -80,8 +80,9 @@ def uab():
                     base_name, arm_name = line.strip().split(',')
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file)
-            df_filtered = df.rename(columns=mapping_dict, inplace=True)
-            df_filtered.to_csv(directory + "filtered_clean_updated_" + file, index=False, float_format=None)
+            df.rename(columns=mapping_dict, inplace=True)
+            print(df)
+            df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
