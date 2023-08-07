@@ -81,9 +81,11 @@ def uab():
                     mapping_dict[arm_name] = base_name
             df = pd.read_csv(directory + clean_uab_file)
             df.rename(columns=mapping_dict, inplace=True)
+            print(mapping_dict)
+            print(df)
             keep_columns = [col for col in df.columns if col in mapping_dict]
             df_filtered = df[keep_columns]
-            df_filtered.to_csv(directory + "filter_clean_updated_" + file, index=False, float_format=None)
+            df_filtered.to_csv(directory + "filtered_clean_updated_" + file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
@@ -114,7 +116,7 @@ def uab():
         elif uab_file == "clean_updated_uab_9.csv":
             map_column_head(uab_file, year_eight_map)
         else:
-            os.rename(directory + uab_file, directory + "filter_" + uab_file)
+            os.rename(directory + uab_file, directory + "filtered_" + uab_file)
         
         
     for file in uab_files:
@@ -125,7 +127,7 @@ def uab():
                 csv_writer = None
 
                 for file in uab_files:
-                    file = "filter_clean_updated_" + file
+                    file = "filtered_clean_updated_" + file
                     with open(os.path.join(directory, file), 'r') as input_file:
                         csv_reader = csv.reader(input_file)
                         if csv_writer is None:
