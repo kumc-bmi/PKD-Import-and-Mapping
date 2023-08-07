@@ -135,7 +135,9 @@ def uab():
         
     for filename in os.listdir(directory):
         if uab_pattern in filename:
-            os.remove(os.path.join(directory, filename))
+            print(uab_pattern)
+            print(filename)
+            os.remove(directory, filename)
             print(f"Deleted: {filename}")
 
 
