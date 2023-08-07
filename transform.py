@@ -70,6 +70,54 @@ def uab():
         updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
+    
+    for file in uab_files:
+        # rename csv column header function
+        def map_column_head(clean_uab_file, mapping_filename):
+            mapping_dict = {}
+            with open(mapping_filename, 'r') as mapping_file:
+                for line in mapping_file:
+                    arm_name, base_name = line.strip().split(',')
+                    mapping_dict[arm_name] = base_name
+            df = pd.read_csv(clean_uab_file)
+            df.rename(columns=mapping_dict, inplace=True)
+            keep_columns = [col for col in df.columns if col in mapping_dict]
+            df_filtered = df[keep_columns]
+            df_filtered.to_csv(directory + "filter_clean_updated_" + file, index=False, float_format=None)
+
+        uab_dir = './csvs/uab/'
+        year_one_map = uab_dir + 'base_year_1.csv'
+        year_two_map = uab_dir + 'base_year_2.csv'
+        year_three_map = uab_dir + 'base_year_3.csv'
+        year_four_map = uab_dir + 'base_year_4.csv'
+        year_five_map = uab_dir + 'base_year_5.csv'
+        year_six_map = uab_dir + 'base_year_6.csv'
+        year_seven_map = uab_dir + 'base_year_7.csv'
+        year_eight_map = uab_dir + 'base_year_8.csv'
+
+        uab_file = "clean_updated_" + file
+
+        print(uab_file)
+        
+        if uab_file == "clean_updated_uab_1.csv":
+            map_column_head(uab_file, year_one_map)
+        elif uab_file == "clean_updated_uab_2.csv":
+            map_column_head(uab_file, year_two_map)
+        elif uab_file == "clean_updated_uab_3.csv":
+            map_column_head(uab_file, year_three_map)
+        elif uab_file == "clean_updated_uab_4.csv":
+            map_column_head(uab_file, year_four_map)
+        elif uab_file == "clean_updated_uab_5.csv":
+            map_column_head(uab_file, year_five_map)
+        elif uab_file == "clean_updated_uab_6.csv":
+            map_column_head(uab_file, year_six_map)
+        elif uab_file == "clean_updated_uab_7.csv":
+            map_column_head(uab_file, year_seven_map)
+        elif uab_file == "clean_updated_uab_8.csv":
+            map_column_head(uab_file, year_eight_map)
+        else:
+            break
+        
         
     for file in uab_files:
         if not uab_files:
@@ -79,7 +127,7 @@ def uab():
                 csv_writer = None
 
                 for file in uab_files:
-                    file = "clean_updated_" + file
+                    file = "filter_clean_updated_" + file
                     with open(os.path.join(directory, file), 'r') as input_file:
                         csv_reader = csv.reader(input_file)
                         if csv_writer is None:
