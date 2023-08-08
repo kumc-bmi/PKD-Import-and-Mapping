@@ -34,7 +34,7 @@ def redcap_export_api():
     sftp_port = 22
 
     # folders for exported files
-    folders = ['kumc', 'umb', 'uab']
+    folders = ['kumc', 'uab', 'umb']
 
     for folder in folders:
         # assign token and project_id
