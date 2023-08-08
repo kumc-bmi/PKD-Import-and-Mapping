@@ -167,7 +167,7 @@ def uab():
 
     subject_id_counts = {}
     
-    uab_final = pd.read_csv(directory + "uab.csv", dtype=str)
+    uab_final = pd.read_csv(directory + uab_final, dtype=str)
 
     # make subject_id unique
     for index, row in uab_final.iterrows():
@@ -180,6 +180,8 @@ def uab():
         if subject_id_counts[current_subject_id] > 1:
             new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
             uab_final.at[index, 'subject_id'] = new_subject_id
+
+        print(uab_final)
     
     uab_final.to_csv(directory + uab_final, index=False)
 
