@@ -649,6 +649,8 @@ def mapped_csvs():
             print(site)
             print(site_source_mapping)
             print(site_source_dict)
+
+            site_source_mapping.to_csv(import_directory + site + '/' + "site_source_mappled" + site + '.csv', index=False, float_format=None)
             
             # create new empty dataframe for storage
             df_mapped = {}
