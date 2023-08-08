@@ -87,6 +87,10 @@ def uab():
             df = pd.read_csv(directory + clean_uab_file, dtype=str)
             df.rename(columns=mapping_dict, inplace=True)
             df["redcap_event_name"] = redcap_event_name
+
+            if "study_id" in df.columns:
+                df = df.drop("study_id", axis=1)
+
             df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
@@ -120,6 +124,8 @@ def uab():
         else:
             df = pd.read_csv(directory + uab_file, dtype=str)
             df["redcap_event_name"] = "baseline_arm_1"
+            if "study_id" in df.columns:
+                df = df.drop("study_id", axis=1)
             df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
     for filename in os.listdir(directory):
