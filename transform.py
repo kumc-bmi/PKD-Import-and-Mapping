@@ -143,9 +143,6 @@ def uab():
                     non_base_arm_df[col] = ''
             
             base_master_df = pd.concat([base_master_df, non_base_arm_df], ignore_index=False)
-        else:
-            print("No uab file(s) found to merge.")
-            break
     
     base_master_df.to_csv(directory + uab_final, index=False)
 
