@@ -286,6 +286,47 @@ def mapped_csvs():
 
             # drop the 'cr7' column
             site_data_df = site_data_df.drop('cr7', axis=1)
+        elif site == 'uab':
+            # read umb site raw data to dataframe
+            site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
+
+            # create a new DataFrame to hold the transposed data
+            new_uab_df = pd.DataFrame(columns=['subject_id', 'race', 'race___1', 'ethnic', 'race___3', 'race___5', 'race___6'])
+
+            # Iterate over each row in the original DataFrame
+            for index, row in site_data_df.iterrows():
+                # get the value from the 'race' column for the current row
+                race_value = row['race']
+                        
+                # create a new dictionary to hold the values for the current row
+                new_row = {'subject_id': row['subject_id'], 'race': race_value}
+                        
+                # Set the value for the corresponding column based on the 'race' value
+                if race_value == '1':
+                    new_row['race___5'] = '1'
+                elif race_value == '2':
+                    new_row['race___1'] = '1'
+                elif race_value == '3':
+                    new_row['ethnic'] = '1'
+                elif race_value == '4':
+                    new_row['race___3'] = '1'
+                elif race_value == '5':
+                    new_row['race___6'] = '1'
+            
+                # create a new DataFrame from the new_row dictionary
+                new_umb_row_df = pd.DataFrame.from_dict(new_row, orient='index').T
+            
+                # concatenate the new DataFrame to the new_uab_df DataFrame
+                new_uab_df = pd.concat([new_uab_df, new_umb_row_df], ignore_index=True, sort=True)
+
+            # remove string nan on dataframe
+            new_uab_df =  new_uab_df.fillna('')
+
+            # append race columns to umb dataframe
+            site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'race'], how='left')
+
+            # drop the 'race' column
+            site_data_df = site_data_df.drop('race', axis=1)
         else:
             # read site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
