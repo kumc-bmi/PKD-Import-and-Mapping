@@ -74,7 +74,7 @@ def uab():
         updated_uab_df.drop_duplicates(subset=updated_uab_df.columns[1:], inplace=True)
         df = updated_uab_df[updated_uab_df.iloc[:, 1:].notnull().any(axis=1)]
         df.to_csv(directory + "clean_" + file, index=False, float_format=None)
-    
+
     # rename column headers based on base_arm file
     for file in uab_files:
         # rename csv column header function
@@ -87,9 +87,11 @@ def uab():
             df = pd.read_csv(directory + clean_uab_file, dtype=str)
             df.rename(columns=mapping_dict, inplace=True)
             df["redcap_event_name"] = redcap_event_name
+            df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
+            df["subject_id"] = df["subject_id"].str.replace(' ','')
 
             if "study_id" in df.columns:
-                df = df.drop("study_id", axis=1)
+                df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
 
             df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
@@ -124,8 +126,11 @@ def uab():
         else:
             df = pd.read_csv(directory + uab_file, dtype=str)
             df["redcap_event_name"] = "baseline_arm_1"
+            df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
+            df["subject_id"] = df["subject_id"].str.replace(' ','')
+            
             if "study_id" in df.columns:
-                df = df.drop("study_id", axis=1)
+                df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
             df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
     for filename in os.listdir(directory):
@@ -139,9 +144,7 @@ def uab():
     base_master_df = pd.read_csv(directory + uab_base_name, dtype=str)
 
     for filename in os.listdir(directory):
-        print(filename)
         if filename.startswith(uab_filtered) and filename != uab_base_name:
-            print(filename)
             non_base_arm_df = pd.read_csv(directory + filename, dtype=str)
 
             for col in base_master_df.columns:
