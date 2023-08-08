@@ -130,7 +130,7 @@ def uab():
             filename_df.drop(columns=non_retain, inplace=True)
             filename_df.to_csv(directory + filename, index=False, float_format=None)
     
-    base_master_df = pd.read_csv(uab_base_name, dtype=str)
+    base_master_df = pd.read_csv(directory + uab_base_name, dtype=str)
 
     for filename in os.listdir(directory):
         if filename.startswith(uab_filtered):
