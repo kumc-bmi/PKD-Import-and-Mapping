@@ -666,7 +666,7 @@ def mapped_csvs():
             
             print(site_data_col_renamed_df)
 
-            site_source_mapping.to_csv(import_directory + site + '/' + "site_data_col_renamed" + site + '.csv', index=False, float_format=None)
+            site_data_col_renamed_df.to_csv(import_directory + site + '/' + "site_data_col_renamed" + site + '.csv', index=False, float_format=None)
 
             # create new dataframe and apply the mapping to the column with values to be converted
             for col in site_data_col_renamed_df.columns:
