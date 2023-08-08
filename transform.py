@@ -146,6 +146,7 @@ def uab():
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             base_df = pd.read_csv(directory + uab_base_name, dtype=str)
             filename_df = pd.read_csv(directory + filename, dtype=str)
+            # remove columns not present in base arm file 
             non_retain = [col for col in filename_df.columns if col not in base_df.columns]
             filename_df.drop(columns=non_retain, inplace=True)
             filename_df.to_csv(directory + filename, index=False, float_format=None)
@@ -163,6 +164,24 @@ def uab():
             base_master_df = pd.concat([base_master_df, non_base_arm_df], ignore_index=False)
     
     base_master_df.to_csv(directory + uab_final, index=False)
+
+    subject_id_counts = {}
+    
+    uab_final = pd.read_csv(directory + "uab.csv", dtype=str)
+
+    # make subject_id unique
+    for index, row in uab_final.iterrows():
+        current_subject_id = row["subject_id"]
+        if current_subject_id in subject_id_counts:
+            subject_id_counts[current_subject_id] += 1
+        else:
+            subject_id_counts[current_subject_id] = 1
+
+        if subject_id_counts[current_subject_id] > 1:
+            new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
+            uab_final.at[index, 'subject_id'] = new_subject_id
+    
+    uab_final.to_csv(directory + uab_final, index=False)
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
