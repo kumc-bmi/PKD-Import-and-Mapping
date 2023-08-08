@@ -133,9 +133,9 @@ def uab():
     base_master_df = pd.read_csv(directory + uab_base_name, dtype=str)
 
     for filename in os.listdir(directory):
-        if filename.startswith(uab_filtered):
-            arm_csv = os.path.join(directory, filename)
-            non_base_arm_df = pd.read_csv(arm_csv, dtype=str)
+        if filename.startswith(uab_filtered) and filename != uab_base_name:
+            print(filename)
+            non_base_arm_df = pd.read_csv(directory + filename, dtype=str)
 
             for col in base_master_df.columns:
                 if col not in non_base_arm_df.columns:
@@ -146,7 +146,7 @@ def uab():
             print("No uab file(s) found to merge.")
             break
     
-    base_master_df.to_csv(uab_final, index=False)
+    base_master_df.to_csv(directory + uab_final, index=False)
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
