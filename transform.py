@@ -233,6 +233,8 @@ def mapped_csvs():
     
     site_names = sorted(site_names, key=lambda site_name:[site_name[0]])
 
+    print(site_names)
+
     for site in site_names:
         # declare variables
         site_col_headers = site + '_col_headers'
