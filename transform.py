@@ -133,6 +133,7 @@ def uab():
     base_master_df = pd.read_csv(directory + uab_base_name, dtype=str)
 
     for filename in os.listdir(directory):
+        print(filename)
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             print(filename)
             non_base_arm_df = pd.read_csv(directory + filename, dtype=str)
