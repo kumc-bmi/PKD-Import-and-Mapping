@@ -642,10 +642,14 @@ def mapped_csvs():
         else:
             # convert corresponding source row values to target source value
             site_source_mapping = site_src_val[site_src_val['site'] == site]
-
+            
             # create a dictionary that maps the target source values to the original source site value
             site_source_dict = {col: dict(zip(group['source_val_combined'], group['trg_val'])) for col, group in site_source_mapping.groupby('trg_var')}
-
+            
+            print(site)
+            print(site_source_mapping)
+            print(site_source_dict)
+            
             # create new empty dataframe for storage
             df_mapped = {}
             # iterate over columns in mapping dictionary
