@@ -133,7 +133,7 @@ def uab():
             df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
             df["subject_id"] = df["subject_id"].str.replace('-nan-nan','')
 
-            df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry", "study_id", "datacomp", "datatype"], axis=1)
+            df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry", "study_id", "datacomp", "datatype", "pt_diagn"], axis=1)
 
             # ensure subject_id and redcap_event_name are first in df
             initial_cols = ['subject_id', 'redcap_event_name']
