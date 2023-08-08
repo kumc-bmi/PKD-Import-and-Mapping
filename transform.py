@@ -231,7 +231,7 @@ def mapped_csvs():
         if filename.endswith('.csv'):
             site_names.append(os.path.splitext(filename)[0])
     
-    site_names = sorted(site_names, key=lambda site_names:[site_names[0]])
+    site_names = sorted(site_names, key=lambda site_name:[site_name[0]])
 
     for site in site_names:
         # declare variables
