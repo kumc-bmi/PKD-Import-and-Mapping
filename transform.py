@@ -164,13 +164,13 @@ def uab():
             base_master_df = pd.concat([base_master_df, non_base_arm_df], ignore_index=False)
     
     base_master_df.to_csv(directory + uab_final, index=False)
+    
+    unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
 
     subject_id_counts = {}
-    
-    uab_final = pd.read_csv(directory + uab_final, dtype=str)
 
     # make subject_id unique
-    for index, row in uab_final.iterrows():
+    for index, row in unique_uab_df.iterrows():
         current_subject_id = row["subject_id"]
         if current_subject_id in subject_id_counts:
             subject_id_counts[current_subject_id] += 1
@@ -179,11 +179,9 @@ def uab():
 
         if subject_id_counts[current_subject_id] > 1:
             new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
-            uab_final.at[index, 'subject_id'] = new_subject_id
-
-        print(uab_final)
-    
-    uab_final.to_csv(directory + uab_final, index=False)
+            unique_uab_df.at[index, 'subject_id'] = new_subject_id
+        
+    unique_uab_df.to_csv(directory + uab_final, index=False)
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
