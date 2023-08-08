@@ -657,13 +657,13 @@ def mapped_csvs():
                 else:
                     # If it does not exist, set all values to None
                     df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
+            
+            print(site_data_col_renamed_df)
 
             # create new dataframe and apply the mapping to the column with values to be converted
             for col in site_data_col_renamed_df.columns:
                 if col not in site_source_dict.keys():
                     df_mapped[col] = site_data_col_renamed_df[col].tolist()
-            
-            print(site_data_col_renamed_df)
 
             # create new DataFrame
             site_df_mapped = pd.DataFrame(df_mapped)
