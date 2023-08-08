@@ -169,7 +169,6 @@ def uab():
             os.remove(directory + filename)
             print(f"Deleted: {filename}")
 
-
 def mapped_csvs():
     # based on site convert src_var to trg_var
     # site, src_var, trg_var => (sites, column headers, target column header)
@@ -622,6 +621,8 @@ def mapped_csvs():
             for col in site_data_col_renamed_df.columns:
                 if col not in site_source_dict.keys():
                     df_mapped[col] = site_data_col_renamed_df[col].tolist()
+            
+            print(df_mapped)
 
             # create new DataFrame
             site_df_mapped = pd.DataFrame(df_mapped)
