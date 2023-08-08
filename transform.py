@@ -93,7 +93,12 @@ def uab():
             if "study_id" in df.columns:
                 df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
 
-            df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
+            # ensure subject_id and redcap_event_name are first in df
+            initial_cols = ['subject_id', 'redcap_event_name']
+
+            # reorder the columns
+            final_df = df.reindex(columns=initial_cols + [col for col in df.columns if col not in initial_cols])
+            final_df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
@@ -131,7 +136,13 @@ def uab():
 
             if "study_id" in df.columns:
                 df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
-            df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
+
+            # ensure subject_id and redcap_event_name are first in df
+            initial_cols = ['subject_id', 'redcap_event_name']
+
+            # reorder the columns
+            final_df = df.reindex(columns=initial_cols + [col for col in df.columns if col not in initial_cols])
+            final_df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
     for filename in os.listdir(directory):
         if filename.startswith(uab_filtered) and filename != uab_base_name:
