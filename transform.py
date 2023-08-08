@@ -37,6 +37,7 @@ def uab():
 
     uab_pattern = r'_\d+\.csv$'
     uab_filtered = "filtered_"
+    uab_base_name = 'filtered_clean_updated_uab_1.csv'
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
@@ -122,32 +123,30 @@ def uab():
             df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
     for filename in os.listdir(directory):
-        uab_base_name = 'filtered_clean_updated_uab_1.csv'
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             base_df = pd.read_csv(directory + uab_base_name, dtype=str)
             filename_df = pd.read_csv(directory + filename, dtype=str)
             non_retain = [col for col in filename_df.columns if col not in base_df.columns]
             filename_df.drop(columns=non_retain, inplace=True)
             filename_df.to_csv(directory + filename, index=False, float_format=None)
-        
-    for file in uab_files:
-        if not uab_files:
-            print("No uab files found to merge.")
+    
+    base_master_df = pd.read_csv(uab_base_name, dtype=str)
+
+    for filename in os.listdir(directory):
+        if filename.startswith(uab_filtered):
+            arm_csv = os.path.join(directory, filename)
+            non_base_arm_df = pd.read_csv(arm_csv, dtype=str)
+
+            for col in base_master_df.columns:
+                if col not in non_base_arm_df.columns:
+                    non_base_arm_df[col] = ''
+            
+            base_master_df = pd.concat([base_master_df, non_base_arm_df], ignore_index=False)
         else:
-            with open(directory + uab_final, 'w', newline='') as output_file:
-                csv_writer = None
-
-                for file in uab_files:
-                    file = "filtered_clean_updated_" + file
-                    with open(os.path.join(directory, file), 'r') as input_file:
-                        csv_reader = csv.reader(input_file)
-                        if csv_writer is None:
-                            csv_writer = csv.writer(output_file)
-                            csv_writer.writerow(next(csv_reader))
-                        for row in csv_reader:
-                            csv_writer.writerow(row)
-
-                print("Merged " + file + " into:", uab_final)
+            print("No uab file(s) found to merge.")
+            break
+    
+    base_master_df.to_csv(uab_final, index=False)
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
