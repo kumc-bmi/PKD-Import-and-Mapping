@@ -88,7 +88,7 @@ def uab():
             df.rename(columns=mapping_dict, inplace=True)
             df["redcap_event_name"] = redcap_event_name
             df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
-            df["subject_id"] = df["subject_id"].str.replace(' ','')
+            df["subject_id"] = df["subject_id"].str.replace('-nan-nan','')
 
             if "study_id" in df.columns:
                 df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
@@ -127,8 +127,8 @@ def uab():
             df = pd.read_csv(directory + uab_file, dtype=str)
             df["redcap_event_name"] = "baseline_arm_1"
             df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
-            df["subject_id"] = df["subject_id"].str.replace(' ','')
-            
+            df["subject_id"] = df["subject_id"].str.replace('-nan-nan','')
+
             if "study_id" in df.columns:
                 df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry"], axis=1)
             df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
