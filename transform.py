@@ -663,9 +663,10 @@ def mapped_csvs():
                 if col not in site_source_dict.keys():
                     df_mapped[col] = site_data_col_renamed_df[col].tolist()
             
+            print(site_data_col_renamed_df)
+
             # create new DataFrame
             site_df_mapped = pd.DataFrame(df_mapped)
-            print(site_df_mapped)
 
             # ensure studyid and redcap_event_name are first in df
             initial_cols = ['studyid', 'redcap_event_name']
