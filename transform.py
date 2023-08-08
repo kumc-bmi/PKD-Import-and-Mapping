@@ -224,17 +224,13 @@ def mapped_csvs():
     import_directory = './import/temp/'
 
     # empty array to store site names
-    site_names = ["kumc", "uab", "umb"]
+    site_names = []
     
-    # # extract site name for csv filename
-    # for filename in os.listdir(directory):
-    #     if filename.endswith('.csv'):
-    #         site_names.append(os.path.splitext(filename)[0])
+    # extract site name for csv filename
+    for filename in os.listdir(directory):
+        if filename.endswith('.csv'):
+            site_names.append(os.path.splitext(filename)[0])
     
-    # site_names = sorted(site_names, key=lambda site_name:[site_name[0]])
-
-    print(site_names)
-
     for site in site_names:
         # declare variables
         site_col_headers = site + '_col_headers'
