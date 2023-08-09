@@ -670,7 +670,7 @@ lvrctscandt,uab,,,,lvrctscandt,,,,text,text,date_ymd,date_mdy,,ct_imaging,,,,,da
 port_flow,uab,,,,port_flow,,,,radio,text,,,,ct_imaging,,,,,portal_flow_ct,,,,
 lvrctscanres,uab,1,normal,,lvrctscannodul,no,No,,radio,radio,,,,ct_imaging,,,,,nodular_liver_ct,,,,
 lvrctscanres,uab,2,nodular,,lvrctscannodul,yes,Yes,,radio,radio,,,,ct_imaging,,,,,nodular_liver_ct,,,,
-lvrctscanres,uab,3,"dilated intrahepatic bile ducts[mild, moderate, or severe]",,lvrctscannodul,UNK,UNK,,radio,radio,,,,ct_imaging,,,,,nodular_liver_ct,,,,
+lvrctscanres,uab,3,"dilated intrahepatic bile ducts[mild, moderate, or severe]",,lvrctscannodul,unk,UNK,,radio,radio,,,,ct_imaging,,,,,nodular_liver_ct,,,,
 lvrctscanres,uab,1,normal,,lvrultbiledilat,0,No,,radio,yesno,,,,ct_imaging,,,,,intrahepatic_bile_duct_dilation_ct_yn,,,,
 lvrctscanres,uab,2,nodular,,lvrultbiledilat,888,UNK,,radio,yesno,,,,ct_imaging,,,,,intrahepatic_bile_duct_dilation_ct_yn,,,,
 lvrctscanres,uab,3,"dilated intrahepatic bile ducts[mild, moderate, or severe]",,lvrultbiledilat,1,Yes,,radio,yesno,,,,ct_imaging,,,,,intrahepatic_bile_duct_dilation_ct_yn,,,,
