@@ -679,8 +679,6 @@ def mapped_csvs():
                     # If it does not exist, set all values to None
                     df_mapped[col] = pd.Series([None]*len(site_data_col_renamed_df))
             
-            print(site_data_col_renamed_df)
-
             site_data_col_renamed_df.to_csv(import_directory + site + '/' + "site_data_col_renamed" + site + '.csv', index=False, float_format=None)
 
             # create new dataframe and apply the mapping to the column with values to be converted
