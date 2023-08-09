@@ -506,7 +506,7 @@ pf15b,umb,,,,average_diabp3,,,text,text,text,number,,,physical_exam,,,,Y,dbp_avg
 tanner_stage,uab,1,Stage 1,,tanner_stage,1,Stage 1,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
 tanner_stage,uab,2,Stage 2,,tanner_stage,2,Stage 2,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
 tanner_stage,uab,3,Stage 3,,tanner_stage,3,Stage 3,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
-tanner_stage,uab,4,Stage 4,tanner_stage,4,Stage 4,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
+tanner_stage,uab,4,Stage 4,,tanner_stage,4,Stage 4,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
 tanner_stage,uab,5,Stage 5,,tanner_stage,5,Stage 5,,radio,radio,,,,physical_exam,,,,,tanner_stage,,,,
 lbdtc,kumc,,,,blood_date,,,,text,text,,date_mdy,,lab_results,,,,,date_of_blood_collection,,,,
 cr108a,umb,,,,blood_date,,,,text,text,,date_mdy,,lab_results,,,,,date_of_blood_collection,,,,
