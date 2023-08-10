@@ -167,13 +167,12 @@ def uab():
     
     unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
 
-    subject_event = unique_uab_df.columns[2:]
-
-    subject_event_dict = {col: 'max' for col in subject_event}
+    def most_filled_columns(group_row):
+        return group_row.iloc[group_row.notnull().sum(axis=1).idxmax()]
     
-    unique_uab_df = unique_uab_df.groupby(['subject_id', 'redcap_event_name'], as_index=False).agg(subject_event_dict)
+    uab_updated_df = unique_uab_df.groupby(['subject_id', 'redcap_event_name'], as_index=False).appy(most_filled_columns)
 
-    unique_uab_df.to_csv(directory + uab_final, index=False)
+    uab_updated_df.to_csv(directory + uab_final, index=False)
 
     # subject_id_counts = {}
 
