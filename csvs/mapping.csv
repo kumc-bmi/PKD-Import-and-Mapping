@@ -870,7 +870,7 @@ cr105,umb,1,Yes,,echo_yn,1,Yes,,yesno,yesno,,,,echocardiogram,,,,,echo_performed
 cr105,umb,0,No,,echo_yn,0,No,,yesno,yesno,,,,echocardiogram,,,,,echo_performed_yn,,,,
 echo,uab,1,Yes,,echo_yn,1,Yes,,radio,yesno,,,,echocardiogram,,,,,echo_performed_yn,,,,
 echo,uab,2,No,,echo_yn,0,No,,radio,yesno,,,,echocardiogram,,,,,echo_performed_yn,,,,
-echo,uab,3,Unknown,,echo_yn,,,,radio,radio,,,,echocardiogram,,,,,echo_performed_yn,,,,
+echo,uab,3,Unknown,,echo_yn,888,UNK,,radio,radio,,,,echocardiogram,,,,,echo_performed_yn,,,,
 cr105a,umb,,,,echo_date,,,,text,text,date_mdy,date_mdy,,echocardiogram,,,,,echo_performed_date,,,,
 echo_date,uab,,,,echo_date,,,,text,text,date_ymd,date_mdy,,echocardiogram,,,,,echo_performed_date,,,,
 echo_lvh,uab,1,Yes,,echo_lvh,1,Yes,,radio,yesno,,,,echocardiogram,,,,,echo_finding_lvh_yn,,,,
