@@ -171,7 +171,7 @@ def uab():
 
     subject_event_dict = {col: 'max' for col in subject_event}
     
-    unique_uab_df = subject_event_dict.groupby(['subject_id', 'redcap_event_name'], as_index=False).agg(subject_event_dict)
+    unique_uab_df = unique_uab_df.groupby(['subject_id', 'redcap_event_name'], as_index=False).agg(subject_event_dict)
 
     unique_uab_df.to_csv(directory + uab_final, index=False)
 
