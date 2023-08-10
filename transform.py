@@ -165,7 +165,15 @@ def uab():
     
     base_master_df.to_csv(directory + uab_final, index=False)
     
-    # unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
+    unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
+
+    subject_event = unique_uab_df.columns[2:]
+
+    subject_event_dict = {col: 'max' for col in subject_event}
+    
+    unique_uab_df = subject_event_dict.groupby(['subject_id', 'redcap_event_name'], as_index=False).agg(subject_event_dict)
+
+    unique_uab_df.to_csv(directory + uab_final, index=False)
 
     # subject_id_counts = {}
 
@@ -182,6 +190,7 @@ def uab():
     #         unique_uab_df.at[index, 'subject_id'] = new_subject_id
         
     # unique_uab_df.to_csv(directory + uab_final, index=False)
+    
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
