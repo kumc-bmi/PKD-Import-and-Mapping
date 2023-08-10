@@ -170,9 +170,12 @@ def uab():
     def most_filled_columns(group_row):
         counts_fill = group_row.notnull().sum(axis=1)
         max_index = counts_fill.idxmax()
-        return group_row.iloc[max_index]
+        return group_row.loc[max_index]
     
     uab_updated_df = unique_uab_df.groupby(['subject_id', 'redcap_event_name'], as_index=False).apply(most_filled_columns)
+
+    # reset index
+    uab_updated_df.reset_index(drop=True)
 
     uab_updated_df.to_csv(directory + uab_final, index=False)
 
