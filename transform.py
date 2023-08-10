@@ -165,23 +165,23 @@ def uab():
     
     base_master_df.to_csv(directory + uab_final, index=False)
     
-    unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
+    # unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
 
-    subject_id_counts = {}
+    # subject_id_counts = {}
 
-    # make subject_id unique
-    for index, row in unique_uab_df.iterrows():
-        current_subject_id = row["subject_id"]
-        if current_subject_id in subject_id_counts:
-            subject_id_counts[current_subject_id] += 1
-        else:
-            subject_id_counts[current_subject_id] = 1
+    # # make subject_id unique
+    # for index, row in unique_uab_df.iterrows():
+    #     current_subject_id = row["subject_id"]
+    #     if current_subject_id in subject_id_counts:
+    #         subject_id_counts[current_subject_id] += 1
+    #     else:
+    #         subject_id_counts[current_subject_id] = 1
 
-        if subject_id_counts[current_subject_id] > 1:
-            new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
-            unique_uab_df.at[index, 'subject_id'] = new_subject_id
+    #     if subject_id_counts[current_subject_id] > 1:
+    #         new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
+    #         unique_uab_df.at[index, 'subject_id'] = new_subject_id
         
-    unique_uab_df.to_csv(directory + uab_final, index=False)
+    # unique_uab_df.to_csv(directory + uab_final, index=False)
 
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
