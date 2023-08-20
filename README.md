@@ -101,6 +101,8 @@ Sites API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under the
 ### Main Variables
   ```py
   values['kumc_redcap_api_url'] = 'KUMC REDCAP API URL';
+  ```
+  ```py
   values['chld_redcap_api_url'] = 'CHILDREN NATIONAL REDCAP API URL';
   ```
 
@@ -115,7 +117,7 @@ Sites API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under the
     - [x] `kumc_sftp_pwd`: SFTP password
     - [x] `sftp_remote_path`: SFTP file path for stored data
 
-`extract.py` file codebase extracts/downloads all project data in csv format using either API or SFTP pull from all three sites.
+`extract.py` file codebase extracts/downloads all project data into csv format using either API or SFTP pull from all three sites.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
