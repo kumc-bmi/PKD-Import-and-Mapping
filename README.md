@@ -132,3 +132,10 @@ Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under th
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Import Instructions
+
+* `load.py` file codebase imports all combined preprocessed records by events from all sites and imports them into the unified redcap project. 
+* final csv files (`kumc.csv`, `uab.csv`, `umb.csv`) in the`./import/temp/` directory is loaded to the unified project through a redcap API call request.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Run Instructions
