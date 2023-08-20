@@ -95,6 +95,30 @@ Based on your OS (Operating System), you need to download python software. The e
 
 ### Download Instructions
 
+Sites API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under the api and token sections. API access is only permitted for University of Kansas Medical Center and Children National. Maryland data is uploaded by the Maryland team through sftp which is then accessed by provided sftp credentials.
+
+<!-- ENVIROMENT VARIABLES -->
+### Main Variables
+  ```py
+  values['kumc_redcap_api_url'] = 'KUMC REDCAP API URL';
+  values['chld_redcap_api_url'] = 'CHILDREN NATIONAL REDCAP API URL';
+  ```
+
+- [x] `token_kumc`: KUMC redcap project API token
+- [x] `token_chld`: Children National redcap project API token
+- [x] `proj_token`: Unified redcap project API token
+- [x] `kumc_project_id`: KUMC redcap project identification number
+- [x] `chld_project_id`: Children National redcap project identification number
+- [x] `project_id`: Unified redcap project identification number
+- [x] `kumc_sftp_host`: Secure file transfer protocol host URL for Maryland data
+    - [x] `kumc_sftp_username`: SFTP username
+    - [x] `kumc_sftp_pwd`: SFTP password
+    - [x] `sftp_remote_path`: SFTP file path for stored data
+
+`extract.py` file codebase extracts/downloads all project data in csv format using either API or SFTP pull from all three sites.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Mapping Instructions
 
 ### Import Instructions
