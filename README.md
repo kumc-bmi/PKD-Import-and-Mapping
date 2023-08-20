@@ -1,4 +1,5 @@
 ## 📽️ PKD MULTI-SITE REGISTRY
+<a name="readme-top"></a>
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) ![Makefile](https://img.shields.io/badge/GNU%20Bash-4EAA25?style=for-the-badge&logo=GNU%20Bash&logoColor=white)
 
@@ -54,7 +55,7 @@ To get a local copy up and running follow these simple example steps.
 
 There are several ways to install Python, that is if it needs to be installed at all!
 
-## Check what’s installed first
+### Check what’s installed first
 
 * version
   ```sh
