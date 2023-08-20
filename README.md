@@ -63,12 +63,13 @@ There are several ways to install Python, that is if it needs to be installed at
   ```
 
 Based on your OS (Operating System), you need to download python software. The example below is on a Linux/unix system through command line.
+
+### Installation
+
 * python
   ```sh
   apt install python3 python-is-python3
   ```
-
-### Installation
 
 1. Clone the PKD Registry repo
    ```sh
