@@ -41,7 +41,55 @@ Thank you to all our authors! ✨
 This project imports data from Maryland University and children's national; 
 makes changes as per requirements and then maps the data to KUMC redcap PKD project
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## ⚙ Setup
+<!-- GETTING STARTED -->
+## Getting Started
+
+Instructions on setting up the PKD project locally.
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+There are several ways to install Python, that is if it needs to be installed at all!
+
+## Check what’s installed first
+
+* version
+  ```sh
+  python --version
+  ```
+
+Based on your OS (Operating System), you need to download python software. The example below is on a Linux/unix system through command line.
+* python
+  ```sh
+  apt install python3 python-is-python3
+  ```
+
+### Installation
+
+1. Clone the PKD Registry repo
+   ```sh
+   git clone https://github.com/kumc-bmi/PKD-Import-and-Mapping.git
+   ```
+2. Create virtual environment
+   ```sh
+   python3 -m venv PKD-Import-and-Mapping/
+   ```
+3. Start up virtual enviroment
+  ```sh
+   cd PKD-Import-and-Mapping/
+   ```
+   ```sh
+   source bin/activate
+   ```
+4. Install all required python packages
+  ```sh
+   pip install -r requirements.txt
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Download Instructions
 
