@@ -138,4 +138,32 @@ Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under th
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Run Instructions
+### Compile Instructions
+
+#### 🖥️  Commands
+
+`Makefile` is used to compile or recompile the project. 
+
+Execute the following command below to run all targets associated with the project.
+
+```Makefile
+make .make.all
+```
+
+The following command(s) below ia an example of running any or connected target(s) associated with the project.
+
+- Non connected target
+```Makefile
+make .make.venv
+```
+
+- Connected targets
+```Makefile
+make .make.app
+```
+
+```Makefile
+make .make.extract
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
