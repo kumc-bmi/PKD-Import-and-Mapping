@@ -59,9 +59,11 @@ def uab():
                     compressed_row.append(row_cell if row_cell.strip() else prev_row_cell)
                 uab_data.append(compressed_row)
                 previous_row = compressed_row
-
+        
+        # prefix updated_ to output file
         output_filename = "updated_" + file
 
+        # write records to each updated_ csv file to /export/temp/raw_data/ directory. 9 csv files will be outputted for uab pull
         with open(directory + output_filename, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
             for row in uab_data:
@@ -90,6 +92,7 @@ def uab():
             # df["subject_id"] = df.apply(lambda row: f"{row['subject_id']}-{row['redcap_event_name']}-{row['redcap_repeat_instrument']}-{row['redcap_repeat_instance']}", axis=1)
             df["subject_id"] = df["subject_id"].str.replace('-nan-nan','')
 
+            # drop columns redcap_repeat_instrument, redcap_repeat_instance, site_id, data_entry, datacomp, datatype columns in each event file dataframe
             df = df.drop(["redcap_repeat_instrument", "redcap_repeat_instance", "site_id", "data_entry", "datacomp", "datatype"], axis=1)
 
             # ensure subject_id and redcap_event_name are first in df
@@ -99,6 +102,7 @@ def uab():
             final_df = df.reindex(columns=initial_cols + [col for col in df.columns if col not in initial_cols])
             final_df.to_csv(directory + "filtered_" + clean_uab_file, index=False, float_format=None)
 
+        # save each uab instrument pull for baseline events for each longitudal record into csv uab folder base_year_1.csv, base_year_2,csv, base_year_3.csv etc
         uab_dir = './csvs/uab/'
         year_one_map = uab_dir + 'base_year_1.csv'
         year_two_map = uab_dir + 'base_year_2.csv'
@@ -109,6 +113,7 @@ def uab():
         year_seven_map = uab_dir + 'base_year_7.csv'
         year_eight_map = uab_dir + 'base_year_8.csv'
 
+        # clean up downloaded uab events data year_1_arm_1, year_2_arm_1 etc else baseline_arm_1
         uab_file = "clean_updated_" + file
 
         if uab_file == "clean_updated_uab_2.csv":
@@ -142,6 +147,7 @@ def uab():
             final_df = df.reindex(columns=initial_cols + [col for col in df.columns if col not in initial_cols])
             final_df.to_csv(directory + "filtered_" + uab_file, index=False, float_format=None)
 
+    # uab base_arm event dataframe
     for filename in os.listdir(directory):
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             base_df = pd.read_csv(directory + uab_base_name, dtype=str)
@@ -153,6 +159,7 @@ def uab():
     
     base_master_df = pd.read_csv(directory + uab_base_name, dtype=str)
 
+    # base_arm events concatenated with other longitudinal events. year_1_arm_1, year_2_arm_1 etc
     for filename in os.listdir(directory):
         if filename.startswith(uab_filtered) and filename != uab_base_name:
             non_base_arm_df = pd.read_csv(directory + filename, dtype=str)
@@ -165,37 +172,26 @@ def uab():
     
     base_master_df.to_csv(directory + uab_final, index=False)
     
+    # unique records for each event
     unique_uab_df = pd.read_csv(directory + uab_final, dtype=str)
-
+    
+    # functions to group rows with most records based on columns
+    # e.g value1,value2,, | value1,value2,value3,. value1,value2,value3 will be selected
     def most_filled_columns(group_row):
         counts_fill = group_row.notnull().sum(axis=1)
         max_index = counts_fill.idxmax()
         return group_row.loc[max_index]
     
+    # group unique records for each event based on subuject_id and redcap events
     uab_updated_df = unique_uab_df.groupby(['subject_id', 'redcap_event_name'], as_index=False).apply(most_filled_columns)
 
     # reset index
     uab_updated_df.reset_index(drop=True)
 
-    uab_updated_df.to_csv(directory + uab_final, index=False)
+    # save uab_updated_df 
+    uab_updated_df.to_csv(directory + uab_final, index=False)    
 
-    # subject_id_counts = {}
-
-    # # make subject_id unique
-    # for index, row in unique_uab_df.iterrows():
-    #     current_subject_id = row["subject_id"]
-    #     if current_subject_id in subject_id_counts:
-    #         subject_id_counts[current_subject_id] += 1
-    #     else:
-    #         subject_id_counts[current_subject_id] = 1
-
-    #     if subject_id_counts[current_subject_id] > 1:
-    #         new_subject_id = f"{current_subject_id}-{np.random.randint(1000)}"
-    #         unique_uab_df.at[index, 'subject_id'] = new_subject_id
-        
-    # unique_uab_df.to_csv(directory + uab_final, index=False)
-    
-
+    # delete temporary files with number pattern e.g: _1.csv, _2.csv
     for filename in os.listdir(directory):
         if re.search(uab_pattern, filename):
             os.remove(directory + filename)

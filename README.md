@@ -79,7 +79,7 @@ Based on your OS (Operating System), you need to download python software. The e
    ```sh
    python3 -m venv PKD-Import-and-Mapping/
    ```
-3. Start up virtual enviroment
+3. Start up virtual environment
   ```sh
    cd PKD-Import-and-Mapping/
    ```
@@ -122,5 +122,13 @@ Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under th
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Mapping Instructions
+
+* `transform.py` file codebase preprocesses all site's downloaded csv files. 
+* `Mapping.csv` in the csvs directory maps all three site project columns to the unified redcap project. 
+* Comma-Separated values files `base_year_1.csv`, `base_year_2.csv`, `base_year_3.csv`, `base_year_4.csv`, `base_year_5.csv`, `base_year_6.csv`, `base_year_7.csv`, `base_year_8.csv` located in the `./csvs/uab/` directory is used to map and preprocess uab instrument records to proposed events. 
+* Columns `trg_var`, `trg_val`, `trg_logic` in the `Mapping.csv` file contains desired values for what source values`src_val_raw` from each site should finally be processed to.
+* `trg_logic` contains fields that are calculated and cannot be mapped directed through the `Mapping.csv` file. These fields have been transformed with custom code located in `transform.py`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Import Instructions
