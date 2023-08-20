@@ -14,6 +14,7 @@ from os import path as os_path
 from builtins import open as openf
 from itertools import groupby
 from datetime import datetime
+from sas7bdat import SAS7BDAT
 
 def main_attributes(os_path, openf, argv):
     def get_config():

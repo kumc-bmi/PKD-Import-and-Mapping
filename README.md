@@ -134,7 +134,7 @@ Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under th
 ### Import Instructions
 
 * `load.py` file codebase imports all combined preprocessed records by events from all sites and imports them into the unified redcap project. 
-* final csv files (`kumc.csv`, `uab.csv`, `umb.csv`) in the`./import/temp/` directory is loaded to the unified project through a redcap API call request.
+* Final csv files (`kumc/kumc.csv`, `uab/uab.csv`, `umb/umb.csv`) in the`./import/temp/` directory is loaded to the unified project through a redcap API call request.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -165,5 +165,11 @@ make .make.app
 ```Makefile
 make .make.extract
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### 💲 SAS
+
+* `pkd_registry.sas` file loads exported pkd_registry.sas7bdat file from the `transform.py` step.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

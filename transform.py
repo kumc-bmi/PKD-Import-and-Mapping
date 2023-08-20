@@ -745,6 +745,10 @@ def mapped_csvs():
 
     # export merged csv file to temporary directory called merged 
     merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
+    
+    # export the dataframe as a SAS dataset
+    with SAS7BDAT(import_directory + 'merged/pkd_registry.sas7bdat', 'w') as sas_file:
+        sas_file.write_frame(merge_site_cvs)
 
     # return merged file
     return merge_site_cvs
