@@ -46,7 +46,7 @@ makes changes as per requirements and then maps the data to KUMC redcap PKD proj
 
 ## ⚙ Setup
 <!-- GETTING STARTED -->
-## Getting Started
+### Getting Started
 
 Instructions on setting up the PKD project locally.
 To get a local copy up and running follow these simple example steps.
@@ -95,15 +95,15 @@ Based on your OS (Operating System), you need to download python software. The e
 
 ### Download Instructions
 
-Sites API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under the api and token sections. API access is only permitted for University of Kansas Medical Center and Children National. Maryland data is uploaded by the Maryland team through sftp which is then accessed by provided sftp credentials.
+Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under the api and token sections. API access is only permitted for University of Kansas Medical Center and Children National. Maryland data is uploaded by the Maryland team through sftp which is then accessed by provided sftp credentials.
 
 <!-- ENVIROMENT VARIABLES -->
-### Main Variables
+#### Main Variables
   ```py
-  values['kumc_redcap_api_url'] = 'KUMC REDCAP API URL';
+  values['kumc_redcap_api_url'] = 'KUMC REDCAP API URL'
   ```
   ```py
-  values['chld_redcap_api_url'] = 'CHILDREN NATIONAL REDCAP API URL';
+  values['chld_redcap_api_url'] = 'CHILDREN NATIONAL REDCAP API URL'
   ```
 
 - [x] `token_kumc`: KUMC redcap project API token
