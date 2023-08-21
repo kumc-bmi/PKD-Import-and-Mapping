@@ -42,3 +42,14 @@ PRINT PKD MULTI REGISTRY TABLE OF CONTENT
 *****************************************;
 proc print DATA = pkd_dataset; 
 run;
+
+
+/* Specify the path to output the .sas7bdat file */
+%let filepath = "./import/temp/merged/pkd_registry.sas7bdat";
+
+/* PROC EXPORT to dump the dataset to a sas7bdat file */
+proc export data=pkd_dataset
+     outfile=&filepath /* Specify the name for pkd_registry SAS dataset */
+     dbms=SAS
+     REPLACE;
+run;

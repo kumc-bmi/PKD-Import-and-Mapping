@@ -170,6 +170,7 @@ make .make.extract
 
 ### 💲 SAS
 
-* `pkd_registry.sas` file loads exported megred.csv file from the `transform.py` step.
+* `pkd_registry.sas` file codebase loads exported megred.csv file from the `transform.py` step.
+* `pkd_registry.sas` codebase also exports the merged dataset to a `sas7bdat` format for SAS use
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
