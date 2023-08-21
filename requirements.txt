@@ -14,4 +14,4 @@ pytz
 six
 pysftp
 sas7bdat
-pyreadstat==1.2.1
+pyreadstat==1.2.2
