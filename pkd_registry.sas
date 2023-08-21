@@ -10,13 +10,13 @@ DM'output;clear;log;clear;';
 
 OPTIONS PAGENO=1 NODATE dsoptions=nomissopt;
 
-/* Specify the path for .sas7bdat file */
-%let filepath = "./import/temp/merged/pkd_registry.sas7bdat";
+/* Specify the path for .csv file */
+%let filepath = "./import/temp/merged/merged.csv";
 
-/* PROC IMPORT to load the .sas7bdat file */
+/* PROC IMPORT to load the .csv file */
 proc import datafile=&filepath
      out=pkd_registry /* Specify the name for pkd_registry SAS dataset */
-     dbms=SAS
+     dbms=csv
      REPLACE;
      GETNAMES=yes;
 run;

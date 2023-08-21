@@ -14,8 +14,6 @@ from os import path as os_path
 from builtins import open as openf
 from itertools import groupby
 from datetime import datetime
-from rpy2.robjects import pandas2ri
-from rpy2.robjects.packages import importr
 
 def main_attributes(os_path, openf, argv):
     def get_config():

@@ -746,12 +746,5 @@ def mapped_csvs():
     # export merged csv file to temporary directory called merged 
     merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
     
-     # export the dataframe as a SAS dataset  
-    pandas2ri.activate()
-    
-    foreign_mod = importr('foreign')
-    
-    foreign_mod.write_sas(merge_site_cvs, import_directory + 'merged/pkd_registry.sas7bdat')
-    
     # return merged file
     return merge_site_cvs

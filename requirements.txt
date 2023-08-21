@@ -13,4 +13,3 @@ python-dateutil
 pytz
 six
 pysftp
-rpy2
