@@ -9,13 +9,13 @@ import csv
 import pysftp
 import glob
 import re
-import pyreadstat
 from sys import argv
 from os import path as os_path
 from builtins import open as openf
 from itertools import groupby
 from datetime import datetime
-from sas7bdat import SAS7BDAT
+from rpy2.robjects import pandas2ri
+from rpy2.robjects.packages import importr
 
 def main_attributes(os_path, openf, argv):
     def get_config():
