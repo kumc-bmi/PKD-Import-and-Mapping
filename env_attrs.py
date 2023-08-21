@@ -9,6 +9,7 @@ import csv
 import pysftp
 import glob
 import re
+import pyreadstat
 from sys import argv
 from os import path as os_path
 from builtins import open as openf

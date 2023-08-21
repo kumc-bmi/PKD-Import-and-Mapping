@@ -14,3 +14,4 @@ pytz
 six
 pysftp
 sas7bdat
+pyreadstat
