@@ -171,7 +171,9 @@ def redcap_export_api():
             r = requests.post(api_url, data=file_list)
             print('HTTP Status: ' + str(r.status_code))
             print(r.text)
-            file_records = [line.split(',') for line in r.strip().split('\n')]      
+            records = r.text
+            print(r.text)
+            file_records = [line.split(',') for line in records.strip().split('\n')]      
             doc_ids = [int(row[1]) for row in file_records[1:]]   
             doc_id = max(doc_ids)
             print(doc_id)
