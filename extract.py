@@ -158,6 +158,10 @@ def redcap_export_api():
             project_id = kumc_project_id
             api_url = kumc_api_url
             
+            print(api_url)
+            print(token)
+            print(project_id)
+            
             file_list = {
                 'token': token,
                 'content': 'fileRepository',
