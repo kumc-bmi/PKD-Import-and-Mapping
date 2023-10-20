@@ -697,9 +697,11 @@ def mapped_csvs():
 
             # create new DataFrame
             site_df_mapped = pd.DataFrame(df_mapped)
+            
+            site_df_mapped['site'] = site
 
-            # ensure studyid and redcap_event_name are first in df
-            initial_cols = ['studyid', 'redcap_event_name']
+            # ensure studyid and redcap_event_name and site are first in df
+            initial_cols = ['studyid', 'redcap_event_name', 'site']
 
             # reorder the columns
             site_final_df = site_df_mapped.reindex(columns=initial_cols + [col for col in site_df_mapped.columns if col not in initial_cols])
