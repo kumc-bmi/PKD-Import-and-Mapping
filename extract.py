@@ -158,6 +158,7 @@ def redcap_export_api():
             token = import_token
             project_id = pkd_project_id
             api_url = kumc_api_url
+            filename = export_directory + folder + '.csv'
             
             file_list = {
                 'token': token,
@@ -171,55 +172,68 @@ def redcap_export_api():
             r = requests.post(api_url, data=file_list)
             print('HTTP Status: ' + str(r.status_code))
             print(r.text)
+            
             records = r.text
-            print(r.text)
             file_records = [line.split(',') for line in records.strip().split('\n')]      
             doc_ids = [int(row[1]) for row in file_records[1:]]   
             doc_id = max(doc_ids)
             print(doc_id)
             
-            # data_param = {
-            #     'token': token,
-            #     'content': 'fileRepository',
-            #     'action': 'export',
-            #     'doc_id': '',
-            #     'project_id': project_id,
-            #     'returnFormat': 'json'
-            # }
-            # r = requests.post(api_url, data=data_param)
-            # print('HTTP Status: ' + str(r.status_code))
+            data_param = {
+                'token': token,
+                'content': 'fileRepository',
+                'action': 'export',
+                'doc_id': doc_id,
+                'returnFormat': 'json'
+            }
+            response = requests.post(api_url, data=data_param)
+            
+            print(response)
+            
+            if response.ok:
+                # print the response status from API call
+                print('HTTP Status: ' + str(response.status_code))
 
+                with open(filename, 'wb') as f:
+                    f.write(response.content)
+                # print success message for site
+                print(folder + ' data exported successfully')
+                f.close()
+            else:
+                # print error result for unsucessful export
+                print('Error exporting ' + folder + ' data: ', response.text)
+                
             # f = open(umb_redcap_file_repo + , 'wb')
             # f.write(r.content)
             # f.close()
 
-            # umb data download
-            folder == 'umb'
-            cnopts = pysftp.CnOpts()
-            cnopts.hostkeys = None
-            # create connection
-            with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
+            # # umb data download
+            # folder == 'umb'
+            # cnopts = pysftp.CnOpts()
+            # cnopts.hostkeys = None
+            # # create connection
+            # with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
 
-                # remote directory
-                sftp.cwd(sftp_remote_path)
+            #     # remote directory
+            #     sftp.cwd(sftp_remote_path)
 
-                # Maryland source file name
-                umb_file = folder + '.csv'
+            #     # Maryland source file name
+            #     umb_file = folder + '.csv'
 
-                csv_files = [file for file in sftp.listdir() if file.lower().endswith(".csv")]
+            #     csv_files = [file for file in sftp.listdir() if file.lower().endswith(".csv")]
 
-                for csv_file in csv_files:
-                    if csv_file.lower() != umb_file:
-                        sftp.rename(csv_file, umb_file)
-                        break
-                    elif csv_file.lower() == umb_file:
-                        break
-                    else:
-                        raise Exception("No CSV file found in directory or called '{}'".format(umb_file))
+            #     for csv_file in csv_files:
+            #         if csv_file.lower() != umb_file:
+            #             sftp.rename(csv_file, umb_file)
+            #             break
+            #         elif csv_file.lower() == umb_file:
+            #             break
+            #         else:
+            #             raise Exception("No CSV file found in directory or called '{}'".format(umb_file))
                 
-                # download file
-                sftp.get(umb_file, export_directory + umb_file)
-                print("umb csv sftp file download complete")
+            #     # download file
+            #     sftp.get(umb_file, export_directory + umb_file)
+            #     print("umb csv sftp file download complete")
 
-                # close session
-                sftp.close()
+            #     # close session
+            #     sftp.close()
