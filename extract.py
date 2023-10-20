@@ -30,11 +30,12 @@ def redcap_export_api():
     import_token = str(vaiables['import_token'])
     pkd_project_id = str(vaiables['project_id'])
 
-    kumc_sftp_host = str(vaiables['kumc_sftp_host'])
-    kumc_sftp_username = str(vaiables['kumc_sftp_username'])
-    kumc_sftp_pwd = str(vaiables['kumc_sftp_pwd'])
-    sftp_remote_path = str(vaiables['sftp_remote_path'])
-    sftp_port = 22
+    # # sftp access no more required but this is the logic
+    # kumc_sftp_host = str(vaiables['kumc_sftp_host'])
+    # kumc_sftp_username = str(vaiables['kumc_sftp_username'])
+    # kumc_sftp_pwd = str(vaiables['kumc_sftp_pwd'])
+    # sftp_remote_path = str(vaiables['sftp_remote_path'])
+    # sftp_port = 22
 
     # folders for exported files
     folders = ['kumc', 'uab', 'umb']
@@ -160,6 +161,7 @@ def redcap_export_api():
             api_url = kumc_api_url
             filename = export_directory + folder + '.csv'
             
+            # Extract file list from redcap File Repository
             file_list = {
                 'token': token,
                 'content': 'fileRepository',
@@ -173,12 +175,14 @@ def redcap_export_api():
             print('HTTP Status: ' + str(r.status_code))
             print(r.text)
             
+            # fetch document id that is the maximum(largest)
             records = r.text
             file_records = [line.split(',') for line in records.strip().split('\n')]      
             doc_ids = [int(row[1]) for row in file_records[1:]]   
             doc_id = max(doc_ids)
             print(doc_id)
             
+            # umb data download based on most recent document id upload
             data_param = {
                 'token': token,
                 'content': 'fileRepository',
@@ -186,6 +190,7 @@ def redcap_export_api():
                 'doc_id': doc_id,
                 'returnFormat': 'json'
             }
+            
             response = requests.post(api_url, data=data_param)
             
             print(response)
@@ -202,3 +207,35 @@ def redcap_export_api():
             else:
                 # print error result for unsucessful export
                 print('Error exporting ' + folder + ' data: ', response.text)
+                
+            # # sftp access no more required but this is the logic
+            # # umb data download
+            # folder == 'umb'
+            # cnopts = pysftp.CnOpts()
+            # cnopts.hostkeys = None
+            # # create connection
+            # with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
+
+            #     # remote directory
+            #     sftp.cwd(sftp_remote_path)
+
+            #     # Maryland source file name
+            #     umb_file = folder + '.csv'
+
+            #     csv_files = [file for file in sftp.listdir() if file.lower().endswith(".csv")]
+
+            #     for csv_file in csv_files:
+            #         if csv_file.lower() != umb_file:
+            #             sftp.rename(csv_file, umb_file)
+            #             break
+            #         elif csv_file.lower() == umb_file:
+            #             break
+            #         else:
+            #             raise Exception("No CSV file found in directory or called '{}'".format(umb_file))
+                
+            #     # download file
+            #     sftp.get(umb_file, export_directory + umb_file)
+            #     print("umb csv sftp file download complete")
+
+            #     # close session
+            #     sftp.close()

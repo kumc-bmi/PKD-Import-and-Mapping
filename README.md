@@ -112,6 +112,9 @@ Site's API, TOKEN, PROJECT_ID credentials are located in `env_attrs.py` under th
 - [x] `kumc_project_id`: KUMC redcap project identification number
 - [x] `chld_project_id`: Children National redcap project identification number
 - [x] `project_id`: Unified redcap project identification number
+- [x] `umb_recap_folder_id`: redcap File Repository identification number for Maryland. Note: In the future if subsequent sites have folders, a variable with the assigned folder id should be created as Maryland.
+
+#### SFTP download process has been discontinued for now. Logic still exists in codebase but commnted out
 - [x] `kumc_sftp_host`: Secure file transfer protocol host URL for Maryland data
     - [x] `kumc_sftp_username`: SFTP username
     - [x] `kumc_sftp_pwd`: SFTP password
