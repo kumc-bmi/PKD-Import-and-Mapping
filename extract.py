@@ -159,10 +159,6 @@ def redcap_export_api():
             project_id = pkd_project_id
             api_url = kumc_api_url
             
-            print(api_url)
-            print(token)
-            print(project_id)
-            
             file_list = {
                 'token': token,
                 'content': 'fileRepository',
@@ -175,6 +171,10 @@ def redcap_export_api():
             r = requests.post(api_url, data=file_list)
             print('HTTP Status: ' + str(r.status_code))
             print(r.text)
+            file_records = [line.split(',') for line in r.strip().split('\n')]      
+            doc_ids = [int(row[1]) for row in file_records[1:]]   
+            doc_id = max(doc_ids)
+            print(doc_id)
             
             # data_param = {
             #     'token': token,
