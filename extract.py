@@ -153,6 +153,9 @@ def redcap_export_api():
             
             print("All " + folder + ' data exported successfully')
         else:
+            token = token_kumc
+            project_id = kumc_project_id
+            api_url = kumc_api_url
             
             file_list = {
                 'token': token,
@@ -164,7 +167,7 @@ def redcap_export_api():
                 'returnFormat': 'json'    
             }
             
-            r = requests.post('api_url', data=file_list)
+            r = requests.post(api_url, data=file_list)
             print('HTTP Status: ' + str(r.status_code))
             print(r.text)
             
