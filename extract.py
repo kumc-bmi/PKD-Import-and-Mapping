@@ -27,7 +27,8 @@ def redcap_export_api():
     kumc_project_id = str(vaiables['kumc_project_id'])
     chld_project_id = str(vaiables['chld_project_id'])
     umb_redcap_file_repo = str(vaiables['umb_recap_folder_id'])
-    # umb_test_file_repo = str(vaiables['umb_test_folder_id'])
+    import_key = str(vaiables['import_key'])
+    pkd_project_id = str(vaiables['project_id'])
 
     kumc_sftp_host = str(vaiables['kumc_sftp_host'])
     kumc_sftp_username = str(vaiables['kumc_sftp_username'])
@@ -154,8 +155,8 @@ def redcap_export_api():
             
             print("All " + folder + ' data exported successfully')
         else:
-            token = token_kumc
-            project_id = kumc_project_id
+            token = import_key
+            project_id = pkd_project_id
             api_url = kumc_api_url
             
             print(api_url)
