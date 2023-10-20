@@ -63,7 +63,7 @@ def main_attributes(os_path, openf, argv):
         values['kumc_sftp_username'] = config.get(pid, 'kumc_sftp_username')
         values['kumc_sftp_pwd'] = config.get(pid, 'kumc_sftp_pwd')
         values['sftp_remote_path'] = config.get(pid, 'sftp_remote_path')
-        values['umb_recap_folder_id'] = config.get('default', 'umb_recap_folder_id')
+        values['umb_recap_folder_id'] = config.get(pid, 'umb_recap_folder_id')
 
         return values 
     return get_config()
