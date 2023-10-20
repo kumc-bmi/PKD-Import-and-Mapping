@@ -26,7 +26,7 @@ def redcap_export_api():
     export_directory = './export/temp/raw_data/'
     kumc_project_id = str(vaiables['kumc_project_id'])
     chld_project_id = str(vaiables['chld_project_id'])
-    umb_redcap_file_repo = '/umb_recap_folder_id/'
+    umb_redcap_file_repo = str(vaiables['umb_recap_folder_id'])
 
     kumc_sftp_host = str(vaiables['kumc_sftp_host'])
     kumc_sftp_username = str(vaiables['kumc_sftp_username'])
