@@ -162,7 +162,7 @@ def redcap_export_api():
                 'token': token,
                 'content': 'fileRepository',
                 'action': 'list',
-                'folder_id': umb_redcap_file_repo,
+                'folder_id': umb_test_file_repo,
                 'format': 'csv',
                 'project_id': project_id,
                 'returnFormat': 'json'    
