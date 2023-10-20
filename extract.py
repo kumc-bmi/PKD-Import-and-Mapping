@@ -202,38 +202,3 @@ def redcap_export_api():
             else:
                 # print error result for unsucessful export
                 print('Error exporting ' + folder + ' data: ', response.text)
-                
-            # f = open(umb_redcap_file_repo + , 'wb')
-            # f.write(r.content)
-            # f.close()
-
-            # # umb data download
-            # folder == 'umb'
-            # cnopts = pysftp.CnOpts()
-            # cnopts.hostkeys = None
-            # # create connection
-            # with pysftp.Connection(kumc_sftp_host, username=kumc_sftp_username, password=kumc_sftp_pwd, port=sftp_port, cnopts=cnopts) as sftp:
-
-            #     # remote directory
-            #     sftp.cwd(sftp_remote_path)
-
-            #     # Maryland source file name
-            #     umb_file = folder + '.csv'
-
-            #     csv_files = [file for file in sftp.listdir() if file.lower().endswith(".csv")]
-
-            #     for csv_file in csv_files:
-            #         if csv_file.lower() != umb_file:
-            #             sftp.rename(csv_file, umb_file)
-            #             break
-            #         elif csv_file.lower() == umb_file:
-            #             break
-            #         else:
-            #             raise Exception("No CSV file found in directory or called '{}'".format(umb_file))
-                
-            #     # download file
-            #     sftp.get(umb_file, export_directory + umb_file)
-            #     print("umb csv sftp file download complete")
-
-            #     # close session
-            #     sftp.close()
