@@ -364,7 +364,7 @@ def mapped_csvs():
 
         # create a logic DataFrame
         logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'tkv', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
-                                             'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height'])
+                                             'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'sucigdur', 'sucigpacks'])
         
         if site == 'kumc':
            # convert onetime forms to baseline arm
@@ -386,8 +386,8 @@ def mapped_csvs():
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
                 
-                if ( pd.notna(row['final_tkv_left']) and pd.notna(row['final_tkv_right']) ):
-                    tkv = str(pd.to_numeric(row['final_tkv_left']) + pd.to_numeric(row['final_tkv_right']))
+                if ( pd.notna(row['tkv_left']) and pd.notna(row['tkv_right']) ):
+                    tkv = str(pd.to_numeric(row['tkv_left']) + pd.to_numeric(row['tkv_right']))
                 else:
                     tkv = ''
 
@@ -586,7 +586,7 @@ def mapped_csvs():
                     height_m = (pd.to_numeric(row['pf8b'], errors='coerce') * 0.0254).astype(str)
                 else:
                     height_m = ''
-
+                
                 # average_sysbp3'] =
                 # average_diabp3'] =
                 # urine_microalb'] =
@@ -594,7 +594,8 @@ def mapped_csvs():
                 # livercysts_mr_num'] =
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 
+                                 'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m, 'sucigdur': sucigdur, 'sucigpacks': sucigpacks}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -729,10 +730,11 @@ def mapped_csvs():
         if site == 'kumc':
             # append race columns to kumc dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name', 'diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
-                                                            on=['studyid', 'redcap_event_name'], how='left')
+                                                            on=['studyid', 'redcap_event_name', 'tkv'], how='left')
         if site == 'umb':
             # append race columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m']], 
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
+                                                                   'sucigdur', 'sucigpacks']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
             # append race columns to uab dataframe
