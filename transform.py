@@ -309,7 +309,7 @@ def mapped_csvs():
             # remove string nan on dataframe
             new_umb_df =  new_umb_df.fillna('')
 
-            # append race columns to umb dataframe
+            # append logic columns to umb dataframe
             site_data_df = pd.merge(site_data_df, new_umb_df[['pid', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6']], on=['pid', 'cr7'], how='left')
 
             # drop the 'cr7' column
@@ -350,7 +350,7 @@ def mapped_csvs():
             # remove string nan on dataframe
             new_uab_df =  new_uab_df.fillna('')
 
-            # append race columns to umb dataframe
+            # append logic columns to umb dataframe
             site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'race'], how='left')
 
             # drop the 'race' column
@@ -386,8 +386,8 @@ def mapped_csvs():
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
                 
-                if ( pd.notna(row['tkv_left']) and pd.notna(row['tkv_right']) ):
-                    tkv = str(pd.to_numeric(row['tkv_left']) + pd.to_numeric(row['tkv_right']))
+                if ( pd.notna(row['kv_left']) and pd.notna(row['kv_right']) ):
+                    tkv = str(pd.to_numeric(row['kv_left']) + pd.to_numeric(row['kv_right']))
                 else:
                     tkv = ''
 
@@ -586,6 +586,20 @@ def mapped_csvs():
                     height_m = (pd.to_numeric(row['pf8b'], errors='coerce') * 0.0254).astype(str)
                 else:
                     height_m = ''
+                    
+                if 'hb3' in row.index and pd.notna(row['crrdate']) and row['crrdate'] != '' and pd.notna(row['cr4']) and row['cr4'] != '' and row['hb3'] == 'yes':                    
+                    sucigdur = str((pd.to_datetime(row['hypertdx'])).year - (pd.to_datetime(row['birthdate'])).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
+                elif 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'no':
+                    sucigdur = str(pd.to_numeric(row['hb5a'], errors='coerce') - pd.to_numeric(row['hb2a'], errors='coerce'))
+                else:
+                    sucigdur = ''
+                    
+                if 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'yes':                    
+                    sucigpacks = (pd.to_numeric(row['hb4'], errors='coerce') / 20).astype(str)
+                elif 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'no':
+                    sucigpacks = (pd.to_numeric(row['hb6'], errors='coerce') / 20).astype(str)
+                else:
+                    sucigpacks = ''
                 
                 # average_sysbp3'] =
                 # average_diabp3'] =
@@ -728,16 +742,15 @@ def mapped_csvs():
             site_final_df = site_final_df.applymap(missing)
         
         if site == 'kumc':
-            # append race columns to kumc dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name', 'diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
-                                                            on=['studyid', 'redcap_event_name', 'tkv'], how='left')
+            # append logic columns to kumc dataframe
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name','tkv','diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3']], 
+                                                            on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
-            # append race columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m',
-                                                                   'sucigdur', 'sucigpacks']], 
+            # append logic columns to umb dataframe
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m', 'sucigdur', 'sucigpacks']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
-            # append race columns to uab dataframe
+            # append logic columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
         
         # attach site name to studyid
