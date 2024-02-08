@@ -386,8 +386,8 @@ def mapped_csvs():
                 studyid = row['studyid']
                 redcap_event_name = row['redcap_event_name']
                 
-                if ( 'left_kidney_vol_ml' in row.index and pd.notna(row['left_kidney_vol_ml']) and 'right_kidney_vol_ml' in row.index and pd.notna(row['right_kidney_vol_ml']) ):
-                    tkv = str(pd.to_numeric(row['left_kidney_vol_ml']) + pd.to_numeric(row['right_kidney_vol_ml']))
+                if ( 'final_tkv_left' in row.index and pd.notna(row['left_kidney_vol']) and 'final_tkv_right' in row.index and pd.notna(row['right_kidney_vol']) ):
+                    tkv = str(pd.to_numeric(row['left_kidney_vol']) + pd.to_numeric(row['right_kidney_vol']))
                 else:
                     tkv = ''
 
