@@ -777,9 +777,11 @@ def mapped_csvs():
         print(col)
         # checking colums that are codebook
         if col in valid_codebook_option.keys():
+            print(col)
             for index, row in merge_site_cvs.iterrows():
+                print(index, row)
                 # set values without valid options to empty
-                if not pd.isnull(row[col]) and row[col] not in valid_codebook_option[col]:
+                if not pd.isna(row[col]) and row[col] not in valid_codebook_option[col]:
                     print(valid_codebook_option[col])
                     merge_site_cvs.at[index, col] = np.nan
 
