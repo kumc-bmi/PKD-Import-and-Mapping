@@ -21,12 +21,8 @@ directory = './export/temp/raw_data/'
 
 # function for missing values
 def missing(x):
-    if x == 'unk':
-        return '888'
-    elif x == 'not applicable':
-        return '555'
-    elif x == 'unknown':
-        return '88'
+    if x == 'unk' or x == 'not applicable'  or x == 'unknown':
+        return ''
     else:
         return x
 # extract site name for csv filename
@@ -262,11 +258,14 @@ def mapped_csvs():
         # drop rows with no src_val_raw or src_val_lbl
         source_df = source_df.dropna(subset=['source_val_combined'])
 
-        # select unique lable variables from all sites (KUMC, MARYLAND, ALABAMA)
+        # select unique label variables from all sites (KUMC, MARYLAND, ALABAMA)
         unique_source_values = source_df.loc[source_df['trg_val'].notnull(), ['source_val_combined', 'site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val', 'trg_lbl']].drop_duplicates(subset=['source_val_combined', 'site', 'src_val_raw', 'src_val_lbl', 'trg_var', 'trg_val'], keep='first')
 
         # drop records where trg_val is lower string nan
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
+        
+        # drop records where trg_val is null
+        unique_source_values = unique_source_values.dropna(subset=['trg_val'])
 
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
