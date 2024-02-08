@@ -21,10 +21,15 @@ directory = './export/temp/raw_data/'
 
 # function for missing values
 def missing(x):
-    if x == 'unk' or x == 'not applicable'  or x == 'unknown':
-        return ''
+    if x == 'unk':
+        return '888'
+    elif x == 'not applicable':
+        return '555'
+    elif x == 'unknown':
+        return '88'
     else:
         return x
+    
 # extract site name for csv filename
 def uab():
     
@@ -264,8 +269,11 @@ def mapped_csvs():
         # drop records where trg_val is lower string nan
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
         
-        # drop records where trg_val is null
-        unique_source_values = unique_source_values.dropna(subset=['trg_val'])
+        # obtain valid REDCap codebook
+        codebook_option = unique_source_values.dropna(subset=['trg_val'])
+        valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
+        
+        print(valid_codebook_option)
 
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
