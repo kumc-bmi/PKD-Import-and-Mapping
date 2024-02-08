@@ -273,8 +273,6 @@ def mapped_csvs():
         codebook_option = unique_source_values.dropna(subset=['trg_val'])
         valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
         
-        print(valid_codebook_option)
-
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
@@ -771,6 +769,15 @@ def mapped_csvs():
     
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
+    
+    # iterate through columns and check codebook options that are present in REDCap project
+    for col in merge_site_cvs.columns:
+        # checking colums that are codebook
+        if col in valid_codebook_option.keys():
+            for index, row in merge_site_cvs.iterrows():
+                # set values without valid options to empty
+                if not pd.isnull(row[col]) and row[col] not in valid_codebook_option[col]:
+                    merge_site_cvs.at[index, col] = np.nan
 
     # export merged csv file to temporary directory called merged 
     merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
