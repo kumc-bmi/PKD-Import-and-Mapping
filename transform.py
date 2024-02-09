@@ -284,6 +284,10 @@ def mapped_csvs():
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
         
         print(df_valid_codebook_option)
+        
+        valid_codebook_vals = df_valid_codebook_option.groupby('trg_var')['trg_val'].apply(set).to_dict()
+        
+        print(valid_codebook_vals)
                    
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
@@ -785,6 +789,13 @@ def mapped_csvs():
     merge_site_cvs_fillna = merge_site_cvs.fillna('')
     
     merge_site_cvs_df = pd.DataFrame(merge_site_cvs_fillna)
+    
+    for column in merge_site_cvs_df.columns:
+        print(column)
+        if column in valid_codebook_vals:
+            print(column)
+            # set values without valid options to empty
+            merge_site_cvs_df[column] = merge_site_cvs_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
     
     print(merge_site_cvs_df)
      
