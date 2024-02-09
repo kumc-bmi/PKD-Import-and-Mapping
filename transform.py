@@ -791,6 +791,8 @@ def mapped_csvs():
     # ensure all data is string for comparison
     merge_site_cvs_fillna[codebook_columns] = merge_site_cvs_fillna[codebook_columns].astype(str)
     
+    print(df_valid_codebook_option)
+    
     # iterate through columns and check codebook options that are present in REDCap project
     for col in codebook_columns:
         codebook_vals = df_valid_codebook_option.loc[df_valid_codebook_option['trg_var'] == col, 'trg_val'].tolist()
