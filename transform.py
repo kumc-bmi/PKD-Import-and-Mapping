@@ -796,6 +796,7 @@ def mapped_csvs():
         print(column)
         if column in valid_codebook_vals:
             print(column)
+            print(merge_site_cvs_df[column])
             # set values without valid options to empty
             merge_site_cvs_df[column] = merge_site_cvs_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
             print(merge_site_cvs_df)
