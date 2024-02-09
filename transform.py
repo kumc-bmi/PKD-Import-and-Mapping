@@ -282,9 +282,7 @@ def mapped_csvs():
                 df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
         
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
-        
-        valid_codebook_option_filtered = df_valid_codebook_option[df_valid_codebook_option['trg_val'].apply(lambda x: x is not None and len(x) > 0), 'trg_var']
-           
+                   
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
@@ -788,18 +786,20 @@ def mapped_csvs():
     
     required_cols = ['studyid','redcap_event_name','site']
     
-    codebook_columns = merge_site_cvs_df[required_cols + [col for col in valid_codebook_option_filtered if col in merge_site_cvs_df.columns]]
+    print(df_valid_codebook_option)
+    
+    codebook_columns = merge_site_cvs_df[required_cols + [col for col in df_valid_codebook_option if col in merge_site_cvs_df.columns]]
     
     # # ensure all data is string for comparison
     # merge_site_cvs_df[codebook_columns] = merge_site_cvs_df[codebook_columns].astype(str)
     
-    print(valid_codebook_option_filtered)
+    print(df_valid_codebook_option)
     print(codebook_columns)
     print(merge_site_cvs_df)
     
     # iterate through columns and check codebook options that are present in REDCap project
     for col in codebook_columns:
-        codebook_vals = valid_codebook_option_filtered.loc[valid_codebook_option_filtered['trg_var'] == col, 'trg_val'].tolist()
+        codebook_vals = df_valid_codebook_option.loc[df_valid_codebook_option['trg_var'] == col, 'trg_val'].tolist()
         print(col)
         print(codebook_vals)
         # set values without valid options to empty
