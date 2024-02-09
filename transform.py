@@ -2,7 +2,7 @@
 Authors:
 - Mary Penne Mays
 - Siddharth Satyakam
-- Sravani Chandakaq
+- Sravani Chandaka
 - Lav Patel
 """
 import os
@@ -777,32 +777,31 @@ def mapped_csvs():
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
 
+        for column in site_final_df.columns:
+            if column in valid_codebook_vals:
+                # set values without valid options to empty
+                site_final_df[column] = site_final_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
+        
         # export site dataframe to csv
-        site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)
+        site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)        
 
         # final converted site raw data
         site_csv_list.append(site_final_df)
-    
+        
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
     
     merge_site_cvs_fillna = merge_site_cvs.fillna('')
     
     merge_site_cvs_df = pd.DataFrame(merge_site_cvs_fillna)
-    
-    print(merge_site_cvs_df)
-    
+        
     for column in merge_site_cvs_df.columns:
-        print(column)
         if column in valid_codebook_vals:
-            print(column)
-            print(merge_site_cvs_df[column])
             # set values without valid options to empty
             merge_site_cvs_df[column] = merge_site_cvs_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
-            print(merge_site_cvs_df)
      
-        # export merged csv file to temporary directory called merged
-        merge_site_cvs_df.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
+    # export merged csv file to temporary directory called merged
+    merge_site_cvs_df.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
     
     # return merged file
     return merge_site_cvs_df

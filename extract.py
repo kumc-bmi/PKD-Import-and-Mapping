@@ -2,7 +2,7 @@
 Authors:
 - Mary Penne Mays
 - Siddharth Satyakam
-- Sravani Chandakaq
+- Sravani Chandaka
 - Lav Patel
 """
 import os
