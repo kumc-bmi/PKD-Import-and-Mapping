@@ -269,11 +269,8 @@ def mapped_csvs():
         # drop records where trg_val is lower string nan
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
         
-        # obtain valid REDCap codebook
-        codebook_option = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan' & (unique_source_values['trg_val'] != '')]
-        
         # ensure null records are eliminated from valid code options
-        codebook_option = codebook_option.dropna(subset=['trg_val'])
+        codebook_option = unique_source_values.dropna(subset=['trg_val'])
         
         # REDCap codebook dictionary
         valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
