@@ -272,16 +272,20 @@ def mapped_csvs():
         # ensure null records are eliminated from valid code options
         codebook_option = unique_source_values.dropna(subset=['trg_val'])
         
-        # REDCap codebook dictionary
-        valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
-        
         df_valid_codebook_option = []
         
-        for trg_var, trg_val in valid_codebook_option.items():
+        for trg_var, trg_val in codebook_option.items():
             for trg_val in trg_val:
                 df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
         
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
+        
+        print(df_valid_codebook_option)
+        
+        # REDCap codebook dictionary
+        valid_codebook_option  = df_valid_codebook_option.groupby('trg_var')['trg_val'].apply(set).to_dict()
+        
+        print(valid_codebook_option)
                    
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
