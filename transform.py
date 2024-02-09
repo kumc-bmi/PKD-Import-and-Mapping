@@ -788,7 +788,7 @@ def mapped_csvs():
     
     required_cols = ['studyid','redcap_event_name','site']
     
-    codebook_columns = merge_site_cvs_df[required_cols + [col for col in valid_codebook_option_filtered if col not in merge_site_cvs_df.columns]]
+    codebook_columns = merge_site_cvs_df[required_cols + [col for col in valid_codebook_option_filtered if col in merge_site_cvs_df.columns]]
     
     # ensure all data is string for comparison
     merge_site_cvs_df[codebook_columns] = merge_site_cvs_df[codebook_columns].astype(str)
