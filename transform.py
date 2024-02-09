@@ -778,8 +778,10 @@ def mapped_csvs():
     
     # iterate through columns and check codebook options that are present in REDCap project
     for col in valid_codebook_option:
+        print(valid_codebook_option)
         # set values without valid options to empty
         merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in valid_codebook_option[col] else '')
+        print(merge_site_cvs_fillna[col])
      
     # export merged csv file to temporary directory called merged 
     merge_site_cvs_fillna.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
