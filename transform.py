@@ -784,26 +784,7 @@ def mapped_csvs():
     
     merge_site_cvs_df = pd.DataFrame(merge_site_cvs_fillna)
     
-    required_cols = ['studyid','redcap_event_name','site']
-    
-    print(df_valid_codebook_option)
-    
-    codebook_columns = merge_site_cvs_df[required_cols + [col for col in df_valid_codebook_option if col in merge_site_cvs_df.columns]]
-    
-    # # ensure all data is string for comparison
-    # merge_site_cvs_df[codebook_columns] = merge_site_cvs_df[codebook_columns].astype(str)
-    
-    print(df_valid_codebook_option)
-    print(codebook_columns)
     print(merge_site_cvs_df)
-    
-    # iterate through columns and check codebook options that are present in REDCap project
-    for col in codebook_columns:
-        codebook_vals = df_valid_codebook_option.loc[df_valid_codebook_option['trg_var'] == col, 'trg_val'].tolist()
-        print(col)
-        print(codebook_vals)
-        # set values without valid options to empty
-        merge_site_cvs_df[col] = merge_site_cvs_df[col].apply(lambda x: x if x in codebook_vals else '')
      
     # export merged csv file to temporary directory called merged 
     merge_site_cvs_df.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
