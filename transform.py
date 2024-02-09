@@ -270,7 +270,12 @@ def mapped_csvs():
         unique_source_values = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan']
         
         # obtain valid REDCap codebook
-        codebook_option = unique_source_values.dropna(subset=['trg_val'])
+        codebook_option = unique_source_values[unique_source_values['trg_val'].str.lower() != 'nan' & (unique_source_values['trg_val'] != '')]
+        
+        # ensure null records are eliminated from valid code options
+        codebook_option = codebook_option.dropna(subset=['trg_val'])
+        
+        # REDCap codebook dictionary
         valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
         
         # get source value labels for site
@@ -773,19 +778,9 @@ def mapped_csvs():
     print(merge_site_cvs)
     
     # iterate through columns and check codebook options that are present in REDCap project
-    for col in merge_site_cvs.columns:
-        print(col)
-        # checking colums that are codebook
-        if col in valid_codebook_option.keys():
-            print(col)
-            for index, row in merge_site_cvs.iterrows():
-                print(index, row)
-                # set values without valid options to empty
-                if not pd.isna(row[col]) and row[col] not in valid_codebook_option[col]:
-                    print(valid_codebook_option[col])
-                    merge_site_cvs.at[index, col] = np.nan
-
-    print(merge_site_cvs)
+    for col in valid_codebook_option:
+        # set values without valid options to empty
+        merge_site_cvs[col] = merge_site_cvs[col].apply(lambda x: x if x in valid_codebook_option[col] else '')
      
     # export merged csv file to temporary directory called merged 
     merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
