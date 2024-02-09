@@ -227,7 +227,7 @@ def mapped_csvs():
     # drop calculated field for later custom logic function
     unique_header_cols_df = unique_header_cols[~unique_header_cols['src_var'].str.contains('trgcalcfield', na=True)]
 
-     # empty array to store dataframes
+    # empty array to store dataframes
     site_csv_list = []
 
     # fetch defined variables from sys
@@ -274,6 +274,16 @@ def mapped_csvs():
         
         # REDCap codebook dictionary
         valid_codebook_option  = codebook_option.groupby('trg_var')['trg_val'].unique().to_dict()
+        
+        df_valid_codebook_option = []
+        
+        for trg_var, trg_vals in valid_codebook_option.items():
+            for trg_val in trg_vals:
+                df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
+        
+        df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
+        
+        print(df_valid_codebook_option)
         
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
@@ -777,11 +787,9 @@ def mapped_csvs():
     print(merge_site_cvs_fillna)
     
     # iterate through columns and check codebook options that are present in REDCap project
-    for col in valid_codebook_option:
-        print(valid_codebook_option)
+    for col in df_valid_codebook_option:
         # set values without valid options to empty
-        merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in valid_codebook_option[col] else '')
-        print(merge_site_cvs_fillna[col])
+        merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in df_valid_codebook_option[col] else '')
      
     # export merged csv file to temporary directory called merged 
     merge_site_cvs_fillna.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
