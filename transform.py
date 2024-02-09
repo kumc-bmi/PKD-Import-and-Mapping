@@ -801,7 +801,7 @@ def mapped_csvs():
             merge_site_cvs_df[column] = merge_site_cvs_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
             print(merge_site_cvs_df)
      
-        # export merged csv file to temporary directory called merged 
+        # export merged csv file to temporary directory called merged
         merge_site_cvs_df.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
     
     # return merged file
