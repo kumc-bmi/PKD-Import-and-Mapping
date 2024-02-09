@@ -772,15 +772,17 @@ def mapped_csvs():
     # merge all the sites csvs
     merge_site_cvs = pd.concat(site_csv_list, axis=0, ignore_index=True, sort=False)
     
-    print(merge_site_cvs)
+    merge_site_cvs_fillna = merge_site_cvs.fillna('')
+    
+    print(merge_site_cvs_fillna)
     
     # iterate through columns and check codebook options that are present in REDCap project
     for col in valid_codebook_option:
         # set values without valid options to empty
-        merge_site_cvs[col] = merge_site_cvs[col].apply(lambda x: x if x in valid_codebook_option[col] else '')
+        merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in valid_codebook_option[col] else '')
      
     # export merged csv file to temporary directory called merged 
-    merge_site_cvs.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
+    merge_site_cvs_fillna.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
     
     # return merged file
-    return merge_site_cvs
+    return merge_site_cvs_fillna
