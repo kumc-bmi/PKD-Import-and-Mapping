@@ -277,8 +277,8 @@ def mapped_csvs():
         
         df_valid_codebook_option = []
         
-        for trg_var, trg_vals in valid_codebook_option.items():
-            for trg_val in trg_vals:
+        for trg_var, trg_val in valid_codebook_option.items():
+            for trg_val in trg_val:
                 df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
         
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
@@ -786,10 +786,16 @@ def mapped_csvs():
     
     print(merge_site_cvs_fillna)
     
+    codebook_columns = [col for col in merge_site_cvs_fillna.columns if col not in ['studyid','redcap_event_name','site']]
+    
+    # ensure all data is string for comparison
+    merge_site_cvs_fillna[codebook_columns] = merge_site_cvs_fillna[codebook_columns].astype(str)
+    
     # iterate through columns and check codebook options that are present in REDCap project
-    for col in df_valid_codebook_option:
+    for col in codebook_columns:
+        codebook_vals = df_valid_codebook_option.loc[df_valid_codebook_option['trg_var'] == col, 'trg_val'].tolist()
         # set values without valid options to empty
-        merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in df_valid_codebook_option[col] else '')
+        merge_site_cvs_fillna[col] = merge_site_cvs_fillna[col].apply(lambda x: x if x in codebook_vals else '')
      
     # export merged csv file to temporary directory called merged 
     merge_site_cvs_fillna.to_csv(import_directory + 'merged/merged.csv', index=False, float_format=None)
