@@ -282,9 +282,7 @@ def mapped_csvs():
                 df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
         
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
-        
-        print(df_valid_codebook_option)
-        
+                
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
@@ -784,14 +782,14 @@ def mapped_csvs():
     
     merge_site_cvs_fillna = merge_site_cvs.fillna('')
     
-    print(merge_site_cvs_fillna)
-    
     codebook_columns = [col for col in merge_site_cvs_fillna.columns if col not in ['studyid','redcap_event_name','site']]
     
     # ensure all data is string for comparison
     merge_site_cvs_fillna[codebook_columns] = merge_site_cvs_fillna[codebook_columns].astype(str)
     
     print(df_valid_codebook_option)
+    print(codebook_columns)
+    print(merge_site_cvs_fillna)
     
     # iterate through columns and check codebook options that are present in REDCap project
     for col in codebook_columns:
