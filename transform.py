@@ -523,10 +523,7 @@ def mapped_csvs():
                     redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate'].strip()) and pd.notna(row['cr4'].strip()) and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
-                    print(site)
-                    print(row['crrdate'].strip(), row['cr4'].strip())
                     age = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
-                    print(age)
                 else:
                     age = ''
 
@@ -572,8 +569,8 @@ def mapped_csvs():
 
                 if 'hb30' in row.index and row['hb30'] == 'yes' and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
                     sualcodur = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
-                elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no' and row['hb31a'] != '' and row['hb29a'] != '':
-                    sualcodur = str((datetime.strptime(row['hb31a'], '%m/%d/%Y')).year - (datetime.strptime(row['hb29a'], '%m/%d/%Y')).year)
+                elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no' and row['hb31a'].strip() != '' and row['hb29a'].strip() != '':
+                    sualcodur = str((datetime.strptime(row['hb31a'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['hb29a'].strip(), '%m/%d/%Y')).year)
                 else:
                     sualcodur = ''
 
