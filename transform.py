@@ -522,7 +522,7 @@ def mapped_csvs():
                 else:
                     redcap_event_name = row['crvisit']
 
-                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']) and row['crrdate'] != '' and row['cr4'] != '':
                     print(site)
                     print(row['crrdate'], row['cr4'])
                     age = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
@@ -530,7 +530,7 @@ def mapped_csvs():
                 else:
                     age = ''
 
-                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']) and row['crrdate'] != '' and row['cr4'] != '':
                     pmhhtn_age_onset = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                 else:
                     pmhhtn_age_onset = ''
@@ -544,7 +544,7 @@ def mapped_csvs():
                 else:
                     birth_weight = ''
 
-                if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
+                if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']) and row['crrdate'] != '' and row['cr4'] != '':
                     rpmenopage = str((datetime.strptime(row['cr28a'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                 else:
                     rpmenopage = ''
@@ -570,9 +570,9 @@ def mapped_csvs():
                 else:
                     smokever = ''
 
-                if 'hb30' in row.index and row['hb30'] == 'yes':
+                if 'hb30' in row.index and row['hb30'] == 'yes' and row['crrdate'] != '' and row['cr4'] != '':
                     sualcodur = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
-                elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no':
+                elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no' and row['hb31a'] != '' and row['hb29a'] != '':
                     sualcodur = str((datetime.strptime(row['hb31a'], '%m/%d/%Y')).year - (datetime.strptime(row['hb29a'], '%m/%d/%Y')).year)
                 else:
                     sualcodur = ''
@@ -608,7 +608,7 @@ def mapped_csvs():
                 else:
                     height_m = ''
                     
-                if 'hb3' in row.index and pd.notna(row['crrdate']) and row['crrdate'] != '' and pd.notna(row['cr4']) and row['cr4'] != '' and row['hb3'] == 'yes':                    
+                if 'hb3' in row.index and pd.notna(row['crrdate']) and row['crrdate'] != '' and pd.notna(row['cr4']) and row['cr4'] != '' and row['hb3'] == 'yes' and row['crrdate'] != '' and row['cr4'] != '':                    
                     sucigdur = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
                 elif 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'no':
                     sucigdur = str(pd.to_numeric(row['hb5a'], errors='coerce') - pd.to_numeric(row['hb2a'], errors='coerce'))
