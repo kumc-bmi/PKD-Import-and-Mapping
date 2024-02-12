@@ -380,7 +380,7 @@ def mapped_csvs():
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # create a logic DataFrame
-        logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
+        logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'adpkd_yn', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'sucigdur', 'sucigpacks', 'tkv'])
         
         if site == 'kumc':
@@ -515,6 +515,7 @@ def mapped_csvs():
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
+                adpkd_yn = '1'
                 
                 if 'redcap_event_name' in row.index: 
                     redcap_event_name = row['redcap_event_name']
@@ -524,13 +525,13 @@ def mapped_csvs():
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
                     print(site)
                     print(row['crrdate'], row['cr4'])
-                    age = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
+                    age = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                     print(age)
                 else:
                     age = ''
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
-                    pmhhtn_age_onset = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
+                    pmhhtn_age_onset = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                 else:
                     pmhhtn_age_onset = ''
 
@@ -544,7 +545,7 @@ def mapped_csvs():
                     birth_weight = ''
 
                 if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a']) and pd.notna(row['cr4']):
-                    rpmenopage = str((pd.to_datetime(row['cr28a'])).year - (pd.to_datetime(row['cr4'])).year)
+                    rpmenopage = str((datetime.strptime(row['cr28a'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                 else:
                     rpmenopage = ''
 
@@ -570,9 +571,9 @@ def mapped_csvs():
                     smokever = ''
 
                 if 'hb30' in row.index and row['hb30'] == 'yes':
-                    sualcodur = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
+                    sualcodur = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year)
                 elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no':
-                    sualcodur = str((pd.to_datetime(row['hb31a'])).year - (pd.to_datetime(row['hb29a'])).year)
+                    sualcodur = str((datetime.strptime(row['hb31a'], '%m/%d/%Y')).year - (datetime.strptime(row['hb29a'], '%m/%d/%Y')).year)
                 else:
                     sualcodur = ''
 
@@ -608,7 +609,7 @@ def mapped_csvs():
                     height_m = ''
                     
                 if 'hb3' in row.index and pd.notna(row['crrdate']) and row['crrdate'] != '' and pd.notna(row['cr4']) and row['cr4'] != '' and row['hb3'] == 'yes':                    
-                    sucigdur = str((pd.to_datetime(row['hypertdx'])).year - (pd.to_datetime(row['birthdate'])).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
+                    sucigdur = str((datetime.strptime(row['crrdate'], '%m/%d/%Y')).year - (datetime.strptime(row['cr4'], '%m/%d/%Y')).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
                 elif 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'no':
                     sucigdur = str(pd.to_numeric(row['hb5a'], errors='coerce') - pd.to_numeric(row['hb2a'], errors='coerce'))
                 else:
@@ -628,7 +629,7 @@ def mapped_csvs():
                 # livercysts_mr_num'] =
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 
                                  'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m, 'sucigdur': sucigdur, 'sucigpacks': sucigpacks}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
@@ -638,6 +639,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 studyid = row['subject_id']
                 redcap_event_name = row['redcap_event_name']
+                adpkd_yn = '1'
             
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact'])).year - (pd.to_datetime(row['birthdate'])).year)
@@ -672,7 +674,7 @@ def mapped_csvs():
                     wbc_k = ''
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
 
                  # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
