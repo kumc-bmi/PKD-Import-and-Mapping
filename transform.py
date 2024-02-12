@@ -515,7 +515,7 @@ def mapped_csvs():
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
-                adpkd_yn = '1'
+                adpkd_yn = 1
                 
                 if 'redcap_event_name' in row.index: 
                     redcap_event_name = row['redcap_event_name']
@@ -636,7 +636,7 @@ def mapped_csvs():
                 # create a new dictionary to hold the values for the uab current row
                 studyid = row['subject_id']
                 redcap_event_name = row['redcap_event_name']
-                adpkd_yn = '1'
+                adpkd_yn = 1
             
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact'])).year - (pd.to_datetime(row['birthdate'])).year)
@@ -766,11 +766,11 @@ def mapped_csvs():
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
             # append logic columns to umb dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m', 'sucigdur', 'sucigpacks']], 
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m', 'sucigdur', 'sucigpacks']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
             # append logic columns to uab dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age','pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
         
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
