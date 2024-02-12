@@ -282,13 +282,9 @@ def mapped_csvs():
                 df_valid_codebook_option.append({'trg_var': trg_var, 'trg_val': trg_val})
         
         df_valid_codebook_option = pd.DataFrame(df_valid_codebook_option)
-        
-        print(df_valid_codebook_option)
-        
+                
         valid_codebook_vals = df_valid_codebook_option.groupby('trg_var')['trg_val'].apply(set).to_dict()
-        
-        print(valid_codebook_vals)
-                   
+                           
         # get source value labels for site
         site_src_val = unique_source_values[unique_source_values['site'] == site]
 
@@ -526,7 +522,10 @@ def mapped_csvs():
                     redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate']) and pd.notna(row['cr4']):
+                    print(site)
+                    print(row['crrdate'], row['cr4'])
                     age = str((pd.to_datetime(row['crrdate'])).year - (pd.to_datetime(row['cr4'])).year)
+                    print(age)
                 else:
                     age = ''
 

@@ -100,8 +100,8 @@ adpkd_status,kumc,4,,,adpkd_yn,0,No,,,radio,,,,,,,,,adpkd_status,,,,
 adpkd_status,kumc,2,,,adpkd_yn,1,Yes,,,radio,,,,,,,,,adpkd_status,,,,
 adpkd_status,kumc,5,,,adpkd_yn,1,Yes,,,radio,,,,,,,,,adpkd_status,,,,
 adpkd_status,kumc,3,,,adpkd_yn,,,,,,,,,,,,,,adpkd_status,,,,
-adpkd_yn,umb,1,Yes,,adpkd_yn,1,Yes,,,radio,,,,,,,,,adpkd_yn,,,,
-adpkd_yn,uab,1,Yes,,adpkd_yn,1,Yes,,,radio,,,,,,,,,adpkd_yn,,,,
+TRGCALCFIELD,umb,,,,adpkd_yn,1,Yes,1,,radio,,,,,,,,,adpkd_yn,,,,
+TRGCALCFIELD,uab,,,,adpkd_yn,1,Yes,1,,radio,,,,,,,,,adpkd_yn,,,,
 diagnstatus,kumc,,,,diagnosisage,,,"IF
 (diagnstatus==”Diagnosed with ADPKD”){age - difftime(dmdat, diagndate, units = ""years"")}
 ELSE {NA}",,text,,,,,,,,Y,age_adpkd_diagnosed_yr,,,,
