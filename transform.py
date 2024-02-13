@@ -760,26 +760,28 @@ def mapped_csvs():
             # apply missing function
             site_final_df = site_final_df.applymap(missing)
         
+        for column in site_final_df.columns:
+            if column in valid_codebook_vals:
+                # set values without valid options to empty
+                site_final_df[column] = site_final_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
+        
         if site == 'kumc':
             # append logic columns to kumc dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name','diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3', 'tkv']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
+            print(site)
             # append logic columns to umb dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m', 'sucigdur', 'sucigpacks']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
             print(site_final_df['adpkd_yn'].tolist())
         if site == 'uab':
+            print(site)
             # append logic columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
             print(site_final_df['adpkd_yn'].tolist())
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
-
-        for column in site_final_df.columns:
-            if column in valid_codebook_vals:
-                # set values without valid options to empty
-                site_final_df[column] = site_final_df[column].apply(lambda x: x if x in valid_codebook_vals[column] else '')
         
         # export site dataframe to csv
         site_final_df.to_csv(import_directory + site + '/' + site + '.csv', index=False, float_format=None)        
