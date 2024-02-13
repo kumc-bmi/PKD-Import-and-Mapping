@@ -766,13 +766,11 @@ def mapped_csvs():
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
             # append logic columns to umb dataframe
-            print(site_final_df['adpkd_yn'].tolist())
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat','height_m', 'sucigdur', 'sucigpacks']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
             print(site_final_df['adpkd_yn'].tolist())
         if site == 'uab':
             # append logic columns to uab dataframe
-            print(site_final_df['adpkd_yn'].tolist())
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
             print(site_final_df['adpkd_yn'].tolist())
         # attach site name to studyid
