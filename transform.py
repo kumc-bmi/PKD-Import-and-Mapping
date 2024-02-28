@@ -382,7 +382,7 @@ def mapped_csvs():
         # create a logic DataFrame
         logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'adpkd_yn', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'sucigdur', 'sucigpacks', 'tkv', 'pmhich', 'pmhuti', 
-                                             'pmhflpain', 'pmhbkpain', 'pmhhtn', 'mhhemat', 'fmhistpkd', 'infertility_hx', 'mhcystinfect', 'pmhabdpain'])
+                                             'pmhflpain', 'pmhbkpain', 'pmhhtn', 'pmhhemat', 'fmhistpkd', 'infertility_hx', 'pmhcystinfect', 'pmhabdpain'])
         
         if site == 'kumc':
            # convert onetime forms to baseline arm
@@ -632,100 +632,100 @@ def mapped_csvs():
                 #             elif 'crvisit' in row.index and row['crvisit']  != value and row['cr50a'] == value: 
                 #                 logic_col = value
                 
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr50'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr50'] == '1':
                     pmhich = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr50'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr50'] == '0':
                     pmhich = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr50a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr50a'] == '1':
                     pmhich = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr50a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr50a'] == '0': 
                     pmhich = '0'
                 
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr38'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr38'] == '1':
                     pmhuti = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr38'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr38'] == '0':
                     pmhuti = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr38b1'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr38b1'] == '1':
                     pmhuti = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr38b1'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr38b1'] == '0': 
                     pmhuti = '0'
 
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr29'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr29'] == '1':
                     pmhhtn = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr29'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr29'] == '0':
                     pmhhtn = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr29a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr29a'] == '1':
                     pmhhtn = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr29a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr29a'] == '0': 
                     pmhhtn = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr30'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr30'] == '1':
                     pmhflpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr30'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr30'] == '0':
                     pmhflpain = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr30a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr30a'] == '1':
                     pmhflpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr30a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr30a'] == '0': 
                     pmhflpain = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr33'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr33'] == '1':
                     pmhbkpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr33'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr33'] == '0':
                     pmhbkpain = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr33a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr33a'] == '1':
                     pmhbkpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr33a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr33a'] == '0': 
                     pmhbkpain = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr37'] == '1':
-                    mhhemat = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr37'] == '0':
-                    mhhemat = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr37a'] == '1':
-                    mhhemat = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr37a'] == '0': 
-                    mhhemat = '0'
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr37'] == '1':
+                    pmhhemat = '1'
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr37'] == '0':
+                    pmhhemat = '0'
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr37a'] == '1':
+                    pmhhemat = '1'
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr37a'] == '0': 
+                    pmhhemat = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr15'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr15'] == '1':
                     fmhistpkd = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr15'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr15'] == '0':
                     fmhistpkd = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr15a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr15a'] == '1':
                     fmhistpkd = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr15a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr15a'] == '0': 
                     fmhistpkd = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr19'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr19'] == '1':
                     infertility_hx = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr19'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr19'] == '0':
                     infertility_hx = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr19a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr19a'] == '1':
                     infertility_hx = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr19a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr19a'] == '0': 
                     infertility_hx = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr39'] == '1':
-                    mhcystinfect = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr39'] == '0':
-                    mhcystinfect = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr39a'] == '1':
-                    mhcystinfect = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr39a'] == '0': 
-                    mhcystinfect = '0'
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr39'] == '1':
+                    pmhcystinfect = '1'
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr39'] == '0':
+                    pmhcystinfect = '0'
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr39a'] == '1':
+                    pmhcystinfect = '1'
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr39a'] == '0': 
+                    pmhcystinfect = '0'
                     
-                if 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1' and row['cr35'] == '1':
+                if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr35'] == '1':
                     pmhabdpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name'] == 'baseline_arm_1'  and row['cr35'] == '0':
+                elif 'crvisit' in row.index and row['crvisit'] == '1'  and row['cr35'] == '0':
                     pmhabdpain = '0'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr35a'] == '1':
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr35a'] == '1':
                     pmhabdpain = '1'
-                elif 'redcap_event_name' in row.index and row['redcap_event_name']  != 'baseline_arm_1' and row['cr35a'] == '0': 
+                elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr35a'] == '0': 
                     pmhabdpain = '0'
                     
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 
                                  'sualcodur': sualcodur, 'sualcodrinks': sualcodrinks, 'tolvaptan_treat': tolvaptan_treat, 'height_m': height_m, 'sucigdur': sucigdur, 'sucigpacks': sucigpacks, 'pmhich': pmhich, 'pmhuti': pmhuti, 'pmhflpain': pmhflpain, 'pmhbkpain': pmhbkpain, 
-                                 'pmhhtn': pmhhtn, 'mhhemat': mhhemat, 'fmhistpkd': fmhistpkd, 'infertility_hx': infertility_hx, 'mhcystinfect': mhcystinfect, 'pmhabdpain': pmhabdpain}
+                                 'pmhhtn': pmhhtn, 'pmhhemat': pmhhemat, 'fmhistpkd': fmhistpkd, 'infertility_hx': infertility_hx, 'pmhcystinfect': pmhcystinfect, 'pmhabdpain': pmhabdpain}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -870,7 +870,7 @@ def mapped_csvs():
         if site == 'umb':
             # append logic columns to umb dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','birth_weight','rpmenopage','teayn','coffeeyn','smokever','sualcodur','sualcodrinks','tolvaptan_treat',
-                                                                   'height_m', 'sucigdur', 'sucigpacks', 'pmhich', 'pmhuti', 'pmhflpain', 'pmhbkpain', 'pmhhtn', 'mhhemat', 'fmhistpkd', 'infertility_hx', 'mhcystinfect', 'pmhabdpain']], 
+                                                                   'height_m', 'sucigdur', 'sucigpacks', 'pmhich', 'pmhuti', 'pmhflpain', 'pmhbkpain', 'pmhhtn', 'pmhhemat', 'fmhistpkd', 'infertility_hx', 'pmhcystinfect', 'pmhabdpain']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
             # append logic columns to uab dataframe
