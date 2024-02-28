@@ -524,12 +524,12 @@ def mapped_csvs():
                     redcap_event_name = row['crvisit']
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate'].strip()) and pd.notna(row['cr4'].strip()) and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
-                    age = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
+                    age = str((datetime.strptime(row['crrdate'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year)
                 else:
                     age = ''
 
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate'].strip()) and pd.notna(row['cr4'].strip()) and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
-                    pmhhtn_age_onset = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
+                    pmhhtn_age_onset = str((datetime.strptime(row['crrdate'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year)
                 else:
                     pmhhtn_age_onset = ''
 
@@ -543,7 +543,7 @@ def mapped_csvs():
                     birth_weight = ''
 
                 if  'cr28a' in row.index and 'cr4' in row.index and pd.notna(row['cr28a'].strip()) and pd.notna(row['cr4'].strip()) and row['cr28a'].strip() != '' and row['cr4'].strip() != '':
-                    rpmenopage = str((datetime.strptime(row['cr28a'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
+                    rpmenopage = str((datetime.strptime(row['cr28a'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year)
                 else:
                     rpmenopage = ''
 
@@ -569,9 +569,9 @@ def mapped_csvs():
                     smokever = ''
 
                 if 'hb30' in row.index and row['hb30'] == 'yes' and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
-                    sualcodur = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year)
+                    sualcodur = str((datetime.strptime(row['crrdate'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year)
                 elif 'hb29a' in row.index and 'hb31a' in row.index and 'hb30' in row.index and row['hb30'] == 'no' and row['hb31a'].strip() != '' and row['hb29a'].strip() != '':
-                    sualcodur = str((datetime.strptime(row['hb31a'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['hb29a'].strip(), '%m/%d/%Y')).year)
+                    sualcodur = str((datetime.strptime(row['hb31a'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['hb29a'].strip(), '%Y-%m-%d')).year)
                 else:
                     sualcodur = ''
 
@@ -607,7 +607,7 @@ def mapped_csvs():
                     height_m = ''
                     
                 if 'hb3' in row.index and pd.notna(row['crrdate'].strip()) and row['crrdate'].strip() != '' and pd.notna(row['cr4'].strip()) and row['cr4'].strip() != '' and row['hb3'] == 'yes' and row['crrdate'].strip() != '' and row['cr4'].strip() != '':                    
-                    sucigdur = str((datetime.strptime(row['crrdate'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['cr4'].strip(), '%m/%d/%Y')).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
+                    sucigdur = str((datetime.strptime(row['crrdate'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year - pd.to_numeric(row['hb2a'], errors='coerce')) 
                 elif 'hb3' in row.index and pd.notna(row['hb3']) and row['hb3'] != '' and row['hb3'] == 'no':
                     sucigdur = str(pd.to_numeric(row['hb5a'], errors='coerce') - pd.to_numeric(row['hb2a'], errors='coerce'))
                 else:
