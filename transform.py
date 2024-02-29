@@ -640,6 +640,8 @@ def mapped_csvs():
                     pmhich = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr50a'] == '0': 
                     pmhich = '0'
+                else:
+                    pmhich = ''
                 
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr38'] == '1':
                     pmhuti = '1'
@@ -649,6 +651,8 @@ def mapped_csvs():
                     pmhuti = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr38b1'] == '0': 
                     pmhuti = '0'
+                else:
+                    pmhuti = ''
 
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr29'] == '1':
                     pmhhtn = '1'
@@ -658,6 +662,8 @@ def mapped_csvs():
                     pmhhtn = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr29a'] == '0': 
                     pmhhtn = '0'
+                else:
+                    pmhhtn = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr30'] == '1':
                     pmhflpain = '1'
@@ -667,6 +673,8 @@ def mapped_csvs():
                     pmhflpain = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr30a'] == '0': 
                     pmhflpain = '0'
+                else:
+                    pmhflpain = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr33'] == '1':
                     pmhbkpain = '1'
@@ -676,6 +684,8 @@ def mapped_csvs():
                     pmhbkpain = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr33a'] == '0': 
                     pmhbkpain = '0'
+                else:
+                    pmhbkpain = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr37'] == '1':
                     pmhhemat = '1'
@@ -685,6 +695,8 @@ def mapped_csvs():
                     pmhhemat = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr37a'] == '0': 
                     pmhhemat = '0'
+                else:
+                    pmhhemat = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr15'] == '1':
                     fmhistpkd = '1'
@@ -694,6 +706,8 @@ def mapped_csvs():
                     fmhistpkd = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr15a'] == '0': 
                     fmhistpkd = '0'
+                else:
+                    fmhistpkd = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr19'] == '1':
                     infertility_hx = '1'
@@ -703,6 +717,8 @@ def mapped_csvs():
                     infertility_hx = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr19a'] == '0': 
                     infertility_hx = '0'
+                else:
+                    infertility_hx = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr39'] == '1':
                     pmhcystinfect = '1'
@@ -712,6 +728,8 @@ def mapped_csvs():
                     pmhcystinfect = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr39a'] == '0': 
                     pmhcystinfect = '0'
+                else:
+                    pmhcystinfect = ''
                     
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr35'] == '1':
                     pmhabdpain = '1'
@@ -721,6 +739,8 @@ def mapped_csvs():
                     pmhabdpain = '1'
                 elif 'crvisit' in row.index and row['crvisit']  != '1' and row['cr35a'] == '0': 
                     pmhabdpain = '0'
+                else:
+                    pmhabdpain = ''
                     
                 # create a new DataFrame from the logic_row dictionary
                 new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'birth_weight': birth_weight, 'rpmenopage': rpmenopage, 'teayn': teayn, 'coffeeyn': coffeeyn, 'smokever': smokever, 
