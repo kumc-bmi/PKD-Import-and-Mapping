@@ -780,7 +780,7 @@ def mapped_csvs():
                 else:
                     tolvaptan_treat = ''
 
-                if 'creatinelvl' in row.index and row['creatinelvl'] == '999':
+                if 'lstcreatine' in row.index and row['lstcreatine'] == '999':
                      creatinine = ''
                 elif 'creatinelvl' in row.index and row['creatinelvl'] == '1' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     creatinine = row['lstcreatine']
