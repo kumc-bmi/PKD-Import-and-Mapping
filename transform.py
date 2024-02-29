@@ -780,9 +780,9 @@ def mapped_csvs():
                 else:
                     tolvaptan_treat = ''
 
-                if 'creatinelvl' in row.index and row['creatinelvl'] == 'mg/dl' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
+                if 'creatinelvl' in row.index and row['creatinelvl'] == '1' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     creatinine = row['lstcreatine']
-                elif 'creatinelvl' in row.index and row['creatinelvl'] == 'mmol/l' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
+                elif 'creatinelvl' in row.index and row['creatinelvl'] == '2' and ('lstcreatine') in row.index and pd.notna(row['lstcreatine']):
                     creatinine = (pd.to_numeric(row['lstcreatine'], errors='coerce') / 88.4).astype(str)
                 else:
                     creatinine = ''
