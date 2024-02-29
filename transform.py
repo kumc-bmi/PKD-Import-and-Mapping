@@ -508,7 +508,7 @@ def mapped_csvs():
                     average_diabp3 = ''
                     
                 if 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
-                    age = str((datetime.strptime(row['visitdat'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['dob'].strip(), '%m/%d/%Y')).year)
+                    age = str((datetime.strptime(row['visitdat'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['dob'].strip(), '%Y-%m-%d')).year)
                 else:
                     age = ''
                 
