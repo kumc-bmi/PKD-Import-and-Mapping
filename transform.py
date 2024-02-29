@@ -363,13 +363,15 @@ def mapped_csvs():
             
                 # concatenate the new DataFrame to the new_uab_df DataFrame
                 new_uab_df = pd.concat([new_uab_df, new_umb_row_df], ignore_index=True, sort=True)
+            
+            new_uab_df.to_csv(import_directory + 'merged/' + site + '_race.csv', index=False, float_format=None)
 
             # remove string nan on dataframe
             new_uab_df =  new_uab_df.fillna('')
 
             # append logic columns to umb dataframe
             site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'race'], how='left')
-
+            
             # drop the 'race' column
             site_data_df = site_data_df.drop('race', axis=1)
         else:
