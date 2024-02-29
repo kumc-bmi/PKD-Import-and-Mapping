@@ -293,7 +293,7 @@ def mapped_csvs():
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
 
             # create a new DataFrame to hold the transposed data
-            new_umb_df = pd.DataFrame(columns=['pid', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6'])
+            new_umb_df = pd.DataFrame(columns=['pid', 'redcap_event_name', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6'])
 
             # Iterate over each row in the original DataFrame
             for index, row in site_data_df.iterrows():
@@ -301,7 +301,7 @@ def mapped_csvs():
                 cr_value = row['cr7']
                         
                 # create a new dictionary to hold the values for the current row
-                new_row = {'pid': row['pid'], 'cr7': cr_value}
+                new_row = {'pid': row['pid'], 'redcap_event_name': row['redcap_event_name'], 'cr7': cr_value}
                         
                 # Set the value for the corresponding column based on the 'cr7' value
                 if cr_value == '1':
@@ -323,11 +323,13 @@ def mapped_csvs():
                 # concatenate the new DataFrame to the new_umb_df DataFrame
                 new_umb_df = pd.concat([new_umb_df, new_umb_row_df], ignore_index=True, sort=True)
 
+            new_umb_df.to_csv(import_directory + 'merged/' + site + '_race.csv', index=False, float_format=None)
+                              
             # remove string nan on dataframe
             new_umb_df =  new_umb_df.fillna('')
 
             # append logic columns to umb dataframe
-            site_data_df = pd.merge(site_data_df, new_umb_df[['pid', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6']], on=['pid', 'cr7'], how='left')
+            site_data_df = pd.merge(site_data_df, new_umb_df[['pid', 'redcap_event_name', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6']], on=['pid', 'redcap_event_name', 'cr7'], how='left')
 
             # drop the 'cr7' column
             site_data_df = site_data_df.drop('cr7', axis=1)
@@ -336,7 +338,7 @@ def mapped_csvs():
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
 
             # create a new DataFrame to hold the transposed data
-            new_uab_df = pd.DataFrame(columns=['subject_id', 'race', 'race___1', 'ethnic', 'race___3', 'race___5', 'race___6'])
+            new_uab_df = pd.DataFrame(columns=['subject_id', 'redcap_event_name', 'race', 'race___1', 'ethnic', 'race___3', 'race___5', 'race___6'])
 
             # Iterate over each row in the original DataFrame
             for index, row in site_data_df.iterrows():
@@ -344,7 +346,7 @@ def mapped_csvs():
                 race_value = row['race']
                         
                 # create a new dictionary to hold the values for the current row
-                new_row = {'subject_id': row['subject_id'], 'race': race_value}
+                new_row = {'subject_id': row['subject_id'], 'redcap_event_name': row['redcap_event_name'], 'race': race_value}
                         
                 # Set the value for the corresponding column based on the 'race' value
                 if race_value == '1':
@@ -369,8 +371,8 @@ def mapped_csvs():
             # remove string nan on dataframe
             new_uab_df =  new_uab_df.fillna('')
 
-            # append logic columns to umb dataframe
-            site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'race'], how='left')
+            # append logic columns to uab dataframe
+            site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'redcap_event_name', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'redcap_event_name', 'race'], how='left')
             
             # drop the 'race' column
             site_data_df = site_data_df.drop('race', axis=1)
