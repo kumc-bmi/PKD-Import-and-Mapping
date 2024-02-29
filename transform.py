@@ -506,9 +506,14 @@ def mapped_csvs():
                     average_diabp3 = row['average_diabp3']
                 else:
                     average_diabp3 = ''
+                    
+                if 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
+                    age = str((datetime.strptime(row['visitdat'].strip(), '%m/%d/%Y')).year - (datetime.strptime(row['dob'].strip(), '%m/%d/%Y')).year)
+                else:
+                    age = ''
                 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'tkv': tkv, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'tkv': tkv, 'diagnosisage': diagnosisage, 'mthr': mthr, 'fthr': fthr, 'teayn': teayn, 'coffeeyn': coffeeyn, 'sodayn': sodayn, 'caffintake': caffintake, 'caffdur': caffdur, 'sualcodur': sualcodur, 'height_m': height_m, 'average_sysbp3': average_sysbp3, 'average_diabp3': average_diabp3}
 
                 # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)

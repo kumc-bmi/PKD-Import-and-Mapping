@@ -46,7 +46,7 @@ visitdat,kumc,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_dat
 date_contact,uab,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_date,,,,,,
 crrdate,umb,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_date,,,,,,
 TRGCALCFIELD,umb,,,,age,,,"difftime(crrdate, cr4, units = ""years"")",text,text,date_mdy,number,,demographics,,,age_in_years,Y,,,,,"cr4, crrdate"
-TRGCALCFIELD,kumc,,,,age,,,"difftime([visitdate, dob, units = ""years"")",text,text,integer,number,,demographics,,,age_in_years,,,,,,
+TRGCALCFIELD,kumc,,,,age,,,"difftime([visitdat, dob, units = ""years"")",text,text,integer,number,,demographics,,,age_in_years,,,,,,
 TRGCALCFIELD,uab,,,,age,,,"difftime(date_contact, birthdate, units=""years"")",text,text,date_mdy,number,,demographics,,,age_in_years,Y,,,,,"birthdate,
 date_contact"
 gest_age,uab,,,,gest_age,,,,text,text,,number,,demographics,if prenatal visit,,gestational_age_wk,,,,,,
