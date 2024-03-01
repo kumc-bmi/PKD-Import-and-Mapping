@@ -370,9 +370,13 @@ def mapped_csvs():
 
             # remove string nan on dataframe
             new_uab_df =  new_uab_df.fillna('')
+            
+            new_uab_df.to_csv(import_directory + 'merged/' + site + '_nan_race.csv', index=False, float_format=None)
 
             # append logic columns to uab dataframe
-            site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'redcap_event_name', 'race', 'race___1', 'race___3', 'race___5', 'race___6', 'ethnic']], on=['subject_id', 'redcap_event_name', 'race'], how='left')
+            site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'redcap_event_name', 'race', 'ethnic', 'race___1', 'race___3', 'race___5', 'race___6']], on=['subject_id', 'redcap_event_name', 'race'], how='left')
+            
+            site_data_df.to_csv(import_directory + 'merged/' + site + '_data_df_nan_race.csv', index=False, float_format=None)
             
             # drop the 'race' column
             site_data_df = site_data_df.drop('race', axis=1)
