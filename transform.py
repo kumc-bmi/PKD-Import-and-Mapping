@@ -384,6 +384,8 @@ def mapped_csvs():
             # read site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
 
+        site_data_df.to_csv(import_directory + 'merged/' + site + '_with_race.csv', index=False, float_format=None)
+        
         # ensure all values are in lower case
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
