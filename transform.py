@@ -912,6 +912,7 @@ def mapped_csvs():
         if site == 'uab':
             # append logic columns to uab dataframe
             site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
+        
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
         
@@ -927,9 +928,7 @@ def mapped_csvs():
     merge_site_cvs_fillna = merge_site_cvs.fillna('')
     
     merge_site_cvs_df = pd.DataFrame(merge_site_cvs_fillna)
-    
-    merge_site_cvs_df.to_csv(import_directory + 'merged/before_merged.csv', index=False, float_format=None)
-        
+            
     for column in merge_site_cvs_df.columns:
         if column in valid_codebook_vals:
             # set values without valid options to empty
