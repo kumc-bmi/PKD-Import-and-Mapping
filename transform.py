@@ -366,7 +366,7 @@ def mapped_csvs():
                 # concatenate the new DataFrame to the new_uab_df DataFrame
                 new_uab_df = pd.concat([new_uab_df, new_umb_row_df], ignore_index=True, sort=True)
             
-            for index, row in site_data_df.iterrows():
+            for index, row in new_uab_df.iterrows():
                 if row['ethnic'] != '1':
                     row['ethnic'] = '0'
                 
