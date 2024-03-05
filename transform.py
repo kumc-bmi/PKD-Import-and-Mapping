@@ -359,13 +359,17 @@ def mapped_csvs():
                     new_row['race___3'] = '1'
                 elif race_value == '5':
                     new_row['race___6'] = '1'
-            
+                                
                 # create a new DataFrame from the new_row dictionary
                 new_umb_row_df = pd.DataFrame.from_dict(new_row, orient='index').T
             
                 # concatenate the new DataFrame to the new_uab_df DataFrame
                 new_uab_df = pd.concat([new_uab_df, new_umb_row_df], ignore_index=True, sort=True)
             
+            for index, row in site_data_df.iterrows():
+                if row['ethnic'] != '1':
+                    row['ethnic'] = '0'
+                
             new_uab_df.to_csv(import_directory + 'merged/' + site + '_race.csv', index=False, float_format=None)
 
             # remove string nan on dataframe
@@ -390,7 +394,7 @@ def mapped_csvs():
         site_data_df = site_data_df.apply(lambda val: val.str.lower() if val.dtype == 'object' else val)
 
         # create a logic DataFrame
-        logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'adpkd_yn', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
+        logic_cols_df = pd.DataFrame(columns=['studyid', 'redcap_event_name', 'age', 'visitdat', 'adpkd_yn', 'diagnosisage', 'pmhhtn_age_onset', 'mthr', 'fthr', 'birth_weight', 'rpmenopage', 'teayn', 'coffeeyn', 'sodayn', 'caffintake', 'caffdur', 'smokever', 'sualcodur',
                                              'sualcodrinks', 'tolvaptan_treat', 'height_m', 'average_sysbp3', 'average_diabp3', 'creatinine', 'albumin', 'wbc_k', 'urine_microalb', 'subject_height', 'sucigdur', 'sucigpacks', 'tkv', 'pmhich', 'pmhuti', 
                                              'pmhflpain', 'pmhbkpain', 'pmhhtn', 'pmhhemat', 'fmhistpkd', 'infertility_hx', 'pmhcystinfect', 'pmhabdpain'])
         
@@ -516,8 +520,8 @@ def mapped_csvs():
                     average_diabp3 = row['average_diabp3']
                 else:
                     average_diabp3 = ''
-                    
-                if 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
+            
+                if row['redcap_event_name'] == 'baseline_arm_1' and 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
                     age = str((datetime.strptime(row['visitdat'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['dob'].strip(), '%Y-%m-%d')).year)
                 else:
                     age = ''
@@ -770,7 +774,26 @@ def mapped_csvs():
                 studyid = row['subject_id']
                 redcap_event_name = row['redcap_event_name']
                 adpkd_yn = '1'
-            
+
+                if 'visitdat' in row.index and redcap_event_name == 'baseline_arm_1':
+                    visitdat = row['date_contact']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_1_arm_1':
+                    visitdat = row['fudtlcont']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_2_arm_1':
+                    visitdat = row['fudtlcont_v2']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_3_arm_1':
+                    visitdat = row['fudtlcont_v2_y3']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_4_arm_1':
+                    visitdat = row['fudtlcont_v2_y3_y4']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_5_arm_1':
+                    visitdat = row['fudtlcont_v2_y3_y4_y5']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_6_arm_1':
+                    visitdat = row['fudtlcont_v2_y3_y4_y5_v2']
+                elif 'visitdat' in row.index and redcap_event_name == 'year_7_arm_1':
+                    visitdat = row['fudtlcont_v2_y3_y4_y5_v2_v2']
+                else:
+                    visitdat = ''  
+                
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact'])).year - (pd.to_datetime(row['birthdate'])).year)
                 else:
@@ -806,7 +829,7 @@ def mapped_csvs():
                     wbc_k = ''
 
                 # create a new DataFrame from the logic_row dictionary
-                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k}
+                new_logic_row = {'studyid': studyid, 'redcap_event_name': redcap_event_name, 'age': age, 'adpkd_yn': adpkd_yn, 'pmhhtn_age_onset': pmhhtn_age_onset, 'tolvaptan_treat': tolvaptan_treat, 'creatinine': creatinine, 'albumin': albumin, 'wbc_k': wbc_k, 'visitdat': visitdat}
 
                  # concatenate the new DataFrame to the logic_cols_df DataFrame
                 logic_cols_df = pd.concat([logic_cols_df, pd.DataFrame([new_logic_row])], ignore_index=True)
@@ -911,7 +934,7 @@ def mapped_csvs():
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'uab':
             # append logic columns to uab dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k']], on=['studyid', 'redcap_event_name'], how='left')
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid','redcap_event_name','age', 'adpkd_yn', 'pmhhtn_age_onset','tolvaptan_treat','creatinine','albumin','wbc_k', 'visitdat']], on=['studyid', 'redcap_event_name'], how='left')
         
         # attach site name to studyid
         site_final_df['studyid'] = site_final_df['studyid'].apply(lambda x: site + '_' + str(x))
