@@ -383,6 +383,8 @@ def mapped_csvs():
             # drop the 'race' column
             site_data_df = site_data_df.drop('race', axis=1)
         elif site == 'kumc':
+            # read kumc site raw data to dataframe
+            site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
             site_data_df['dob'] = site_data_df.groupby('studyid')['dob'].transform(lambda x: x.ffill().bfill())
         else:
             # read site raw data to dataframe
