@@ -40,7 +40,7 @@ pid,umb,,,,studyid,,,,text,text,,,,demographics,,,participant_id,,,,,,
 studyid,kumc,,,,studyid,,,,text,text,,,,demographics,,,participant_id,,,,,,
 subject_id,uab,,,,studyid,,,,text,text,,,,demographics,,,participant_id,,,,,,
 visitdat,kumc,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_date,,,,,,
-TRGCALCFIELD,uab,,,,visdat,,,if (event = baseline) visdat = date_contact elseif  (event = year1 ) visdat = fudtlcont elseif  (event = year2 ) visdat = fudtlcont_v2 elseif  (event = year3 ) visdat = fudtlcont_v2_yr3  elseif  (event = year4 ) visdat = fudtlcont_v2_yr4  elseif  (event = year4 ) visdat = fudtlcont_v2_y3_y4 elseif  (event = year5 ) visdat = fudtlcont_v2_y3_y4_y5 elseif  (event = year6 ) visdat = fudtlcont_v2_y3_y4_y5_v2 elseif  (event = year7) visdat = fudtlcont_v2_y3_y4_y5_v2_v2,text,text,date_mdy,number,,demographics,,,age_in_years,Y,,,,,"cr4, crrdate"
+date_contact,uab,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_date,,,,,,
 crrdate,umb,,,,visdat,,,,text,text,date_mdy,date_mdy,,demographics,,,visit_date,,,,,,
 TRGCALCFIELD,umb,,,,age,,,"difftime(crrdate, cr4, units = ""years"")",text,text,date_mdy,number,,demographics,,,age_in_years,Y,,,,,"cr4, crrdate"
 TRGCALCFIELD,kumc,,,,age,,,"difftime([visitdate, dob, units = ""years"")",text,text,integer,number,,demographics,,,age_in_years,Y,,,,,
