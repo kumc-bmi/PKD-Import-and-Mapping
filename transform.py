@@ -292,7 +292,8 @@ def mapped_csvs():
             # read umb site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
             
-            site_data_df['cr4'] = site_data_df.groupby('pid')['cr4'].transform(lambda x: x.ffill().bfill())
+            # fill umb birth date in other events
+            site_data_df['cr4'] = site_data_df.groupby('pid')['cr4'].ffill()
 
             # create a new DataFrame to hold the transposed data
             new_umb_df = pd.DataFrame(columns=['pid', 'redcap_event_name', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6'])
@@ -339,7 +340,8 @@ def mapped_csvs():
             # read umb site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
             
-            site_data_df['birthdate'] = site_data_df.groupby('subject_id')['birthdate'].transform(lambda x: x.ffill().bfill())
+            # fill umb birth date in other events
+            site_data_df['birthdate'] = site_data_df.groupby('subject_id')['birthdate'].ffill()
 
             # create a new DataFrame to hold the transposed data
             new_uab_df = pd.DataFrame(columns=['subject_id', 'redcap_event_name', 'race', 'race___1', 'ethnic', 'race___3', 'race___5', 'race___6'])
@@ -385,7 +387,9 @@ def mapped_csvs():
         elif site == 'kumc':
             # read kumc site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
-            site_data_df['dob'] = site_data_df.groupby('studyid')['dob'].transform(lambda x: x.ffill().bfill())
+            
+            # fill umb birth date in other events
+            site_data_df['dob'] = site_data_df.groupby('studyid')['dob'].ffill()
         else:
             # read site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
@@ -640,18 +644,6 @@ def mapped_csvs():
                     sucigpacks = (pd.to_numeric(row['hb6'], errors='coerce') / 20).astype(str)
                 else:
                     sucigpacks = ''
-                    
-                # def crvisit_multi(df, visit_keys):
-                #     for index, row in df:
-                #         for col, value in visit_keys.items():
-                #             if 'crvisit' in row.index and row['crvisit'] == value and row[col] == value:
-                #                 logic_col = value
-                #             elif 'crvisit' in row.index and row['crvisit'] == value  and row['cr50'] == value:
-                #                 logic_col = value
-                #             elif 'crvisit' in row.index and row['crvisit']  != value and row['cr50a'] == value:
-                #                 logic_col = value
-                #             elif 'crvisit' in row.index and row['crvisit']  != value and row['cr50a'] == value: 
-                #                 logic_col = value
                 
                 if 'crvisit' in row.index and row['crvisit'] == '1' and row['cr50'] == '1':
                     pmhich = '1'
