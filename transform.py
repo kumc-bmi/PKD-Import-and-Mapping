@@ -192,11 +192,11 @@ def uab():
     # save uab_updated_df 
     uab_updated_df.to_csv(directory + uab_final, index=False)    
 
-    # delete temporary files with number pattern e.g: _1.csv, _2.csv
-    for filename in os.listdir(directory):
-        if re.search(uab_pattern, filename):
-            os.remove(directory + filename)
-            print(f"Deleted: {filename}")
+    # # delete temporary files with number pattern e.g: _1.csv, _2.csv
+    # for filename in os.listdir(directory):
+    #     if re.search(uab_pattern, filename):
+    #         os.remove(directory + filename)
+    #         print(f"Deleted: {filename}")
 
 def mapped_csvs():
     # based on site convert src_var to trg_var
