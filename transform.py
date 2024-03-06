@@ -368,7 +368,7 @@ def mapped_csvs():
             
             for index, row in new_uab_df.iterrows():
                 if row['ethnic'] != '1':
-                    row['ethnic'] = '0'
+                    row['ethnic'] = '2'
                 
             new_uab_df.to_csv(import_directory + 'merged/' + site + '_race.csv', index=False, float_format=None)
 
@@ -521,7 +521,7 @@ def mapped_csvs():
                 else:
                     average_diabp3 = ''
             
-                if row['redcap_event_name'] == 'baseline_arm_1' and 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
+                if 'visitdat' in row.index and 'dob' in row.index and pd.notna(row['visitdat'].strip()) and pd.notna(row['dob'].strip()) and row['visitdat'].strip() != '' and row['dob'].strip() != '':
                     age = str((datetime.strptime(row['visitdat'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['dob'].strip(), '%Y-%m-%d')).year)
                 else:
                     age = ''
@@ -774,27 +774,6 @@ def mapped_csvs():
                 studyid = row['subject_id']
                 redcap_event_name = row['redcap_event_name']
                 adpkd_yn = '1'
-
-                # if 'date_contact' in row.index and redcap_event_name == 'baseline_arm_1':
-                #     visdat = row['date_contact']
-                # elif 'fudtlcont' in row.index and redcap_event_name == 'year_1_arm_1':
-                #     visdat = row['fudtlcont']
-                # elif 'fudtlcont_v2' in row.index and redcap_event_name == 'year_2_arm_1':
-                #     visdat = row['fudtlcont_v2']
-                # elif 'fudtlcont_v2_y3' in row.index and redcap_event_name == 'year_3_arm_1':
-                #     visdat = row['fudtlcont_v2_y3']
-                # elif 'fudtlcont_v2_y3_y4' in row.index and redcap_event_name == 'year_4_arm_1':
-                #     visdat = row['fudtlcont_v2_y3_y4']
-                # elif 'fudtlcont_v2_y3_y4_y5' in row.index and redcap_event_name == 'year_5_arm_1':
-                #     visdat = row['fudtlcont_v2_y3_y4_y5']
-                # elif 'fudtlcont_v2_y3_y4_y5_v2' in row.index and redcap_event_name == 'year_6_arm_1':
-                #     visdat = row['fudtlcont_v2_y3_y4_y5_v2']
-                # elif 'fudtlcont_v2_y3_y4_y5_v2_v2' in row.index and redcap_event_name == 'year_7_arm_1':
-                #     visdat = row['fudtlcont_v2_y3_y4_y5_v2_v2']
-                # elif 'fudtlcont_v2_y3_y4_y5_v2_v2_v2' in row.index and redcap_event_name == 'year_8_arm_1':
-                #     visdat = row['fudtlcont_v2_y3_y4_y5_v2_v2_v2']
-                # else:
-                #     visdat = ''  
                 
                 if 'date_contact' in row.index and pd.notna(row['date_contact']) and ('birthdate') in row.index and pd.notna(row['birthdate']):
                     age = str((pd.to_datetime(row['date_contact'])).year - (pd.to_datetime(row['birthdate'])).year)
@@ -927,7 +906,7 @@ def mapped_csvs():
         
         if site == 'kumc':
             # append logic columns to kumc dataframe
-            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name','diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3', 'tkv']], 
+            site_final_df = pd.merge(site_final_df, logic_cols_df[['studyid', 'redcap_event_name', 'age', 'diagnosisage','mthr','fthr','teayn','coffeeyn','sodayn','caffintake','caffdur','sualcodur','height_m','average_sysbp3','average_diabp3', 'tkv']], 
                                                             on=['studyid', 'redcap_event_name'], how='left')
         if site == 'umb':
             # append logic columns to umb dataframe
