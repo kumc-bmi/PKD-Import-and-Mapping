@@ -291,6 +291,8 @@ def mapped_csvs():
         if site == 'umb':
             # read umb site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
+            
+            site_data_df['cr4'] = site_data_df.groupby('pid')['cr4'].transform(lambda x: x.ffill().bfill())
 
             # create a new DataFrame to hold the transposed data
             new_umb_df = pd.DataFrame(columns=['pid', 'redcap_event_name', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6'])
@@ -330,12 +332,14 @@ def mapped_csvs():
 
             # append logic columns to umb dataframe
             site_data_df = pd.merge(site_data_df, new_umb_df[['pid', 'redcap_event_name', 'cr7', 'race___1', 'race___2', 'race___3', 'race___4', 'race___5', 'race___6']], on=['pid', 'redcap_event_name', 'cr7'], how='left')
-
+            
             # drop the 'cr7' column
             site_data_df = site_data_df.drop('cr7', axis=1)
         elif site == 'uab':
             # read umb site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
+            
+            site_data_df['birthdate'] = site_data_df.groupby('subject_id')['birthdate'].transform(lambda x: x.ffill().bfill())
 
             # create a new DataFrame to hold the transposed data
             new_uab_df = pd.DataFrame(columns=['subject_id', 'redcap_event_name', 'race', 'race___1', 'ethnic', 'race___3', 'race___5', 'race___6'])
@@ -370,20 +374,16 @@ def mapped_csvs():
                 if row['ethnic'] != '1':
                     row['ethnic'] = '2'
                 
-            new_uab_df.to_csv(import_directory + 'merged/' + site + '_race.csv', index=False, float_format=None)
-
             # remove string nan on dataframe
             new_uab_df =  new_uab_df.fillna('')
             
-            new_uab_df.to_csv(import_directory + 'merged/' + site + '_nan_race.csv', index=False, float_format=None)
-
             # append logic columns to uab dataframe
             site_data_df = pd.merge(site_data_df, new_uab_df[['subject_id', 'redcap_event_name', 'race', 'ethnic', 'race___1', 'race___3', 'race___5', 'race___6']], on=['subject_id', 'redcap_event_name', 'race'], how='left')
-            
-            site_data_df.to_csv(import_directory + 'merged/' + site + '_data_df_nan_race.csv', index=False, float_format=None)
-            
+                        
             # drop the 'race' column
             site_data_df = site_data_df.drop('race', axis=1)
+        elif site == 'kumc':
+            site_data_df['dob'] = site_data_df.groupby('studyid')['dob'].transform(lambda x: x.ffill().bfill())
         else:
             # read site raw data to dataframe
             site_data_df = pd.read_csv(directory + site + '.csv', skip_blank_lines=True, dtype=str)
