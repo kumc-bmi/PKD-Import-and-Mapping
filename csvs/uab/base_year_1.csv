@@ -5,6 +5,7 @@ redcap_repeat_instance,redcap_repeat_instance
 site_id,fusite
 data_entry,datadate
 date_death,fuddth
+date_contact,fudtlcont
 cause_death,fucausedth
 other_cause_death,fudthothr
 tanner_stage_done,tanner_stage_done_6e26c1

@@ -192,11 +192,11 @@ def uab():
     # save uab_updated_df 
     uab_updated_df.to_csv(directory + uab_final, index=False)    
 
-    # # delete temporary files with number pattern e.g: _1.csv, _2.csv
-    # for filename in os.listdir(directory):
-    #     if re.search(uab_pattern, filename):
-    #         os.remove(directory + filename)
-    #         print(f"Deleted: {filename}")
+    # delete temporary files with number pattern e.g: _1.csv, _2.csv
+    for filename in os.listdir(directory):
+        if re.search(uab_pattern, filename):
+            os.remove(directory + filename)
+            print(f"Deleted: {filename}")
 
 def mapped_csvs():
     # based on site convert src_var to trg_var
@@ -791,6 +791,8 @@ def mapped_csvs():
                     visdat = row['fudtlcont_v2_y3_y4_y5_v2']
                 elif 'fudtlcont_v2_y3_y4_y5_v2_v2' in row.index and redcap_event_name == 'year_7_arm_1':
                     visdat = row['fudtlcont_v2_y3_y4_y5_v2_v2']
+                elif 'fudtlcont_v2_y3_y4_y5_v2_v2_v2' in row.index and redcap_event_name == 'year_8_arm_1':
+                    visdat = row['fudtlcont_v2_y3_y4_y5_v2_v2_v2']
                 else:
                     visdat = ''  
                 
