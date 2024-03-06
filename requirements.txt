@@ -1,4 +1,15 @@
 pandas
 requests
-pathlib2
+pathlib
 configparser
+PyCap
+certifi
+chardet
+numpy
+semantic-version
+urllib3
+idna
+python-dateutil
+pytz
+six
+pysftp
