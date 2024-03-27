@@ -541,13 +541,9 @@ def mapped_csvs():
             if site == 'umb':
                 # create a new dictionary to hold the values for the umb current row
                 studyid = row['pid']
+                redcap_event_name = row['redcap_event_name']
                 adpkd_yn = '1'
                 
-                if 'redcap_event_name' in row.index: 
-                    redcap_event_name = row['redcap_event_name']
-                else:
-                    redcap_event_name = row['crvisit']
-
                 if 'crrdate' in row.index and 'cr4' in row.index and pd.notna(row['crrdate'].strip()) and pd.notna(row['cr4'].strip()) and row['crrdate'].strip() != '' and row['cr4'].strip() != '':
                     age = str((datetime.strptime(row['crrdate'].strip(), '%Y-%m-%d')).year - (datetime.strptime(row['cr4'].strip(), '%Y-%m-%d')).year)
                 else:
